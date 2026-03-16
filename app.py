@@ -106,6 +106,8 @@ with st.sidebar:
     else:
         drama_style = "Speak like a heroic RPG character on a noble quest to protect the household."
 
+    st.divider()
+
 
     with st.expander("⚙️ Edit Dog Persona"):
 
