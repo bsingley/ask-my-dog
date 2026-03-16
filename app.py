@@ -39,20 +39,34 @@ if "dog" not in st.session_state:
             st.session_state.dog = json.load(f)
     else:
         st.session_state.dog = default_dog.copy()
+
+# Ensure all keys exist in case JSON is missing some fields
+for key, value in default_dog.items():
+    if key not in st.session_state.dog:
+        st.session_state.dog[key] = value
+
 dog = st.session_state.dog
 
+# Drama and Story options
 drama_options = [
     "🐾 Low – Mostly normal dog reactions",
     "🐕 Moderate – Story influences some thoughts/actions",
     "👑 High – Story guides most thoughts/actions",
     "🦸 Extreme – Story defines everything the dog thinks and does"
 ]
+style_options = [
+    "🐾 Doggish Dog", 
+    "🎬 Sitcom Dog", 
+    "📖 Shakespearean Dog", 
+    "🎮 RPG Hero Dog", 
+    "🎵 Snoop Dogg Dog"
+]
+
 if "drama_level" not in st.session_state or st.session_state.drama_level not in drama_options:
     st.session_state.drama_level = "🐕 Moderate – Story influences some thoughts/actions"
 if "confirmed_drama" not in st.session_state:
     st.session_state.confirmed_drama = st.session_state.drama_level
 
-style_options = ["🐾 Doggish Dog", "🎬 Sitcom Dog", "📖 Shakespearean Dog", "🎮 RPG Hero Dog", "🎵 Snoop Dogg Dog"]
 if "story_style" not in st.session_state or st.session_state.story_style not in style_options:
     st.session_state.story_style = "🐾 Doggish Dog"
 if "confirmed_style" not in st.session_state:
@@ -73,7 +87,7 @@ if "placeholder_question" not in st.session_state:
     ])
 
 # -----------------------------
-# Sidebar: Dog Card
+# Sidebar: Dog Card Function
 # -----------------------------
 def render_dog_card():
     st.sidebar.image("https://cdn-icons-png.flaticon.com/512/616/616408.png", width=80)
@@ -123,12 +137,18 @@ with st.sidebar.expander("⚙️ View or edit full dog persona"):
 # -----------------------------
 # Sidebar: Drama & Storytelling Style
 # -----------------------------
-drama_level = st.sidebar.selectbox("🎭 Drama Level", drama_options,
-                                   index=drama_options.index(st.session_state.drama_level),
-                                   key="drama_level")
-story_style = st.sidebar.selectbox("🎨 Storytelling Style", style_options,
-                                   index=style_options.index(st.session_state.story_style),
-                                   key="story_style")
+drama_level = st.sidebar.selectbox(
+    "🎭 Drama Level",
+    drama_options,
+    index=drama_options.index(st.session_state.drama_level),
+    key="drama_level"
+)
+story_style = st.sidebar.selectbox(
+    "🎨 Storytelling Style",
+    style_options,
+    index=style_options.index(st.session_state.story_style),
+    key="story_style"
+)
 
 if st.sidebar.button("✅ Confirm Settings"):
     st.session_state.confirmed_drama = st.session_state.drama_level
@@ -227,7 +247,7 @@ User question:
 """
 
     try:
-        with st.spinner("🐾 Luna is thinking..."):
+        with st.spinner(f"🐾 {dog['name']} is thinking..."):
             response = client.responses.create(
                 model="gpt-4.1-mini",
                 input=prompt
