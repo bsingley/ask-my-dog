@@ -41,7 +41,7 @@ else:
 # -----------------------------
 st.sidebar.header("🐶 Dog Controls")
 
-# --- Dog Character Card ---
+# Dog Card
 st.sidebar.image("https://cdn-icons-png.flaticon.com/512/616/616408.png", width=80)
 st.sidebar.markdown(f"""
 ### {dog['name']}
@@ -49,7 +49,7 @@ st.sidebar.markdown(f"""
 **Identity:** {dog['self_identity']}
 """)
 
-# --- Persona Expander ---
+# Persona Expander
 with st.sidebar.expander("⚙️ View or edit full dog persona"):
     st.write(f"**Training Level:** {dog['training_level']}")
     st.write("**Personality Traits:** " + ", ".join(dog['personality_traits']))
@@ -78,10 +78,10 @@ with st.sidebar.expander("⚙️ View or edit full dog persona"):
             dog = default_dog.copy()
             st.success("Reset to Luna")
 
-# --- Drama Level ---
+# Drama Level
 drama_options = [
     "🐾 Low – Mostly normal dog reactions",
-    "🐕 Moderate – Story influences some thoughts/actions",  # default
+    "🐕 Moderate – Story influences some thoughts/actions",
     "👑 High – Story guides most thoughts/actions",
     "🦸 Extreme – Story defines everything the dog thinks and does"
 ]
@@ -95,19 +95,9 @@ drama_level = st.sidebar.selectbox(
     key="drama_level"
 )
 
-# Map Drama → Prompt
-if "Low" in st.session_state.drama_level:
-    drama_strength = "The dog mostly reacts normally; its self-story has little effect."
-elif "Moderate" in st.session_state.drama_level:
-    drama_strength = "The dog sometimes filters its thoughts and behavior through its self-story."
-elif "High" in st.session_state.drama_level:
-    drama_strength = "The dog mostly acts and thinks according to its self-story."
-else:
-    drama_strength = "The dog fully believes in its self-story; all thoughts and reactions are filtered through it."
-
-# --- Storytelling Style ---
+# Storytelling Style
 style_options = [
-    "🐾 Doggish Dog",   # default
+    "🐾 Doggish Dog",
     "🎬 Sitcom Dog",
     "📖 Shakespearean Dog",
     "🎮 RPG Hero Dog",
@@ -123,34 +113,14 @@ story_style = st.sidebar.selectbox(
     key="story_style"
 )
 
-# Map Style → Prompt
-if st.session_state.story_style == "🐾 Doggish Dog":
-    story_style_prompt = "Speak like a normal dog thinking in simple playful thoughts."
-elif st.session_state.story_style == "🎬 Sitcom Dog":
-    story_style_prompt = "Respond like a sarcastic sitcom character observing ridiculous human behavior."
-elif st.session_state.story_style == "📖 Shakespearean Dog":
-    story_style_prompt = "Speak in overly dramatic Shakespearean-style language."
-elif st.session_state.story_style == "🎮 RPG Hero Dog":
-    story_style_prompt = "Speak like a heroic RPG character on a noble quest to protect the household."
-else:  # Snoop Dogg
-    story_style_prompt = (
-        "Speak in a laid-back, cool, rhyming style reminiscent of Snoop Dogg. "
-        "Use playful slang, humor, and rhythm while describing dog thoughts."
-    )
-
-# --- Replay Last Question ---
-if "last_question" not in st.session_state:
-    st.session_state.last_question = ""
-if "replay_triggered" not in st.session_state:
-    st.session_state.replay_triggered = False
-
-if st.session_state.last_question:
-    if st.sidebar.button("🔁 Replay Last Question with New Styles"):
-        st.session_state.replay_triggered = True
-        st.experimental_rerun()
+# Confirm Settings Button
+if st.sidebar.button("✅ Confirm Settings"):
+    st.session_state.confirmed_drama = st.session_state.drama_level
+    st.session_state.confirmed_style = st.session_state.story_style
+    st.sidebar.success("Settings saved! Will apply to next question.")
 
 # -----------------------------
-# Main Page: Chat Input + Response Feed
+# Placeholder Questions
 # -----------------------------
 sample_questions = [
     "Why do I chase my tail?",
@@ -165,26 +135,65 @@ sample_questions = [
 if "placeholder_question" not in st.session_state:
     st.session_state.placeholder_question = random.choice(sample_questions)
 
+# -----------------------------
+# Chat Input
+# -----------------------------
 user_question = st.text_input(
     f"What would you like to ask {dog['name']}?",
     placeholder=f"e.g., {st.session_state.placeholder_question}",
     key="user_question_input"
 )
 
-# Determine which question to send
-if st.session_state.replay_triggered:
-    question_to_ask = st.session_state.last_question
-    st.session_state.replay_triggered = False
-elif user_question:
-    question_to_ask = user_question
+# -----------------------------
+# Replay Last Question
+# -----------------------------
+if "last_question" not in st.session_state:
+    st.session_state.last_question = ""
+
+if st.session_state.last_question:
+    if st.sidebar.button("🔁 Replay Last Question"):
+        question_to_ask = st.session_state.last_question
+    else:
+        question_to_ask = user_question if user_question else None
 else:
-    question_to_ask = None
+    question_to_ask = user_question if user_question else None
+
+# -----------------------------
+# Use confirmed settings (if available)
+# -----------------------------
+current_drama = st.session_state.get("confirmed_drama", st.session_state.drama_level)
+current_style = st.session_state.get("confirmed_style", st.session_state.story_style)
+
+# Map Drama → Prompt Description
+if "Low" in current_drama:
+    drama_strength = "The dog mostly reacts normally; its self-story has little effect."
+elif "Moderate" in current_drama:
+    drama_strength = "The dog sometimes filters its thoughts and behavior through its self-story."
+elif "High" in current_drama:
+    drama_strength = "The dog mostly acts and thinks according to its self-story."
+else:
+    drama_strength = "The dog fully believes in its self-story; all thoughts and reactions are filtered through it."
+
+# Map Style → Prompt
+if current_style == "🐾 Doggish Dog":
+    story_style_prompt = "Speak like a normal dog thinking in simple playful thoughts."
+elif current_style == "🎬 Sitcom Dog":
+    story_style_prompt = "Respond like a sarcastic sitcom character observing ridiculous human behavior."
+elif current_style == "📖 Shakespearean Dog":
+    story_style_prompt = "Speak in overly dramatic Shakespearean-style language."
+elif current_style == "🎮 RPG Hero Dog":
+    story_style_prompt = "Speak like a heroic RPG character on a noble quest to protect the household."
+else:  # 🎵 Snoop Dogg Dog
+    story_style_prompt = (
+        "Speak in a laid-back, cool, rhyming style reminiscent of Snoop Dogg. "
+        "Use playful slang, humor, and rhythm while describing dog thoughts."
+    )
 
 # -----------------------------
 # AI Response
 # -----------------------------
 if question_to_ask:
-    st.session_state.last_question = question_to_ask  # save last question
+    st.session_state.last_question = question_to_ask
 
     prompt = f"""
 You are a dog named {dog['name']}.
