@@ -285,10 +285,11 @@ User question:
             dog_part = text
             trainer_part = ""
 
+        # Append to chat history
         st.session_state.chat_history.append(
             (question_to_ask, dog_part.strip(), trainer_part.strip())
         )
-        st.experimental_rerun()  # Refresh page so new chat appears below previous responses
 
+        # No experimental_rerun() here — the next run naturally displays the new response
     except OpenAIError:
         st.error("The AI dog is taking a nap. Check your API key or connection.")
