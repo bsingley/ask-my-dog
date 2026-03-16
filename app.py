@@ -197,7 +197,9 @@ else:
 
 # Story style mapping
 if current_style == "🐾 Doggish Dog":
-    story_style_prompt = "Speak like a normal dog thinking in simple playful thoughts."
+    story_style_prompt = "Speak like a normal dog, thinking and acting according to your traits. "
+        "Do not list personality traits explicitly; behave as if everyone already knows them. "
+        "Make responses natural, playful, and filtered through the dog's self-story and Drama Level."
 elif current_style == "🎬 Sitcom Dog":
     story_style_prompt = "Respond like a sarcastic sitcom character observing ridiculous human behavior."
 elif current_style == "📖 Shakespearean Dog":
