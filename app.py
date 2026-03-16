@@ -43,9 +43,6 @@ if "chat_history" not in st.session_state:
 if "last_question" not in st.session_state:
     st.session_state.last_question = ""
 
-if "replay_pressed" not in st.session_state:
-    st.session_state.replay_pressed = False
-
 if "confirmed_drama" not in st.session_state:
     st.session_state.confirmed_drama = "🐾 Low – Mostly normal dog reactions"
 
@@ -140,11 +137,6 @@ if st.sidebar.button("Confirm Settings"):
     st.session_state.confirmed_style = st.session_state.selected_style
     st.sidebar.success("Settings confirmed. They will apply to the next question.")
 
-# Replay last question
-if st.sidebar.button("Replay Last Question"):
-    if st.session_state.last_question:
-        st.session_state.replay_pressed = True
-
 # -----------------------------
 # Main page - Chat
 # -----------------------------
@@ -171,12 +163,6 @@ question_to_ask = None
 if submit_question and st.session_state.current_input.strip() != "":
     question_to_ask = st.session_state.current_input.strip()
     st.session_state.last_question = question_to_ask
-elif st.session_state.replay_pressed:
-    question_to_ask = st.session_state.last_question
-    st.session_state.replay_pressed = False
-
-if question_to_ask:
-    st.session_state.chat_history.append((question_to_ask, "…thinking…", ""))
 
     # Map drama & style → prompt text
     drama_map = {
@@ -196,36 +182,9 @@ if question_to_ask:
     }
     story_style_prompt = style_map[st.session_state.confirmed_style]
 
-    prompt = f"""
-You are a dog named {dog['name']}.
+    prompt = build_prompt(dog, question_to_ask, drama_strength, story_style_prompt)
 
-Background personality:
-Age: {dog['age']}
-Breed: {dog['breed']}
-Energy level: {dog['energy_level']}
-Training level: {dog['training_level']}
-Fear triggers: {', '.join(dog['fear_triggers'])}
-Personality traits: {', '.join(dog['personality_traits'])}
-
-Self-Story:
-{dog['self_story']}
-
-Drama Level:
-{drama_strength}
-
-Storytelling Style:
-{story_style_prompt}
-
-Instructions:
-- Respond in two parts.
-- Part 1: Speak in first person as the dog, concise (2–4 sentences), extreme according to Drama Level.
-- Part 2: Start with "As a dog trainer:" and give a brief objective explanation (2–3 sentences).
-- Do not repeat the dog's name or list traits explicitly.
-
-User question:
-{question_to_ask}
-"""
-
+    # Call AI first
     try:
         with st.spinner(f"🐾 {dog['name']} is thinking..."):
             response = client.responses.create(
@@ -239,19 +198,19 @@ User question:
             dog_part = text
             trainer_part = ""
 
-        # Replace placeholder with actual response
-        st.session_state.chat_history[-1] = (
+        # Append fully generated response
+        st.session_state.chat_history.append((
             question_to_ask,
             dog_part.strip(),
             trainer_part.strip()
-        )
+        ))
 
-        # Reset input after AI response
+        # Reset input box
         st.session_state.current_input = ""
 
     except OpenAIError:
-        st.session_state.chat_history[-1] = (
+        st.session_state.chat_history.append((
             question_to_ask,
             "AI dog is taking a nap. Check your API key or connection.",
             ""
-        )
+        ))
