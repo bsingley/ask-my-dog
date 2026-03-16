@@ -1,3 +1,4 @@
+
 # Ask My Dog 🐶
 
 **Ask My Dog** is a playful AI app that answers questions from the perspective of your dog, combining creativity with technical experimentation in AI-driven UX.
@@ -23,18 +24,18 @@ This project highlights skills in:
 
 ```mermaid
 flowchart TD
-    UI[User Interface<br>(Browser / Web)] --> App[Streamlit App<br>(Python)]
-    App --> AI[AI Engine / API<br>(OpenAI GPT)]
+    UI["User Interface\n(Browser / Web)"] --> App["Streamlit App\n(Python)"]
+    App --> AI["AI Engine / API\n(OpenAI GPT)"]
     
-    UI --> |User Inputs<br>(Question, Dog Selection, Confidence)| App
-    App --> |Persona Config<br>(Dog Personality, Confidence)| AI
-    AI --> |Response Generation<br>(Text output based on prompt + persona)| App
+    UI --> |User Inputs\n(Question, Dog Selection, Confidence)| App
+    App --> |Persona Config\n(Dog Personality, Confidence)| AI
+    AI --> |Response Generation\n(Text output based on prompt + persona)| App
     App --> |Displayed Response| UI
 
-    subgraph Future Enhancements
-        AI --> Memory[Conversation Memory<br>(Contextual Responses)]
-        App --> MultiDog[Multiple Dog Personalities]
-        AI --> Training[Personalized Training Recommendations]
+    subgraph FutureEnhancements
+        AI --> Memory["Conversation Memory\n(Contextual Responses)"]
+        App --> MultiDog["Multiple Dog Personalities"]
+        AI --> Training["Personalized Training Recommendations"]
     end
 ```
 
