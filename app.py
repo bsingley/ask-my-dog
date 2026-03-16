@@ -40,8 +40,21 @@ if "dog" not in st.session_state:
 
 dog = st.session_state.dog
 # --- Sidebar ---
-# 1️⃣ Dog Card
-render_dog_card()
+# -----------------------------
+# Sidebar: Dog Card Function
+# -----------------------------
+def render_dog_card():
+    st.sidebar.image("https://cdn-icons-png.flaticon.com/512/616/616408.png", width=80)
+    st.sidebar.markdown(f"""
+    ### {dog['name']}
+    **{dog['breed']} • {dog['age']}**  
+    **Identity:** {dog['self_identity']}
+    """)
+
+# -----------------------------
+# Call Dog Card
+# -----------------------------
+render_dog_card()  # now this works because function is defined above
 
 # 2️⃣ Persona Editor (always in an expander, no checkbox)
 with st.sidebar.expander("⚙️ View or edit full dog persona"):
