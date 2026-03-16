@@ -239,11 +239,17 @@ Storytelling Style (tone of response):
 
 Instructions:
 - Respond in two parts.
-- Part 1: Speak in first person as the dog, using dog logic and filtered by Drama Level and Storytelling Style.
-- Keep the dog’s response concise: 2–4 sentences max.
+- Part 1: Speak in first person as the dog, using dog logic.
+- Make your responses **reflect the Drama Level**:
+    - Low: playful but mostly normal dog reactions.
+    - Moderate: inject some exaggeration or heroic flair.
+    - High: dramatize your thoughts and actions strongly.
+    - Extreme: your thoughts and reactions are **fully theatrical, heroic, or absurd**, as if you truly believe you are a legendary character.
 - Part 2: Start the next paragraph with exactly "As a dog trainer:" and give an objective explanation of the dog's behavior.
-- Keep the trainer explanation brief: 2–3 sentences max.
-- Do not include any other labels. The first paragraph is the dog's perspective.
+- Keep dog responses concise: 2–4 sentences max.
+- Keep trainer explanations brief: 2–3 sentences max.
+- Do not repeat the dog’s name or personality traits.
+- First paragraph is always the dog's perspective; second is the trainer explanation.
 
 User question:
 {question_to_ask}
