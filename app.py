@@ -2,7 +2,6 @@ import streamlit as st
 from openai import OpenAI, OpenAIError
 import json
 import os
-import random
 
 # -----------------------------
 # Setup
@@ -26,13 +25,13 @@ default_dog = {
 }
 dog_file = "dog_profile.json"
 
+# Load or initialize dog
 if "dog" not in st.session_state:
     if os.path.exists(dog_file):
         with open(dog_file) as f:
             st.session_state.dog = json.load(f)
     else:
         st.session_state.dog = default_dog.copy()
-
 dog = st.session_state.dog
 
 # -----------------------------
@@ -53,6 +52,9 @@ if "confirmed_drama" not in st.session_state:
 if "confirmed_style" not in st.session_state:
     st.session_state.confirmed_style = "🐾 Doggish Dog"
 
+if "current_input" not in st.session_state:
+    st.session_state.current_input = ""
+
 # -----------------------------
 # Sidebar
 # -----------------------------
@@ -65,7 +67,6 @@ def render_dog_card():
 **{dog['breed']} • {dog['age']}**  
 **Identity:** {dog['self_identity']}
 """)
-
 render_dog_card()
 
 # Persona editor
@@ -78,10 +79,16 @@ with st.sidebar.expander("⚙️ View or edit full dog persona"):
     dog["self_identity"] = st.text_input("Self identity", dog["self_identity"])
     dog["self_story"] = st.text_input("Self story", dog["self_story"])
     dog["personality_traits"] = [
-        t.strip() for t in st.text_input("Personality Traits (comma-separated)", ", ".join(dog["personality_traits"])).split(",")
+        t.strip() for t in st.text_input(
+            "Personality Traits (comma-separated)",
+            ", ".join(dog["personality_traits"])
+        ).split(",")
     ]
     dog["fear_triggers"] = [
-        t.strip() for t in st.text_input("Fear Triggers (comma-separated)", ", ".join(dog["fear_triggers"])).split(",")
+        t.strip() for t in st.text_input(
+            "Fear Triggers (comma-separated)",
+            ", ".join(dog["fear_triggers"])
+        ).split(",")
     ]
 
     save_col1, save_col2 = st.columns(2)
@@ -150,42 +157,25 @@ for q, d, t in st.session_state.chat_history:
     st.markdown(f"**🧑‍🏫 Dog trainer explains:** {t}")
     st.divider()
 
-# Sample questions for placeholder
-sample_questions = [
-    "What's the best part of your day?",
-    "What scares you the most?",
-    "How do you feel about new people?",
-    "What's your favorite game or toy?",
-    "Describe your dream adventure!"
-]
-placeholder_text = random.choice(sample_questions)
-
-## 1️⃣ Input box + submit button
-if "current_input" not in st.session_state:
-    st.session_state.current_input = ""
-
+# -----------------------------
+# Input box + AI call
+# -----------------------------
 st.session_state.current_input = st.text_input(
     "Ask your dog a question",
-    value=st.session_state.current_input,
-    placeholder=random.choice(sample_questions)
+    value=st.session_state.current_input
 )
 submit_question = st.button("Ask")
 
-# 2️⃣ Determine if we should run AI
+# Determine question to ask
 question_to_ask = None
 if submit_question and st.session_state.current_input.strip() != "":
     question_to_ask = st.session_state.current_input.strip()
     st.session_state.last_question = question_to_ask
-    # Reset input
-    st.session_state.current_input = ""
-
 elif st.session_state.replay_pressed:
     question_to_ask = st.session_state.last_question
     st.session_state.replay_pressed = False
 
-# 3️⃣ Append placeholder and call AI only here
 if question_to_ask:
-    st.session_state.last_question = question_to_ask
     st.session_state.chat_history.append((question_to_ask, "…thinking…", ""))
 
     # Map drama & style → prompt text
@@ -248,13 +238,15 @@ User question:
         else:
             dog_part = text
             trainer_part = ""
-        # Replace placeholder
+
+        # Replace placeholder with actual response
         st.session_state.chat_history[-1] = (
             question_to_ask,
             dog_part.strip(),
             trainer_part.strip()
         )
-        # Reset input after response
+
+        # Reset input after AI response
         st.session_state.current_input = ""
 
     except OpenAIError:
