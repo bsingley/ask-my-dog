@@ -216,6 +216,8 @@ story_style_prompt = style_map[current_style]
 # -----------------------------
 if question_to_ask:
     st.session_state.last_question = question_to_ask
+    # Append placeholder so chat shows immediately
+    st.session_state.chat_history.append((question_to_ask, "…thinking…", ""))
     # Build prompt and call OpenAI here
 
     prompt = f"""
@@ -247,24 +249,30 @@ Instructions:
 User question:
 {question_to_ask}
 """
-
-    try:
-        with st.spinner(f"🐾 {dog['name']} is thinking..."):
-            response = client.responses.create(
-                model="gpt-4.1-mini",
-                input=prompt
-            )
-
-        text = response.output_text.strip()
-        if "As a dog trainer:" in text:
-            dog_part, trainer_part = text.split("As a dog trainer:", 1)
-        else:
-            dog_part = text
-            trainer_part = ""
-
-        st.session_state.chat_history.append(
-            (question_to_ask, dog_part.strip(), trainer_part.strip())
+try:
+    with st.spinner(f"🐾 {dog['name']} is thinking..."):
+        response = client.responses.create(
+            model="gpt-4.1-mini",
+            input=prompt
         )
 
-    except OpenAIError:
-        st.error("The AI dog is taking a nap. Check your API key or connection.")
+    text = response.output_text.strip()
+    if "As a dog trainer:" in text:
+        dog_part, trainer_part = text.split("As a dog trainer:", 1)
+    else:
+        dog_part = text
+        trainer_part = ""
+
+    # Replace the last placeholder entry
+    st.session_state.chat_history[-1] = (
+        question_to_ask,
+        dog_part.strip(),
+        trainer_part.strip()
+    )
+
+except OpenAIError:
+    st.session_state.chat_history[-1] = (
+        question_to_ask,
+        "AI dog is taking a nap.",
+        ""
+    )
