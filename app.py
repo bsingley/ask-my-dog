@@ -90,7 +90,7 @@ with st.sidebar:
             "🐾 Doggish Dog",
             "🎬 Sitcom Dog",
             "📖 Shakespearean Dog",
-            "🎮 RPG Hero Dog"
+            "🎮 RPG Hero Dog",
             "🎵 Snoop Dogg Dog"
         ],
         help="Controls the tone and style of the dog's responses."
