@@ -189,12 +189,72 @@ user_question = st.text_input(
 )
 
 # Determine which question to ask
-if replay_button:
+question_to_ask = None
+
+if st.session_state.get("replay_pressed", False):
     question_to_ask = st.session_state.last_question
+    st.session_state.replay_pressed = False  # reset
+
 elif user_question:
     question_to_ask = user_question
-else:
-    question_to_ask = None
+
+# Only call AI if we actually have a question
+if question_to_ask:
+    st.session_state.last_question = question_to_ask
+
+    prompt = f"""
+You are a dog named {dog['name']}.
+
+Background personality information (use only if relevant):
+Age: {dog['age']}
+Breed: {dog['breed']}
+Energy level: {dog['energy_level']}
+Training level: {dog['training_level']}
+Fear triggers: {', '.join(dog['fear_triggers'])}
+Personality traits: {', '.join(dog['personality_traits'])}
+
+Self-Story:
+{dog['self_story']}
+
+Drama Level (how much the dog believes its story):
+{drama_strength}
+
+Storytelling Style (tone of response):
+{story_style_prompt}
+
+Instructions:
+- Respond in two parts.
+- Part 1: Speak in first person as the dog, using dog logic.
+- Make your responses reflect the Drama Level and exaggerate as appropriate.
+- Keep dog responses concise: 2–4 sentences max.
+- Part 2: Start with "As a dog trainer:" and give a brief objective explanation.
+- Do not repeat the dog's name or personality traits.
+
+User question:
+{question_to_ask}
+"""
+
+    try:
+        with st.spinner(f"🐾 {dog['name']} is thinking..."):
+            response = client.responses.create(
+                model="gpt-4.1-mini",
+                input=prompt
+            )
+        text = response.output_text.strip()
+
+        if "As a dog trainer:" in text:
+            dog_part, trainer_part = text.split("As a dog trainer:", 1)
+        else:
+            dog_part = text
+            trainer_part = ""
+
+        # Append to chat history
+        st.session_state.chat_history.append(
+            (question_to_ask, dog_part.strip(), trainer_part.strip())
+        )
+
+    except OpenAIError:
+        st.error("The AI dog is taking a nap. Check your API key or connection.")
 
 # -----------------------------
 # Map confirmed settings to prompt
