@@ -137,109 +137,91 @@ if st.sidebar.button("Confirm Settings"):
     st.session_state.confirmed_style = st.session_state.selected_style
     st.sidebar.success("Settings confirmed. They will apply to the next question.")
 
-# -----------------------------
-# Main page - Chat
-# -----------------------------
 st.title("🐾 Ask My Dog")
 
-# Display chat history
-for q, d, t in st.session_state.chat_history:
-    st.markdown(f"**You:** {q}")
-    st.markdown(f"**🐶 {dog['name']} thinks:** {d}")
-    st.markdown(f"**🧑‍🏫 Dog trainer explains:** {t}")
-    st.divider()
-
 # -----------------------------
-# Input box + AI call
+# Input FIRST
 # -----------------------------
-st.session_state.current_input = st.text_input(
-    "Ask your dog a question",
-    value=st.session_state.current_input
-)
-submit_question = st.button("Ask")
 
-# Determine question to ask
-question_to_ask = None
-if submit_question and st.session_state.current_input.strip() != "":
-    question_to_ask = st.session_state.current_input.strip()
-    st.session_state.last_question = question_to_ask
+user_question = st.text_input("Ask your dog a question", key="chat_input")
+submit = st.button("Ask")
 
-    # Map drama & style → prompt text
+if submit and user_question.strip():
+
+    question = user_question.strip()
+
     drama_map = {
-        "🐾 Low – Mostly normal dog reactions": "The dog mostly reacts normally; its self-story has little effect.",
-        "🐕 Moderate – Story influences some thoughts/actions": "The dog sometimes filters its thoughts and behavior through its self-story.",
-        "👑 High – Story guides most thoughts/actions": "The dog mostly acts and thinks according to its self-story.",
-        "🦸 Extreme – Story defines everything the dog thinks and does": "The dog fully believes in its self-story; all thoughts and reactions are filtered through it."
+        "🐾 Low – Mostly normal dog reactions": "The dog mostly reacts normally.",
+        "🐕 Moderate – Story influences some thoughts/actions": "The dog's story influences some behavior.",
+        "👑 High – Story guides most thoughts/actions": "The dog mostly behaves according to its story.",
+        "🦸 Extreme – Story defines everything the dog thinks and does": "The dog fully believes its dramatic identity."
     }
-    drama_strength = drama_map[st.session_state.confirmed_drama]
 
     style_map = {
-        "🐾 Doggish Dog": "Speak naturally according to your traits; do not list traits explicitly; behave as if everyone already knows them.",
-        "🎬 Sitcom Dog": "Respond like a sarcastic sitcom character observing ridiculous human behavior.",
-        "📖 Shakespearean Dog": "Speak in overly dramatic Shakespearean-style language.",
-        "🎮 RPG Hero Dog": "Speak like a heroic RPG character on a noble quest to protect the household.",
-        "🎵 Snoop Dogg Dog": "Speak in a laid-back, cool, rhyming style reminiscent of Snoop Dogg."
+        "🐾 Doggish Dog": "Respond naturally as a dog.",
+        "🎬 Sitcom Dog": "Respond like a sarcastic sitcom character.",
+        "📖 Shakespearean Dog": "Speak like Shakespeare.",
+        "🎮 RPG Hero Dog": "Speak like a heroic RPG character.",
+        "🎵 Snoop Dogg Dog": "Respond in a laid back Snoop Dogg style."
     }
-    story_style_prompt = style_map[st.session_state.confirmed_style]
+
+    drama = drama_map[st.session_state.confirmed_drama]
+    style = style_map[st.session_state.confirmed_style]
 
     prompt = f"""
 You are a dog named {dog['name']}.
 
-Background personality:
-Age: {dog['age']}
-Breed: {dog['breed']}
-Energy level: {dog['energy_level']}
-Training level: {dog['training_level']}
-Fear triggers: {', '.join(dog['fear_triggers'])}
-Personality traits: {', '.join(dog['personality_traits'])}
+Traits: {", ".join(dog["personality_traits"])}
+Fears: {", ".join(dog["fear_triggers"])}
 
-Self-Story:
-{dog['self_story']}
+Drama rule:
+{drama}
 
-Drama Level:
-{drama_strength}
+Style rule:
+{style}
 
-Storytelling Style:
-{story_style_prompt}
+Respond in two parts:
 
-Instructions:
-- Respond in two parts.
-- Part 1: Speak in first person as the dog, concise (2–4 sentences), extreme according to Drama Level.
-- Part 2: Start with "As a dog trainer:" and give a brief objective explanation (2–3 sentences).
-- Do not repeat the dog's name or list traits explicitly.
+1. The dog speaking (2-4 sentences)
+2. Start second section with "As a dog trainer:" and explain behavior briefly.
 
-User question:
-{question_to_ask}
+Question: {question}
 """
 
-
-    # Call AI first
     try:
         with st.spinner(f"🐾 {dog['name']} is thinking..."):
             response = client.responses.create(
                 model="gpt-4.1-mini",
                 input=prompt
             )
-        text = response.output_text.strip()
+
+        text = response.output_text
+
         if "As a dog trainer:" in text:
-            dog_part, trainer_part = text.split("As a dog trainer:", 1)
+            dog_part, trainer_part = text.split("As a dog trainer:",1)
         else:
             dog_part = text
             trainer_part = ""
 
-        # Append fully generated response
-        st.session_state.chat_history.append((
-            question_to_ask,
-            dog_part.strip(),
-            trainer_part.strip()
-        ))
+        st.session_state.chat_history.append(
+            (question, dog_part.strip(), trainer_part.strip())
+        )
 
-        # Reset input box
-        st.session_state.current_input = ""
+    except Exception:
+        st.session_state.chat_history.append(
+            (question,"Something went wrong calling the AI.","")
+        )
 
-    except OpenAIError:
-        st.session_state.chat_history.append((
-            question_to_ask,
-            "AI dog is taking a nap. Check your API key or connection.",
-            ""
-        ))
+# -----------------------------
+# Render chat AFTER response
+# -----------------------------
+
+for q,d,t in st.session_state.chat_history:
+
+    st.markdown(f"**You:** {q}")
+    st.markdown(f"**🐶 {dog['name']} thinks:** {d}")
+
+    if t:
+        st.markdown(f"**Trainer:** {t}")
+
+    st.divider()
