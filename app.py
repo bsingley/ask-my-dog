@@ -98,17 +98,18 @@ with st.sidebar:
 
     if story_style == "Realistic Dog":
         story_style_prompt = "Speak like a normal dog thinking in simple playful thoughts."
-        elif story_style == "Sitcom Dog":
-            story_style_prompt = "Respond like a sarcastic sitcom character observing ridiculous human behavior."
-        elif story_style == "Shakespearean Dog":
-            story_style_prompt = "Speak in overly dramatic Shakespearean-style language."
-        elif story_style == "RPG Hero Dog":
-            story_style_prompt = "Speak like a heroic RPG character on a noble quest to protect the household."
-        else:  # Snoop Dogg Dog
-            story_style_prompt = (
-                "Speak in a laid-back, cool, rhyming style reminiscent of Snoop Dogg. "
-                "Use playful slang, humor, and rhythm while describing dog thoughts."
-        )
+    elif story_style == "Sitcom Dog":
+        story_style_prompt = "Respond like a sarcastic sitcom character observing ridiculous human behavior."        
+    elif story_style == "Shakespearean Dog":
+        story_style_prompt = "Speak in overly dramatic Shakespearean-style language."
+    elif story_style == "RPG Hero Dog":
+        story_style_prompt = "Speak like a heroic RPG character on a noble quest to protect the household."
+    else:  # Snoop Dogg Dog
+        story_style_prompt = (
+            "Speak in a laid-back, cool, rhyming style reminiscent of Snoop Dogg. "
+            "Use playful slang, humor, and rhythm while describing dog thoughts."
+    )
+    
     st.divider()
 
 
