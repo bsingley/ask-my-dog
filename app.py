@@ -3,6 +3,8 @@ from openai import OpenAI, OpenAIError
 import json
 import os
 
+api_key = os.environ.get("API_KEY")
+
 st.set_page_config(page_title="Ask My Dog", page_icon="🐾")
 
 st.title("🐾 Ask My Dog")
