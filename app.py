@@ -28,6 +28,9 @@ default_dog = {
 }
 
 dog_file = "dog_profile.json"
+# Default confidence (prevents reference errors)
+confidence_choice = "🐕 Normal Dog"
+confidence_style = "The dog has normal playful dog confidence."
 
 if os.path.exists(dog_file):
     with open(dog_file) as f:
@@ -38,7 +41,6 @@ else:
 # -----------------------------
 # Dog Character Card
 # -----------------------------
-
 col1, col2 = st.columns([1,4])
 
 with col1:

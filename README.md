@@ -1,27 +1,59 @@
+# Ask My Dog 🐶
 
-{\rtf1\ansi\ansicpg1252\cocoartf2822
-\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
-{\colortbl;\red255\green255\blue255;}
-{\*\expandedcolortbl;;}
-\margl1440\margr1440\vieww28280\viewh16060\viewkind0
-\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+**Ask My Dog** is a playful AI app that answers questions from the perspective of your dog, combining creativity with technical experimentation in AI-driven UX.
 
-\f0\fs24 \cf0 # Ask My Dog \uc0\u55357 \u56374 \
-\
-Ask My Dog is a playful AI app that answers questions from the perspective of your dog.\
-\
-The user selects a dog personality, adjusts confidence levels, and asks questions about training, food, or daily life.\
-\
-This project explores:\
-- Prompt engineering\
-- Persona design\
-- Lightweight AI UX\
-- Streamlit app development\
-\
-Try it here: [Live App Link]\
-\
-Future improvements:\
-- Training recommendations\
-- Multiple dog personalities\
-- Conversation memory}
->>>>>>> f0d970a (Initial version of Ask my Dog with README)
+Users can:
+
+* Select a dog personality
+* Adjust confidence levels
+* Ask questions about training, food, or daily life
+
+This project highlights skills in:
+
+* **Prompt engineering**: designing AI prompts for engaging dog personas
+* **Persona design**: crafting distinct AI personalities with unique behaviors
+* **Lightweight AI UX**: building intuitive, interactive flows
+* **Streamlit app development**: rapid prototyping of web-based AI applications
+
+**Live demo:** [Insert Link]
+
+---
+
+## Architecture Overview
+
+```mermaid
+flowchart TD
+    UI[User Interface<br>(Browser / Web)] --> App[Streamlit App<br>(Python)]
+    App --> AI[AI Engine / API<br>(OpenAI GPT)]
+    
+    UI --> |User Inputs<br>(Question, Dog Selection, Confidence)| App
+    App --> |Persona Config<br>(Dog Personality, Confidence)| AI
+    AI --> |Response Generation<br>(Text output based on prompt + persona)| App
+    App --> |Displayed Response| UI
+
+    subgraph Future Enhancements
+        AI --> Memory[Conversation Memory<br>(Contextual Responses)]
+        App --> MultiDog[Multiple Dog Personalities]
+        AI --> Training[Personalized Training Recommendations]
+    end
+```
+
+---
+
+## Features
+
+* **Dynamic AI personalities:** Users can pick dog types with different behaviors.
+* **Confidence slider:** Adjust how “sure” the dog is in its responses.
+* **Interactive Q&A:** Ask questions about training, food, or daily life.
+* **Lightweight web interface:** Built in **Streamlit** for fast, accessible interaction.
+
+---
+
+## Future Improvements
+
+* Personalized training recommendations based on user questions
+* Multiple dog personalities with distinct behaviors
+* Conversation memory for ongoing interactions
+* Enhanced UX with richer feedback and interactive elements
+
+
