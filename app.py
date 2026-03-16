@@ -40,12 +40,15 @@ if "dog" not in st.session_state:
     else:
         st.session_state.dog = default_dog.copy()
 
-# Ensure all keys exist in case JSON is missing some fields
+# Ensure all keys exist
 for key, value in default_dog.items():
     if key not in st.session_state.dog:
         st.session_state.dog[key] = value
 
 dog = st.session_state.dog
+
+if "chat_history" not in st.session_state:
+    st.session_state.chat_history = []
 
 # Drama and Story options
 drama_options = [
@@ -87,7 +90,7 @@ if "placeholder_question" not in st.session_state:
     ])
 
 # -----------------------------
-# Sidebar: Dog Card Function
+# Sidebar: Dog Card
 # -----------------------------
 def render_dog_card():
     st.sidebar.image("https://cdn-icons-png.flaticon.com/512/616/616408.png", width=80)
@@ -131,8 +134,9 @@ with st.sidebar.expander("⚙️ View or edit full dog persona"):
         st.success("Saved for future sessions")
     if st.button("Reset to Luna"):
         st.session_state.dog = default_dog.copy()
-        st.success("Reset to Luna")
         dog = st.session_state.dog
+        st.success("Reset to Luna")
+render_dog_card()  # Update card if persona changed
 
 # -----------------------------
 # Sidebar: Drama & Storytelling Style
@@ -149,7 +153,6 @@ story_style = st.sidebar.selectbox(
     index=style_options.index(st.session_state.story_style),
     key="story_style"
 )
-
 if st.sidebar.button("✅ Confirm Settings"):
     st.session_state.confirmed_drama = st.session_state.drama_level
     st.session_state.confirmed_style = st.session_state.story_style
@@ -163,7 +166,18 @@ if st.session_state.last_question:
     replay_button = st.sidebar.button("🔁 Replay Last Question")
 
 # -----------------------------
-# Main Page: Chat Input
+# Main Page: Display Chat History
+# -----------------------------
+for i, (q, dog_resp, trainer_resp) in enumerate(st.session_state.chat_history):
+    st.markdown(f"**You:** {q}")
+    st.markdown(f"🐶 **{dog['name']} thinks:** {dog_resp}")
+    if trainer_resp:
+        with st.expander("🧑‍🏫 Dog trainer explains"):
+            st.markdown(trainer_resp)
+    st.divider()
+
+# -----------------------------
+# Main Page: User Input
 # -----------------------------
 user_question = st.text_input(
     f"What would you like to ask {dog['name']}?",
@@ -171,7 +185,7 @@ user_question = st.text_input(
     key="user_question_input"
 )
 
-# Determine question to ask
+# Determine which question to ask
 if replay_button:
     question_to_ask = st.session_state.last_question
 elif user_question:
@@ -197,14 +211,18 @@ else:
 
 # Story style mapping
 if current_style == "🐾 Doggish Dog":
-    story_style_prompt = "Speak like a normal dog, thinking and acting according to your traits. Do not list personality traits explicitly; behave as if everyone already knows them. Make responses natural, playful, and filtered through the dog's self-story and Drama Level."
+    story_style_prompt = (
+        "Speak like a normal dog, thinking and acting according to your traits. "
+        "Do not list personality traits explicitly; behave as if everyone already knows them. "
+        "Make responses natural, playful, and filtered through the dog's self-story and Drama Level."
+)
 elif current_style == "🎬 Sitcom Dog":
     story_style_prompt = "Respond like a sarcastic sitcom character observing ridiculous human behavior."
 elif current_style == "📖 Shakespearean Dog":
     story_style_prompt = "Speak in overly dramatic Shakespearean-style language."
 elif current_style == "🎮 RPG Hero Dog":
     story_style_prompt = "Speak like a heroic RPG character on a noble quest to protect the household."
-else:  # 🎵 Snoop Dogg Dog
+else:  # Snoop Dogg
     story_style_prompt = (
         "Speak in a laid-back, cool, rhyming style reminiscent of Snoop Dogg. "
         "Use playful slang, humor, and rhythm while describing dog thoughts."
@@ -217,7 +235,6 @@ if question_to_ask:
     st.session_state.last_question = question_to_ask
 
     prompt = f"""
-
 You are a dog named {dog['name']}.
 
 Background personality information (use only if relevant):
@@ -240,16 +257,12 @@ Storytelling Style (tone of response):
 Instructions:
 - Respond in two parts.
 - Part 1: Speak in first person as the dog, using dog logic.
-- Make your responses **reflect the Drama Level**:
-    - Low: playful but mostly normal dog reactions.
-    - Moderate: inject some exaggeration or heroic flair.
-    - High: dramatize your thoughts and actions strongly.
-    - Extreme: your thoughts and reactions are **fully theatrical, heroic, or absurd**, as if you truly believe you are a legendary character.
-- Part 2: Start the next paragraph with exactly "As a dog trainer:" and give an objective explanation of the dog's behavior.
+- Make your responses **reflect the Drama Level** and exaggerate as appropriate.
 - Keep dog responses concise: 2–4 sentences max.
+- Part 2: Start the next paragraph with exactly "As a dog trainer:" and give an objective explanation of the dog's behavior.
 - Keep trainer explanations brief: 2–3 sentences max.
-- Do not repeat the dog’s name or personality traits.
-- First paragraph is always the dog's perspective; second is the trainer explanation.
+- Do not repeat the dog's name or personality traits.
+- First paragraph is the dog's perspective; second is the trainer explanation.
 
 User question:
 {question_to_ask}
@@ -269,13 +282,10 @@ User question:
             dog_part = text
             trainer_part = ""
 
-        # Display AI responses
-        st.markdown(f"### 🐶 {dog['name']} thinks...")
-        st.markdown(dog_part.strip())
-
-        if trainer_part.strip():
-            with st.expander("🧑‍🏫 Dog trainer explains"):
-                st.markdown(trainer_part.strip())
+        st.session_state.chat_history.append(
+            (question_to_ask, dog_part.strip(), trainer_part.strip())
+        )
+        st.experimental_rerun()  # Refresh page so new chat appears below previous responses
 
     except OpenAIError:
         st.error("The AI dog is taking a nap. Check your API key or connection.")
