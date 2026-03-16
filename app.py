@@ -150,32 +150,17 @@ for q, d, t in st.session_state.chat_history:
     st.markdown(f"**🧑‍🏫 Dog trainer explains:** {t}")
     st.divider()
 
-# -----------------------------
-# Map drama & style → prompt
-# -----------------------------
-current_drama = st.session_state.confirmed_drama
-current_style = st.session_state.confirmed_style
+# Sample questions for placeholder
+sample_questions = [
+    "What's the best part of your day?",
+    "What scares you the most?",
+    "How do you feel about new people?",
+    "What's your favorite game or toy?",
+    "Describe your dream adventure!"
+]
+placeholder_text = random.choice(sample_questions)
 
-drama_map = {
-    "🐾 Low – Mostly normal dog reactions": "The dog mostly reacts normally; its self-story has little effect.",
-    "🐕 Moderate – Story influences some thoughts/actions": "The dog sometimes filters its thoughts and behavior through its self-story.",
-    "👑 High – Story guides most thoughts/actions": "The dog mostly acts and thinks according to its self-story.",
-    "🦸 Extreme – Story defines everything the dog thinks and does": "The dog fully believes in its self-story; all thoughts and reactions are filtered through it."
-}
-drama_strength = drama_map[current_drama]
-
-style_map = {
-    "🐾 Doggish Dog": "Speak naturally according to your traits; do not list traits explicitly; behave as if everyone already knows them.",
-    "🎬 Sitcom Dog": "Respond like a sarcastic sitcom character observing ridiculous human behavior.",
-    "📖 Shakespearean Dog": "Speak in overly dramatic Shakespearean-style language.",
-    "🎮 RPG Hero Dog": "Speak like a heroic RPG character on a noble quest to protect the household.",
-    "🎵 Snoop Dogg Dog": "Speak in a laid-back, cool, rhyming style reminiscent of Snoop Dogg."
-}
-story_style_prompt = style_map[current_style]
-
-# -----------------------------
-#Input box + Submit button
-# -----------------------------
+## 1️⃣ Input box + submit button
 if "current_input" not in st.session_state:
     st.session_state.current_input = ""
 
