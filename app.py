@@ -39,113 +39,66 @@ if "dog" not in st.session_state:
         st.session_state.dog = default_dog.copy()
 
 dog = st.session_state.dog
-
-# -----------------------------
-# Sidebar: Dog Card
-# -----------------------------
-def render_dog_card():
-    st.sidebar.image("https://cdn-icons-png.flaticon.com/512/616/616408.png", width=80)
-    st.sidebar.markdown(f"""
-    ### {dog['name']}
-    **{dog['breed']} • {dog['age']}**  
-    **Identity:** {dog['self_identity']}
-    """)
-
-# -----------------------------
-# Sidebar: Persona Editor
-# -----------------------------
-with st.sidebar.expander("⚙️ View or edit full dog persona"):
-    st.write(f"**Training Level:** {dog['training_level']}")
-    st.write("**Personality Traits:** " + ", ".join(dog["personality_traits"]))
-    st.write("**Fear Triggers:** " + ", ".join(dog["fear_triggers"]))
-    st.write(f"**Self Story:** {dog['self_story']}")
-
-    if st.checkbox("Edit persona"):
-        dog["name"] = st.text_input("Dog name", dog["name"])
-        dog["breed"] = st.text_input("Breed", dog["breed"])
-        dog["age"] = st.text_input("Age", dog["age"])
-        dog["energy_level"] = st.text_input("Energy level", dog["energy_level"])
-        dog["training_level"] = st.text_input("Training level", dog["training_level"])
-        dog["self_identity"] = st.text_input("Self identity", dog["self_identity"])
-        dog["self_story"] = st.text_input("Self story", dog["self_story"])
-
-        # Editable lists
-        dog["personality_traits"] = [
-            trait.strip() for trait in st.text_input(
-                "Personality Traits (comma-separated)",
-                ", ".join(dog["personality_traits"])
-            ).split(",")
-        ]
-        dog["fear_triggers"] = [
-            trigger.strip() for trigger in st.text_input(
-                "Fear Triggers (comma-separated)",
-                ", ".join(dog["fear_triggers"])
-            ).split(",")
-        ]
-
-        save_col1, save_col2 = st.columns(2)
-        if save_col1.button("Save Updates"):
-            st.success("Persona updated!")
-        if save_col2.checkbox("Save for later"):
-            with open(dog_file, "w") as f:
-                json.dump(dog, f, indent=2)
-            st.success("Saved for future sessions")
-        if st.button("Reset to Luna"):
-            st.session_state.dog = default_dog.copy()
-            st.success("Reset to Luna")
-            dog = st.session_state.dog  # update reference
-
-# --- Render Dog Card after edits ---
+# --- Sidebar ---
+# 1️⃣ Dog Card
 render_dog_card()
 
-# -----------------------------
-# Sidebar: Drama Level
-# -----------------------------
-drama_options = [
-    "🐾 Low – Mostly normal dog reactions",
-    "🐕 Moderate – Story influences some thoughts/actions",
-    "👑 High – Story guides most thoughts/actions",
-    "🦸 Extreme – Story defines everything the dog thinks and does"
-]
+# 2️⃣ Persona Editor (always in an expander, no checkbox)
+with st.sidebar.expander("⚙️ View or edit full dog persona"):
+    dog["name"] = st.text_input("Dog name", dog["name"])
+    dog["breed"] = st.text_input("Breed", dog["breed"])
+    dog["age"] = st.text_input("Age", dog["age"])
+    dog["energy_level"] = st.text_input("Energy level", dog["energy_level"])
+    dog["training_level"] = st.text_input("Training level", dog["training_level"])
+    dog["self_identity"] = st.text_input("Self identity", dog["self_identity"])
+    dog["self_story"] = st.text_input("Self story", dog["self_story"])
 
-if "drama_level" not in st.session_state or st.session_state.drama_level not in drama_options:
-    st.session_state.drama_level = "🐕 Moderate – Story influences some thoughts/actions"
+    # Editable lists
+    dog["personality_traits"] = [
+        trait.strip() for trait in st.text_input(
+            "Personality Traits (comma-separated)",
+            ", ".join(dog["personality_traits"])
+        ).split(",")
+    ]
+    dog["fear_triggers"] = [
+        trigger.strip() for trigger in st.text_input(
+            "Fear Triggers (comma-separated)",
+            ", ".join(dog["fear_triggers"])
+        ).split(",")
+    ]
 
-drama_level = st.sidebar.selectbox(
-    "🎭 Drama Level",
-    drama_options,
-    index=drama_options.index(st.session_state.drama_level),
-    key="drama_level"
-)
+    save_col1, save_col2 = st.columns(2)
+    if save_col1.button("Save Updates"):
+        st.success("Persona updated!")
+    if save_col2.checkbox("Save for later"):
+        with open(dog_file, "w") as f:
+            json.dump(dog, f, indent=2)
+        st.success("Saved for future sessions")
+    if st.button("Reset to Luna"):
+        st.session_state.dog = default_dog.copy()
+        st.success("Reset to Luna")
+        dog = st.session_state.dog
 
-# -----------------------------
-# Sidebar: Storytelling Style
-# -----------------------------
-style_options = [
-    "🐾 Doggish Dog",
-    "🎬 Sitcom Dog",
-    "📖 Shakespearean Dog",
-    "🎮 RPG Hero Dog",
-    "🎵 Snoop Dogg Dog"
-]
+# 3️⃣ Drama Level
+drama_level = st.sidebar.selectbox("🎭 Drama Level", drama_options,
+                                   index=drama_options.index(st.session_state.drama_level),
+                                   key="drama_level")
 
-if "story_style" not in st.session_state or st.session_state.story_style not in style_options:
-    st.session_state.story_style = "🐾 Doggish Dog"
+# 4️⃣ Storytelling Style
+story_style = st.sidebar.selectbox("🎨 Storytelling Style", style_options,
+                                   index=style_options.index(st.session_state.story_style),
+                                   key="story_style")
 
-story_style = st.sidebar.selectbox(
-    "🎨 Storytelling Style",
-    style_options,
-    index=style_options.index(st.session_state.story_style),
-    key="story_style"
-)
-
-# -----------------------------
-# Sidebar: Confirm Settings
-# -----------------------------
+# 5️⃣ Confirm Settings Button
 if st.sidebar.button("✅ Confirm Settings"):
     st.session_state.confirmed_drama = st.session_state.drama_level
     st.session_state.confirmed_style = st.session_state.story_style
     st.sidebar.success("Settings saved! Will apply to next question.")
+
+# 6️⃣ Replay Last Question
+if st.session_state.last_question:
+    if st.sidebar.button("🔁 Replay Last Question"):
+        question_to_ask = st.session_state.last_question
 
 # -----------------------------
 # Sample Placeholder Questions
