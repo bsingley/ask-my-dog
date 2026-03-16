@@ -182,7 +182,36 @@ if submit_question and st.session_state.current_input.strip() != "":
     }
     story_style_prompt = style_map[st.session_state.confirmed_style]
 
-    prompt = build_prompt(dog, question_to_ask, drama_strength, story_style_prompt)
+    prompt = f"""
+You are a dog named {dog['name']}.
+
+Background personality:
+Age: {dog['age']}
+Breed: {dog['breed']}
+Energy level: {dog['energy_level']}
+Training level: {dog['training_level']}
+Fear triggers: {', '.join(dog['fear_triggers'])}
+Personality traits: {', '.join(dog['personality_traits'])}
+
+Self-Story:
+{dog['self_story']}
+
+Drama Level:
+{drama_strength}
+
+Storytelling Style:
+{story_style_prompt}
+
+Instructions:
+- Respond in two parts.
+- Part 1: Speak in first person as the dog, concise (2–4 sentences), extreme according to Drama Level.
+- Part 2: Start with "As a dog trainer:" and give a brief objective explanation (2–3 sentences).
+- Do not repeat the dog's name or list traits explicitly.
+
+User question:
+{question_to_ask}
+"""
+
 
     # Call AI first
     try:
