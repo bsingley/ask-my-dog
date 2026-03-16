@@ -5,7 +5,7 @@ import os
 import random
 
 # -----------------------------
-# Setup
+# Page setup
 # -----------------------------
 st.set_page_config(page_title="Ask My Dog", page_icon="🐾")
 st.title("🐾 Ask My Dog")
@@ -14,7 +14,7 @@ api_key = os.environ.get("API_KEY")
 client = OpenAI()
 
 # -----------------------------
-# Default Dog Persona
+# Default dog persona
 # -----------------------------
 default_dog = {
     "name": "Luna",
@@ -30,33 +30,63 @@ default_dog = {
 
 dog_file = "dog_profile.json"
 
-# Store dog in session_state to persist updates across reruns
+# -----------------------------
+# Session State Initialization
+# -----------------------------
 if "dog" not in st.session_state:
     if os.path.exists(dog_file):
         with open(dog_file) as f:
             st.session_state.dog = json.load(f)
     else:
         st.session_state.dog = default_dog.copy()
-
 dog = st.session_state.dog
-# --- Sidebar ---
+
+drama_options = [
+    "🐾 Low – Mostly normal dog reactions",
+    "🐕 Moderate – Story influences some thoughts/actions",
+    "👑 High – Story guides most thoughts/actions",
+    "🦸 Extreme – Story defines everything the dog thinks and does"
+]
+if "drama_level" not in st.session_state or st.session_state.drama_level not in drama_options:
+    st.session_state.drama_level = "🐕 Moderate – Story influences some thoughts/actions"
+if "confirmed_drama" not in st.session_state:
+    st.session_state.confirmed_drama = st.session_state.drama_level
+
+style_options = ["🐾 Doggish Dog", "🎬 Sitcom Dog", "📖 Shakespearean Dog", "🎮 RPG Hero Dog", "🎵 Snoop Dogg Dog"]
+if "story_style" not in st.session_state or st.session_state.story_style not in style_options:
+    st.session_state.story_style = "🐾 Doggish Dog"
+if "confirmed_style" not in st.session_state:
+    st.session_state.confirmed_style = st.session_state.story_style
+
+if "last_question" not in st.session_state:
+    st.session_state.last_question = ""
+
+if "placeholder_question" not in st.session_state:
+    st.session_state.placeholder_question = random.choice([
+        "Why do I chase my tail?",
+        "How can I make new friends?",
+        "Why do I bark at strangers?",
+        "What’s my favorite part of the house?",
+        "How can I be a better fetch player?",
+        "Why do I get scared of the vacuum?",
+        "What’s my favorite toy?",
+    ])
+
 # -----------------------------
-# Sidebar: Dog Card Function
+# Sidebar: Dog Card
 # -----------------------------
 def render_dog_card():
     st.sidebar.image("https://cdn-icons-png.flaticon.com/512/616/616408.png", width=80)
     st.sidebar.markdown(f"""
-    ### {dog['name']}
-    **{dog['breed']} • {dog['age']}**  
-    **Identity:** {dog['self_identity']}
-    """)
+### {dog['name']}
+**{dog['breed']} • {dog['age']}**  
+**Identity:** {dog['self_identity']}
+""")
+render_dog_card()
 
 # -----------------------------
-# Call Dog Card
+# Sidebar: Persona Editor
 # -----------------------------
-render_dog_card()  # now this works because function is defined above
-
-# 2️⃣ Persona Editor (always in an expander, no checkbox)
 with st.sidebar.expander("⚙️ View or edit full dog persona"):
     dog["name"] = st.text_input("Dog name", dog["name"])
     dog["breed"] = st.text_input("Breed", dog["breed"])
@@ -65,8 +95,6 @@ with st.sidebar.expander("⚙️ View or edit full dog persona"):
     dog["training_level"] = st.text_input("Training level", dog["training_level"])
     dog["self_identity"] = st.text_input("Self identity", dog["self_identity"])
     dog["self_story"] = st.text_input("Self story", dog["self_story"])
-
-    # Editable lists
     dog["personality_traits"] = [
         trait.strip() for trait in st.text_input(
             "Personality Traits (comma-separated)",
@@ -92,45 +120,30 @@ with st.sidebar.expander("⚙️ View or edit full dog persona"):
         st.success("Reset to Luna")
         dog = st.session_state.dog
 
-# 3️⃣ Drama Level
+# -----------------------------
+# Sidebar: Drama & Storytelling Style
+# -----------------------------
 drama_level = st.sidebar.selectbox("🎭 Drama Level", drama_options,
                                    index=drama_options.index(st.session_state.drama_level),
                                    key="drama_level")
-
-# 4️⃣ Storytelling Style
 story_style = st.sidebar.selectbox("🎨 Storytelling Style", style_options,
                                    index=style_options.index(st.session_state.story_style),
                                    key="story_style")
 
-# 5️⃣ Confirm Settings Button
 if st.sidebar.button("✅ Confirm Settings"):
     st.session_state.confirmed_drama = st.session_state.drama_level
     st.session_state.confirmed_style = st.session_state.story_style
     st.sidebar.success("Settings saved! Will apply to next question.")
 
-# 6️⃣ Replay Last Question
+# -----------------------------
+# Sidebar: Replay Last Question
+# -----------------------------
+replay_button = False
 if st.session_state.last_question:
-    if st.sidebar.button("🔁 Replay Last Question"):
-        question_to_ask = st.session_state.last_question
+    replay_button = st.sidebar.button("🔁 Replay Last Question")
 
 # -----------------------------
-# Sample Placeholder Questions
-# -----------------------------
-sample_questions = [
-    "Why do I chase my tail?",
-    "How can I make new friends?",
-    "Why do I bark at strangers?",
-    "What’s my favorite part of the house?",
-    "How can I be a better fetch player?",
-    "Why do I get scared of the vacuum?",
-    "What’s my favorite toy?",
-]
-
-if "placeholder_question" not in st.session_state:
-    st.session_state.placeholder_question = random.choice(sample_questions)
-
-# -----------------------------
-# Chat Input (Main Page)
+# Main Page: Chat Input
 # -----------------------------
 user_question = st.text_input(
     f"What would you like to ask {dog['name']}?",
@@ -138,27 +151,21 @@ user_question = st.text_input(
     key="user_question_input"
 )
 
-# -----------------------------
-# Replay Last Question
-# -----------------------------
-if "last_question" not in st.session_state:
-    st.session_state.last_question = ""
-
-if st.session_state.last_question:
-    if st.sidebar.button("🔁 Replay Last Question"):
-        question_to_ask = st.session_state.last_question
-    else:
-        question_to_ask = user_question if user_question else None
+# Determine question to ask
+if replay_button:
+    question_to_ask = st.session_state.last_question
+elif user_question:
+    question_to_ask = user_question
 else:
-    question_to_ask = user_question if user_question else None
+    question_to_ask = None
 
 # -----------------------------
-# Use Confirmed Settings for next question
+# Map confirmed settings to prompt
 # -----------------------------
-current_drama = st.session_state.get("confirmed_drama", st.session_state.drama_level)
-current_style = st.session_state.get("confirmed_style", st.session_state.story_style)
+current_drama = st.session_state.confirmed_drama
+current_style = st.session_state.confirmed_style
 
-# Map Drama → Prompt Description
+# Drama mapping
 if "Low" in current_drama:
     drama_strength = "The dog mostly reacts normally; its self-story has little effect."
 elif "Moderate" in current_drama:
@@ -168,7 +175,7 @@ elif "High" in current_drama:
 else:
     drama_strength = "The dog fully believes in its self-story; all thoughts and reactions are filtered through it."
 
-# Map Style → Prompt
+# Story style mapping
 if current_style == "🐾 Doggish Dog":
     story_style_prompt = "Speak like a normal dog thinking in simple playful thoughts."
 elif current_style == "🎬 Sitcom Dog":
@@ -233,7 +240,7 @@ User question:
             dog_part = text
             trainer_part = ""
 
-        # Display responses in main page
+        # Display AI responses
         st.markdown(f"### 🐶 {dog['name']} thinks...")
         st.markdown(dog_part.strip())
 
