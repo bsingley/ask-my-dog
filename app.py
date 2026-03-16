@@ -3,7 +3,9 @@ from openai import OpenAI, OpenAIError
 import json
 import os
 
-api_key = os.environ.get("API_KEY")
+# -----------------------------
+# Setup
+# -----------------------------
 
 st.set_page_config(page_title="Ask My Dog", page_icon="🐾")
 
@@ -11,8 +13,10 @@ st.title("🐾 Ask My Dog")
 
 client = OpenAI()
 
+dog_file = "dog_profile.json"
+
 # -----------------------------
-# Default Dog
+# Default Dog Profile
 # -----------------------------
 
 default_dog = {
@@ -29,11 +33,6 @@ default_dog = {
     "superhero_identity": "None"
 }
 
-dog_file = "dog_profile.json"
-# Default confidence (prevents reference errors)
-confidence_choice = "🐕 Normal Dog"
-confidence_style = "The dog has normal playful dog confidence."
-
 if os.path.exists(dog_file):
     with open(dog_file) as f:
         dog = json.load(f)
@@ -41,38 +40,49 @@ else:
     dog = default_dog.copy()
 
 # -----------------------------
-# Dog Character Card
+# Chat History
 # -----------------------------
-col1, col2 = st.columns([1,4])
 
-with col1:
-    st.image("https://cdn-icons-png.flaticon.com/512/616/616408.png", width=80)
+if "messages" not in st.session_state:
+    st.session_state.messages = []
 
-with col2:
+# -----------------------------
+# Sidebar Persona
+# -----------------------------
+
+with st.sidebar:
+
+    st.image("https://cdn-icons-png.flaticon.com/512/616/616408.png", width=120)
+
     st.markdown(f"""
-### 🐶 {dog['name']}
+    ### 🐶 {dog['name']}
+    **{dog['breed']} • {dog['age']}**
+    """)
 
-**{dog['breed']} • {dog['age']}**
+    st.divider()
 
-**Identity:** {dog['self_identity']}  
-**Confidence Mode:** {confidence_choice}
-""")
+    confidence_choice = st.selectbox(
+        "How does this dog view themselves?",
+        [
+            "🐶 Nervous Puppy",
+            "🐕 Normal Dog",
+            "👑 Very Important Dog",
+            "🦸 Legendary Household Guardian"
+        ]
+    )
 
-st.divider()
+    if "Nervous Puppy" in confidence_choice:
+        confidence_style = "The dog is slightly unsure and cautious."
+    elif "Normal Dog" in confidence_choice:
+        confidence_style = "The dog has normal playful dog confidence."
+    elif "Very Important Dog" in confidence_choice:
+        confidence_style = "The dog believes they are responsible for important household decisions."
+    else:
+        confidence_style = "The dog believes they are the heroic protector of the household."
 
-# -----------------------------
-# Persona Expander
-# -----------------------------
+    st.divider()
 
-with st.expander("⚙️ View or edit full dog persona"):
-
-    st.write(f"**Training Level:** {dog['training_level']}")
-    st.write("**Personality Traits:** " + ", ".join(dog['personality_traits']))
-    st.write("**Fear Triggers:** " + ", ".join(dog['fear_triggers']))
-    st.write(f"**Self Story:** {dog['self_story']}")
-    st.write(f"**Superhero Identity:** {dog['superhero_identity']}")
-
-    if st.checkbox("Edit persona"):
+    with st.expander("⚙️ Edit Dog Persona"):
 
         dog["name"] = st.text_input("Dog name", dog["name"])
         dog["breed"] = st.text_input("Breed", dog["breed"])
@@ -83,65 +93,56 @@ with st.expander("⚙️ View or edit full dog persona"):
         dog["self_story"] = st.text_input("Self story", dog["self_story"])
         dog["superhero_identity"] = st.text_input("Superhero identity", dog["superhero_identity"])
 
-        save_col1, save_col2 = st.columns(2)
-
-        if save_col1.button("Save Updates"):
-            st.success("Persona updated!")
-
-        if save_col2.checkbox("Save for later"):
+        if st.button("Save Persona"):
             with open(dog_file, "w") as f:
                 json.dump(dog, f, indent=2)
-            st.success("Saved for future sessions")
+            st.success("Saved!")
 
         if st.button("Reset to Luna"):
             dog = default_dog.copy()
-            st.success("Reset to Luna")
+            st.success("Reset to default")
+
+# -----------------------------
+# Example Prompts
+# -----------------------------
+
+st.caption("Try asking:")
+st.caption("• Why do you bark at the vacuum?")
+st.caption("• Why do you steal socks?")
+st.caption("• What happens during Zoom meetings?")
+st.caption("• Why do you stare at me while I eat?")
 
 st.divider()
 
 # -----------------------------
-# Dog Confidence Selector
+# Display Chat History
 # -----------------------------
 
-confidence_choice = st.selectbox(
-    "How does this dog view themselves?",
-    [
-        "🐶 Nervous Puppy",
-        "🐕 Normal Dog",
-        "👑 Very Important Dog",
-        "🦸 Legendary Household Guardian"
-    ],
-    help="Controls how dramatic your dog's internal monologue will be."
-)
+for message in st.session_state.messages:
 
-st.caption(f"Current mindset: **{confidence_choice}**")
-
-if "Nervous Puppy" in confidence_choice:
-    confidence_style = "The dog is slightly unsure and cautious."
-elif "Normal Dog" in confidence_choice:
-    confidence_style = "The dog has normal playful dog confidence."
-elif "Very Important Dog" in confidence_choice:
-    confidence_style = "The dog believes they are responsible for important household decisions."
-else:
-    confidence_style = "The dog believes they are the heroic protector of the household."
-
-st.divider()
+    with st.chat_message(message["role"]):
+        st.markdown(message["content"])
 
 # -----------------------------
-# Ask Question
+# Chat Input
 # -----------------------------
 
-st.markdown("### Ask your dog a question")
-
-user_question = st.text_input(
-    f"What would you like to ask {dog['name']}?"
-)
+user_question = st.chat_input(f"Ask {dog['name']} something...")
 
 # -----------------------------
 # AI Response
 # -----------------------------
 
 if user_question:
+
+    # Display user message
+    with st.chat_message("user"):
+        st.markdown(user_question)
+
+    st.session_state.messages.append({
+        "role": "user",
+        "content": user_question
+    })
 
     prompt = f"""
 You are a dog named {dog['name']}.
@@ -205,15 +206,21 @@ User question:
             dog_part = text
             trainer_part = ""
 
-        st.divider()
+        # Display response
+        with st.chat_message("assistant"):
 
-        st.markdown(f"### 🐶 {dog['name']} thinks...")
+            st.markdown(f"### 🐶 {dog['name']} thinks...")
+            st.markdown(dog_part)
 
-        st.markdown(dog_part)
+            if trainer_part:
+                with st.expander("🧑‍🏫 Dog trainer explains"):
+                    st.markdown(trainer_part)
 
-        st.markdown("### 🧑‍🏫 Dog trainer explains")
-
-        st.markdown(trainer_part)
+        # Save assistant response
+        st.session_state.messages.append({
+            "role": "assistant",
+            "content": f"### 🐶 {dog['name']} thinks...\n{dog_part}\n\n**Dog Trainer:**\n{trainer_part}"
+        })
 
     except OpenAIError:
 
