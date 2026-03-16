@@ -1,16 +1,20 @@
 ```mermaid
 flowchart TD
-    UI[User Interface (Browser/Web)] --> App[Streamlit App (Python)]
-    App --> AI[AI Engine/API (OpenAI GPT)]
-    
-    UI -->|User Inputs: Question, Dog, Confidence| App
-    App -->|Persona Config: Dog Personality, Confidence| AI
-    AI -->|Response Generation: Text output| App
-    App -->|Displayed Response| UI
+    UI[User Interface] --> App[Streamlit App]
+    App --> AI[OpenAI API]
 
-    subgraph FutureEnhancements
-        AI --> Memory[Conversation Memory]
-        App --> MultiDog[Multiple Dog Personalities]
-        AI --> Training[Personalized Training Recommendations]
+    UI -->|User inputs question and dog persona| App
+    App -->|Prompt with persona configuration| AI
+    AI -->|Generated response| App
+    App -->|Display response| UI
+
+    subgraph Future Enhancements
+        Memory[Conversation Memory]
+        MultiDog[Multiple Dog Personalities]
+        Training[Training Recommendations]
     end
+
+    AI --> Memory
+    App --> MultiDog
+    AI --> Training
 ```
