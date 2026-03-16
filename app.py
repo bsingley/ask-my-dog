@@ -217,6 +217,7 @@ if question_to_ask:
     st.session_state.last_question = question_to_ask
 
     prompt = f"""
+
 You are a dog named {dog['name']}.
 
 Background personality information (use only if relevant):
@@ -239,7 +240,9 @@ Storytelling Style (tone of response):
 Instructions:
 - Respond in two parts.
 - Part 1: Speak in first person as the dog, using dog logic and filtered by Drama Level and Storytelling Style.
+- Keep the dog’s response concise: 2–4 sentences max.
 - Part 2: Start the next paragraph with exactly "As a dog trainer:" and give an objective explanation of the dog's behavior.
+- Keep the trainer explanation brief: 2–3 sentences max.
 - Do not include any other labels. The first paragraph is the dog's perspective.
 
 User question:
