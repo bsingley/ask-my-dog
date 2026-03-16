@@ -89,6 +89,7 @@ if "placeholder_question" not in st.session_state:
         "What’s my favorite toy?",
     ])
 
+
 # -----------------------------
 # Sidebar: Dog Card
 # -----------------------------
@@ -99,11 +100,8 @@ def render_dog_card():
 **{dog['breed']} • {dog['age']}**  
 **Identity:** {dog['self_identity']}
 """)
-render_dog_card()
 
-# -----------------------------
-# Sidebar: Persona Editor
-# -----------------------------
+# Only render after persona editor to reflect any changes
 with st.sidebar.expander("⚙️ View or edit full dog persona"):
     dog["name"] = st.text_input("Dog name", dog["name"])
     dog["breed"] = st.text_input("Breed", dog["breed"])
@@ -136,7 +134,8 @@ with st.sidebar.expander("⚙️ View or edit full dog persona"):
         st.session_state.dog = default_dog.copy()
         dog = st.session_state.dog
         st.success("Reset to Luna")
-    render_dog_card()  # Update card if persona changed
+
+render_dog_card()  # <-- only call here
 
 # -----------------------------
 # Sidebar: Drama & Storytelling Style
