@@ -51,11 +51,11 @@ st.sidebar.markdown(f"""
 
 # Persona Expander
 with st.sidebar.expander("⚙️ View or edit full dog persona"):
+
     st.write(f"**Training Level:** {dog['training_level']}")
     st.write("**Personality Traits:** " + ", ".join(dog['personality_traits']))
     st.write("**Fear Triggers:** " + ", ".join(dog['fear_triggers']))
     st.write(f"**Self Story:** {dog['self_story']}")
-    st.write(f"**Superhero Identity:** {dog['superhero_identity']}")
 
     if st.checkbox("Edit persona"):
         dog["name"] = st.text_input("Dog name", dog["name"])
@@ -65,7 +65,20 @@ with st.sidebar.expander("⚙️ View or edit full dog persona"):
         dog["training_level"] = st.text_input("Training level", dog["training_level"])
         dog["self_identity"] = st.text_input("Self identity", dog["self_identity"])
         dog["self_story"] = st.text_input("Self story", dog["self_story"])
-        dog["superhero_identity"] = st.text_input("Superhero identity", dog["superhero_identity"])
+
+        # Editable lists as comma-separated text
+        dog["personality_traits"] = [
+            trait.strip() for trait in st.text_input(
+                "Personality Traits (comma-separated)",
+                ", ".join(dog["personality_traits"])
+            ).split(",")
+        ]
+        dog["fear_triggers"] = [
+            trigger.strip() for trigger in st.text_input(
+                "Fear Triggers (comma-separated)",
+                ", ".join(dog["fear_triggers"])
+            ).split(",")
+        ]
 
         save_col1, save_col2 = st.columns(2)
         if save_col1.button("Save Updates"):
