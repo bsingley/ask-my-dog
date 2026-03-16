@@ -82,6 +82,32 @@ with st.sidebar:
 
     st.divider()
 
+    st.divider()
+
+    drama_level = st.selectbox(
+        "🎭 Drama Level",
+        [
+            "🐾 Realistic Dog",
+            "🎬 Sitcom Dog",
+            "📖 Shakespearean Dog",
+            "🎮 RPG Hero Dog"
+        ],
+        help="Controls how dramatic your dog's internal monologue will be."
+    )
+
+    if "Realistic Dog" in drama_level:
+        drama_style = "Speak like a normal dog thinking in simple playful thoughts."
+
+    elif "Sitcom Dog" in drama_level:
+        drama_style = "Respond like a sarcastic sitcom character observing ridiculous human behavior."
+
+    elif "Shakespearean Dog" in drama_level:
+        drama_style = "Speak in overly dramatic Shakespearean-style language as if narrating an epic tragedy."
+
+    else:
+        drama_style = "Speak like a heroic RPG character on a noble quest to protect the household."
+
+
     with st.expander("⚙️ Edit Dog Persona"):
 
         dog["name"] = st.text_input("Dog name", dog["name"])
@@ -160,6 +186,9 @@ Superhero identity: {dog['superhero_identity']}
 
 Confidence style:
 {confidence_style}
+
+Drama style:
+{drama_style}
 
 Instructions:
 
