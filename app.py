@@ -7,7 +7,6 @@ import random
 # -----------------------------
 # Setup
 # -----------------------------
-api_key = os.environ.get("API_KEY")
 client = OpenAI()
 st.set_page_config(page_title="Ask My Dog", page_icon="🐾")
 
@@ -25,7 +24,6 @@ default_dog = {
     "personality_traits": ["extremely intelligent", "curious", "cautious"],
     "fear_triggers": ["new objects", "loud sounds"]
 }
-
 dog_file = "dog_profile.json"
 
 if "dog" not in st.session_state:
@@ -38,7 +36,7 @@ if "dog" not in st.session_state:
 dog = st.session_state.dog
 
 # -----------------------------
-# Session state for chat and settings
+# Session state
 # -----------------------------
 if "chat_history" not in st.session_state:
     st.session_state.chat_history = []
@@ -80,16 +78,10 @@ with st.sidebar.expander("⚙️ View or edit full dog persona"):
     dog["self_identity"] = st.text_input("Self identity", dog["self_identity"])
     dog["self_story"] = st.text_input("Self story", dog["self_story"])
     dog["personality_traits"] = [
-        trait.strip() for trait in st.text_input(
-            "Personality Traits (comma-separated)",
-            ", ".join(dog["personality_traits"])
-        ).split(",")
+        t.strip() for t in st.text_input("Personality Traits (comma-separated)", ", ".join(dog["personality_traits"])).split(",")
     ]
     dog["fear_triggers"] = [
-        trigger.strip() for trigger in st.text_input(
-            "Fear Triggers (comma-separated)",
-            ", ".join(dog["fear_triggers"])
-        ).split(",")
+        t.strip() for t in st.text_input("Fear Triggers (comma-separated)", ", ".join(dog["fear_triggers"])).split(",")
     ]
 
     save_col1, save_col2 = st.columns(2)
@@ -168,7 +160,7 @@ sample_questions = [
 ]
 placeholder_text = random.choice(sample_questions)
 
-# Input box + submit button
+# Input box + submit
 st.markdown("### Ask your dog a question")
 user_question = st.text_input(
     "Type your question here",
@@ -181,7 +173,6 @@ submit_question = st.button("Ask")
 # Determine which question to ask
 # -----------------------------
 question_to_ask = None
-
 if st.session_state.replay_pressed:
     question_to_ask = st.session_state.last_question
     st.session_state.replay_pressed = False
@@ -203,11 +194,11 @@ drama_map = {
 drama_strength = drama_map[current_drama]
 
 style_map = {
-    "🐾 Doggish Dog": "Speak like a normal dog, thinking and acting according to your traits. Do not list personality traits explicitly; behave as if everyone already knows them. Make responses natural, playful, and filtered through the dog's self-story and Drama Level.",
+    "🐾 Doggish Dog": "Speak naturally according to your traits; do not list traits explicitly; behave as if everyone already knows them.",
     "🎬 Sitcom Dog": "Respond like a sarcastic sitcom character observing ridiculous human behavior.",
     "📖 Shakespearean Dog": "Speak in overly dramatic Shakespearean-style language.",
     "🎮 RPG Hero Dog": "Speak like a heroic RPG character on a noble quest to protect the household.",
-    "🎵 Snoop Dogg Dog": "Speak in a laid-back, cool, rhyming style reminiscent of Snoop Dogg. Use playful slang, humor, and rhythm while describing dog thoughts."
+    "🎵 Snoop Dogg Dog": "Speak in a laid-back, cool, rhyming style reminiscent of Snoop Dogg."
 }
 story_style_prompt = style_map[current_style]
 
@@ -216,13 +207,13 @@ story_style_prompt = style_map[current_style]
 # -----------------------------
 if question_to_ask:
     st.session_state.last_question = question_to_ask
-    # Append placeholder so chat shows immediately
+    # Append placeholder
     st.session_state.chat_history.append((question_to_ask, "…thinking…", ""))
 
     prompt = f"""
 You are a dog named {dog['name']}.
 
-Background personality information:
+Background personality:
 Age: {dog['age']}
 Breed: {dog['breed']}
 Energy level: {dog['energy_level']}
@@ -255,21 +246,18 @@ User question:
                 model="gpt-4.1-mini",
                 input=prompt
             )
-
         text = response.output_text.strip()
         if "As a dog trainer:" in text:
             dog_part, trainer_part = text.split("As a dog trainer:", 1)
         else:
             dog_part = text
             trainer_part = ""
-
-        # Replace the last placeholder entry with actual AI response
+        # Replace placeholder
         st.session_state.chat_history[-1] = (
             question_to_ask,
             dog_part.strip(),
             trainer_part.strip()
         )
-
     except OpenAIError:
         st.session_state.chat_history[-1] = (
             question_to_ask,
