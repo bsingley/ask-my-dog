@@ -180,12 +180,26 @@ user_question = st.text_input(
 # -----------------------------
 # Determine question to ask
 # -----------------------------
+# Determine which question to ask
 question_to_ask = None
+
+# Replay logic
 if st.session_state.get("replay_pressed", False):
     question_to_ask = st.session_state.last_question
     st.session_state.replay_pressed = False
-elif user_question:
-    question_to_ask = user_question
+# New question typed by user
+elif user_question.strip() != "":
+    question_to_ask = user_question.strip()
+
+# Call AI only if we have a real question
+if question_to_ask:
+    st.session_state.last_question = question_to_ask
+
+    # Compute drama_strength and story_style_prompt here
+    # (from st.session_state.confirmed_drama / confirmed_style)
+
+    # Build AI prompt...
+    # Call OpenAI API...
 
 # -----------------------------
 # Map Drama & Style → Prompt
