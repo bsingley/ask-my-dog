@@ -1,3 +1,4 @@
+```mermaid
 flowchart TD
     UI[User Interface (Browser/Web)] --> App[Streamlit App (Python)]
     App --> AI[AI Engine/API (OpenAI GPT)]
@@ -12,3 +13,4 @@ flowchart TD
         App --> MultiDog[Multiple Dog Personalities]
         AI --> Training[Personalized Training Recommendations]
     end
+```
