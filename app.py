@@ -150,35 +150,6 @@ for q, d, t in st.session_state.chat_history:
     st.markdown(f"**🧑‍🏫 Dog trainer explains:** {t}")
     st.divider()
 
-# Sample questions for placeholder
-sample_questions = [
-    "What's the best part of your day?",
-    "What scares you the most?",
-    "How do you feel about new people?",
-    "What's your favorite game or toy?",
-    "Describe your dream adventure!"
-]
-placeholder_text = random.choice(sample_questions)
-
-# Input box + submit
-st.markdown("### Ask your dog a question")
-user_question = st.text_input(
-    "Type your question here",
-    key="user_question_input",
-    placeholder=placeholder_text
-)
-submit_question = st.button("Ask")
-
-# -----------------------------
-# Determine which question to ask
-# -----------------------------
-question_to_ask = None
-if st.session_state.replay_pressed:
-    question_to_ask = st.session_state.last_question
-    st.session_state.replay_pressed = False
-elif submit_question and user_question.strip() != "":
-    question_to_ask = user_question.strip()
-
 # -----------------------------
 # Map drama & style → prompt
 # -----------------------------
@@ -201,6 +172,54 @@ style_map = {
     "🎵 Snoop Dogg Dog": "Speak in a laid-back, cool, rhyming style reminiscent of Snoop Dogg."
 }
 story_style_prompt = style_map[current_style]
+
+# -----------------------------
+#Input box + Submit button
+# -----------------------------
+if "current_input" not in st.session_state:
+    st.session_state.current_input = ""
+
+st.session_state.current_input = st.text_input(
+    "Ask your dog a question",
+    value=st.session_state.current_input,
+    placeholder=random.choice(sample_questions)
+)
+submit_question = st.button("Ask")
+
+# 2️⃣ Determine if we should run AI
+question_to_ask = None
+if submit_question and st.session_state.current_input.strip() != "":
+    question_to_ask = st.session_state.current_input.strip()
+    st.session_state.last_question = question_to_ask
+    # Reset input
+    st.session_state.current_input = ""
+
+elif st.session_state.replay_pressed:
+    question_to_ask = st.session_state.last_question
+    st.session_state.replay_pressed = False
+
+# 3️⃣ Append placeholder and call AI only here
+if question_to_ask:
+    st.session_state.chat_history.append((question_to_ask, "…thinking…", ""))
+    with st.spinner(f"🐾 {dog['name']} is thinking..."):
+        response = client.responses.create(
+            model="gpt-4.1-mini",
+            input=build_prompt(dog, question_to_ask, current_drama, current_style)
+        )
+        text = response.output_text.strip()
+        if "As a dog trainer:" in text:
+            dog_part, trainer_part = text.split("As a dog trainer:", 1)
+        else:
+            dog_part = text
+            trainer_part = ""
+        # Replace placeholder
+        st.session_state.chat_history[-1] = (
+            question_to_ask,
+            dog_part.strip(),
+            trainer_part.strip()
+        )
+
+
 
 # -----------------------------
 # Call AI
