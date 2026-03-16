@@ -154,9 +154,6 @@ for q, d, t in st.session_state.chat_history:
     st.markdown(f"**🧑‍🏫 Dog trainer explains:** {t}")
     st.divider()
 
-# Input box
-user_question = st.text_input("Ask a question", key="user_question_input")
-
 # -----------------------------
 # Sample questions for placeholder
 # -----------------------------
