@@ -192,11 +192,11 @@ Storytelling Style (tone of response):
 
 Instructions:
 
-1. Respond in two parts:
-   - First, speak in first person as the dog using dog logic and filtered by Drama Level and Storytelling Style. 
-   - Second, explain the behavior objectively as a dog trainer. 
-2. **Do not include the text "DOG RESPONSE" or "DOG TRAINER RESPONSE" in your output.**
-3. Separate the two parts clearly so your first part is the dog's perspective and the second part is the trainer explanation.
+Instructions:
+- Respond in two parts.
+- Part 1: Speak in first person as the dog, using dog logic and filtered by Drama Level and Storytelling Style.
+- Part 2: Start the next paragraph with exactly "As a dog trainer:" and give an objective explanation of the dog's behavior.
+- Do not include any other labels. The first paragraph is the dog's perspective.
 
 
 User question:
