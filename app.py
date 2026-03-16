@@ -185,34 +185,26 @@ elif st.session_state.replay_pressed:
 
 # 3️⃣ Append placeholder and call AI only here
 if question_to_ask:
-    st.session_state.chat_history.append((question_to_ask, "…thinking…", ""))
-    with st.spinner(f"🐾 {dog['name']} is thinking..."):
-        response = client.responses.create(
-            model="gpt-4.1-mini",
-            input=build_prompt(dog, question_to_ask, current_drama, current_style)
-        )
-        text = response.output_text.strip()
-        if "As a dog trainer:" in text:
-            dog_part, trainer_part = text.split("As a dog trainer:", 1)
-        else:
-            dog_part = text
-            trainer_part = ""
-        # Replace placeholder
-        st.session_state.chat_history[-1] = (
-            question_to_ask,
-            dog_part.strip(),
-            trainer_part.strip()
-        )
-
-
-
-# -----------------------------
-# Call AI
-# -----------------------------
-if question_to_ask:
     st.session_state.last_question = question_to_ask
-    # Append placeholder
     st.session_state.chat_history.append((question_to_ask, "…thinking…", ""))
+
+    # Map drama & style → prompt text
+    drama_map = {
+        "🐾 Low – Mostly normal dog reactions": "The dog mostly reacts normally; its self-story has little effect.",
+        "🐕 Moderate – Story influences some thoughts/actions": "The dog sometimes filters its thoughts and behavior through its self-story.",
+        "👑 High – Story guides most thoughts/actions": "The dog mostly acts and thinks according to its self-story.",
+        "🦸 Extreme – Story defines everything the dog thinks and does": "The dog fully believes in its self-story; all thoughts and reactions are filtered through it."
+    }
+    drama_strength = drama_map[st.session_state.confirmed_drama]
+
+    style_map = {
+        "🐾 Doggish Dog": "Speak naturally according to your traits; do not list traits explicitly; behave as if everyone already knows them.",
+        "🎬 Sitcom Dog": "Respond like a sarcastic sitcom character observing ridiculous human behavior.",
+        "📖 Shakespearean Dog": "Speak in overly dramatic Shakespearean-style language.",
+        "🎮 RPG Hero Dog": "Speak like a heroic RPG character on a noble quest to protect the household.",
+        "🎵 Snoop Dogg Dog": "Speak in a laid-back, cool, rhyming style reminiscent of Snoop Dogg."
+    }
+    story_style_prompt = style_map[st.session_state.confirmed_style]
 
     prompt = f"""
 You are a dog named {dog['name']}.
@@ -262,6 +254,9 @@ User question:
             dog_part.strip(),
             trainer_part.strip()
         )
+        # Reset input after response
+        st.session_state.current_input = ""
+
     except OpenAIError:
         st.session_state.chat_history[-1] = (
             question_to_ask,
