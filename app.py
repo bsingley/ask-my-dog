@@ -136,7 +136,7 @@ with st.sidebar.expander("⚙️ View or edit full dog persona"):
         st.session_state.dog = default_dog.copy()
         dog = st.session_state.dog
         st.success("Reset to Luna")
-render_dog_card()  # Update card if persona changed
+    render_dog_card()  # Update card if persona changed
 
 # -----------------------------
 # Sidebar: Drama & Storytelling Style
