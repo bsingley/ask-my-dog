@@ -3,22 +3,14 @@ from openai import OpenAI, OpenAIError
 import json
 import os
 
-# -----------------------------
-# Setup
-# -----------------------------
+api_key = os.environ.get("API_KEY")
+client = OpenAI()
 
 st.set_page_config(page_title="Ask My Dog", page_icon="🐾")
 
-st.title("🐾 Ask My Dog")
-
-client = OpenAI()
-
-dog_file = "dog_profile.json"
-
 # -----------------------------
-# Default Dog Profile
+# Load or Initialize Dog Persona
 # -----------------------------
-
 default_dog = {
     "name": "Luna",
     "age": "10 months",
@@ -28,11 +20,11 @@ default_dog = {
     "fear_triggers": ["new objects", "loud sounds"],
     "personality_traits": ["extremely intelligent", "curious", "cautious"],
     "self_identity": "fearless guardian",
-    "self_confidence": "extreme",
     "self_story": "protector of the household",
     "superhero_identity": "None"
 }
 
+dog_file = "dog_profile.json"
 if os.path.exists(dog_file):
     with open(dog_file) as f:
         dog = json.load(f)
@@ -40,25 +32,20 @@ else:
     dog = default_dog.copy()
 
 # -----------------------------
-# Chat History
-# -----------------------------
-
-if "messages" not in st.session_state:
-    st.session_state.messages = []
-
-# -----------------------------
-# Sidebar Persona
+# Sidebar: Dog Info + Selections
 # -----------------------------
 with st.sidebar:
-
     st.image("https://cdn-icons-png.flaticon.com/512/616/616408.png", width=120)
-
     st.markdown(f"### 🐶 {dog['name']}")
     st.caption(f"Self-Story: {dog['self_story']}")
-
     st.divider()
 
-    # NEW: Drama Level → strength of self-story belief
+    # -----------------------------
+    # Drama Level (Self-story belief)
+    # -----------------------------
+    if "drama_level" not in st.session_state:
+        st.session_state.drama_level = "🐾 Low – Mostly normal dog reactions"
+
     drama_level = st.selectbox(
         "🎭 Drama Level",
         [
@@ -67,9 +54,16 @@ with st.sidebar:
             "👑 High – Story guides most thoughts/actions",
             "🦸 Extreme – Story defines everything the dog thinks and does"
         ],
-        help="Controls how strongly the dog believes its own story."
+        index=[
+            "🐾 Low – Mostly normal dog reactions",
+            "🐕 Moderate – Story influences some thoughts/actions",
+            "👑 High – Story guides most thoughts/actions",
+            "🦸 Extreme – Story defines everything the dog thinks and does"
+        ].index(st.session_state.drama_level),
+        key="drama_level"
     )
 
+    # Map Drama Level → Prompt Description
     if "Low" in drama_level:
         drama_strength = "The dog mostly reacts normally; its self-story has little effect."
     elif "Moderate" in drama_level:
@@ -80,10 +74,14 @@ with st.sidebar:
         drama_strength = "The dog fully believes in its self-story; all thoughts and reactions are filtered through it."
 
     st.caption(f"Current Drama Level: {drama_level}")
-
     st.divider()
 
-    # Former “Drama Level” → Storytelling Style
+    # -----------------------------
+    # Storytelling Style (tone/voice)
+    # -----------------------------
+    if "story_style" not in st.session_state:
+        st.session_state.story_style = "🐾 Realistic Dog"
+
     story_style = st.selectbox(
         "🎨 Storytelling Style",
         [
@@ -93,28 +91,59 @@ with st.sidebar:
             "🎮 RPG Hero Dog",
             "🎵 Snoop Dogg Dog"
         ],
-        help="Controls the tone and style of the dog's responses."
+        index=[
+            "🐾 Doggish Dog",
+            "🎬 Sitcom Dog",
+            "📖 Shakespearean Dog",
+            "🎮 RPG Hero Dog",
+            "🎵 Snoop Dogg Dog"
+        ].index(st.session_state.story_style),
+        key="story_style"
     )
 
-    if story_style == "Realistic Dog":
+    # Map Storytelling Style → Prompt
+    if story_style == "Doggish Dog":
         story_style_prompt = "Speak like a normal dog thinking in simple playful thoughts."
     elif story_style == "Sitcom Dog":
-        story_style_prompt = "Respond like a sarcastic sitcom character observing ridiculous human behavior."        
+        story_style_prompt = "Respond like a sarcastic sitcom character observing ridiculous human behavior."
     elif story_style == "Shakespearean Dog":
         story_style_prompt = "Speak in overly dramatic Shakespearean-style language."
     elif story_style == "RPG Hero Dog":
         story_style_prompt = "Speak like a heroic RPG character on a noble quest to protect the household."
-    else:  # Snoop Dogg Dog
+    else:  # Snoop Dogg
         story_style_prompt = (
             "Speak in a laid-back, cool, rhyming style reminiscent of Snoop Dogg. "
             "Use playful slang, humor, and rhythm while describing dog thoughts."
-    )
-    
-    st.divider()
+        )
 
+# -----------------------------
+# Dog Character Card (Main Page)
+# -----------------------------
+col1, col2 = st.columns([1, 4])
+with col1:
+    st.image("https://cdn-icons-png.flaticon.com/512/616/616408.png", width=80)
+with col2:
+    st.markdown(f"""
+### 🐶 {dog['name']}
 
-    with st.expander("⚙️ Edit Dog Persona"):
+**{dog['breed']} • {dog['age']}**  
+**Identity:** {dog['self_identity']}  
+**Self-Story:** {dog['self_story']}
+""")
 
+st.divider()
+
+# -----------------------------
+# Persona Expander
+# -----------------------------
+with st.expander("⚙️ View or edit full dog persona"):
+    st.write(f"**Training Level:** {dog['training_level']}")
+    st.write("**Personality Traits:** " + ", ".join(dog['personality_traits']))
+    st.write("**Fear Triggers:** " + ", ".join(dog['fear_triggers']))
+    st.write(f"**Self Story:** {dog['self_story']}")
+    st.write(f"**Superhero Identity:** {dog['superhero_identity']}")
+
+    if st.checkbox("Edit persona"):
         dog["name"] = st.text_input("Dog name", dog["name"])
         dog["breed"] = st.text_input("Breed", dog["breed"])
         dog["age"] = st.text_input("Age", dog["age"])
@@ -124,62 +153,39 @@ with st.sidebar:
         dog["self_story"] = st.text_input("Self story", dog["self_story"])
         dog["superhero_identity"] = st.text_input("Superhero identity", dog["superhero_identity"])
 
-        if st.button("Save Persona"):
+        save_col1, save_col2 = st.columns(2)
+        if save_col1.button("Save Updates"):
+            st.success("Persona updated!")
+        if save_col2.checkbox("Save for later"):
             with open(dog_file, "w") as f:
                 json.dump(dog, f, indent=2)
-            st.success("Saved!")
-
+            st.success("Saved for future sessions")
         if st.button("Reset to Luna"):
             dog = default_dog.copy()
-            st.success("Reset to default")
-
-# -----------------------------
-# Example Prompts
-# -----------------------------
-
-st.caption("Try asking:")
-st.caption("• Why do you bark at the vacuum?")
-st.caption("• Why do you steal socks?")
-st.caption("• What happens during Zoom meetings?")
-st.caption("• Why do you stare at me while I eat?")
+            st.success("Reset to Luna")
 
 st.divider()
 
 # -----------------------------
-# Display Chat History
+# Ask Question
 # -----------------------------
-
-for message in st.session_state.messages:
-
-    with st.chat_message(message["role"]):
-        st.markdown(message["content"])
-
-# -----------------------------
-# Chat Input
-# -----------------------------
-
-user_question = st.chat_input(f"Ask {dog['name']} something...")
+st.markdown("### Ask your dog a question")
+user_question = st.text_input(f"What would you like to ask {dog['name']}?")
 
 # -----------------------------
 # AI Response
 # -----------------------------
-
 if user_question:
-
-    # Display user message
-    with st.chat_message("user"):
-        st.markdown(user_question)
-
-    st.session_state.messages.append({
-        "role": "user",
-        "content": user_question
-    })
-
     prompt = f"""
 You are a dog named {dog['name']}.
 
-Background personality info (use only if relevant):
-{dog['age']}, {dog['breed']}, {', '.join(dog['personality_traits'])}, etc.
+Background personality information (use only if relevant):
+Age: {dog['age']}
+Breed: {dog['breed']}
+Energy level: {dog['energy_level']}
+Training level: {dog['training_level']}
+Fear triggers: {', '.join(dog['fear_triggers'])}
+Personality traits: {', '.join(dog['personality_traits'])}
 
 Self-Story:
 {dog['self_story']}
@@ -191,50 +197,37 @@ Storytelling Style (tone of response):
 {story_style_prompt}
 
 Instructions:
-
-Instructions:
 - Respond in two parts.
 - Part 1: Speak in first person as the dog, using dog logic and filtered by Drama Level and Storytelling Style.
 - Part 2: Start the next paragraph with exactly "As a dog trainer:" and give an objective explanation of the dog's behavior.
 - Do not include any other labels. The first paragraph is the dog's perspective.
 
-
 User question:
 {user_question}
 """
 
-
     try:
-
         response = client.responses.create(
             model="gpt-4.1-mini",
             input=prompt
         )
-
         text = response.output_text.strip()
 
+        # Split into dog / trainer
         if "As a dog trainer:" in text:
             dog_part, trainer_part = text.split("As a dog trainer:", 1)
         else:
             dog_part = text
             trainer_part = ""
 
-        # Display response
-        with st.chat_message("assistant"):
+        # Display Dog response
+        st.markdown(f"### 🐶 {dog['name']} thinks...")
+        st.markdown(dog_part.strip())
 
-            st.markdown(f"### 🐶 {dog['name']} thinks...")
-            st.markdown(dog_part)
-
-            if trainer_part:
-                with st.expander("🧑‍🏫 Dog trainer explains"):
-                    st.markdown(trainer_part)
-
-        # Save assistant response
-        st.session_state.messages.append({
-            "role": "assistant",
-            "content": f"### 🐶 {dog['name']} thinks...\n{dog_part}\n\n**Dog Trainer:**\n{trainer_part}"
-        })
+        # Display Trainer explanation in expander
+        if trainer_part.strip():
+            with st.expander("🧑‍🏫 Dog trainer explains"):
+                st.markdown(trainer_part.strip())
 
     except OpenAIError:
-
         st.error("The AI dog is taking a nap. Check your API key or connection.")
