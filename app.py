@@ -207,8 +207,8 @@ user_question = st.text_input(
 # -----------------------------
 # When the user submits a question
 if user_question:
-    st.session_state.last_question = user_question  # save for replay
-    # ... then run your AI response as usual
+    st.session_state.last_question = user_question  # save question for replay
+
     prompt = f"""
 You are a dog named {dog['name']}.
 
@@ -239,6 +239,32 @@ User question:
 {user_question}
 """
 
+    # Wrap the API call in a spinner
+    with st.spinner("🐾 Luna is thinking..."):
+        try:
+            response = client.responses.create(
+                model="gpt-4.1-mini",
+                input=prompt
+            )
+            text = response.output_text.strip()
+
+            if "As a dog trainer:" in text:
+                dog_part, trainer_part = text.split("As a dog trainer:", 1)
+            else:
+                dog_part = text
+                trainer_part = ""
+
+            # Show Dog response
+            st.markdown(f"### 🐶 {dog['name']} thinks...")
+            st.markdown(dog_part.strip())
+
+            # Show Trainer explanation in expander
+            if trainer_part.strip():
+                with st.expander("🧑‍🏫 Dog trainer explains"):
+                    st.markdown(trainer_part.strip())
+
+        except OpenAIError:
+            st.error("The AI dog is taking a nap. Check your API key or connection.")
     try:
         response = client.responses.create(
             model="gpt-4.1-mini",
