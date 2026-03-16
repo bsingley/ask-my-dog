@@ -45,6 +45,7 @@ with st.sidebar:
     # -----------------------------
     # Drama Level (self-story belief)
     # -----------------------------
+    # Drama Level
     drama_options = [
         "🐾 Low – Mostly normal dog reactions",
         "🐕 Moderate – Story influences some thoughts/actions",
@@ -52,7 +53,7 @@ with st.sidebar:
         "🦸 Extreme – Story defines everything the dog thinks and does"
     ]
 
-    # Initialize or validate session_state
+    # Ensure session_state value is valid
     if "drama_level" not in st.session_state or st.session_state.drama_level not in drama_options:
         st.session_state.drama_level = drama_options[0]
 
@@ -64,7 +65,7 @@ with st.sidebar:
         key="drama_level"
     )
 
-    # Map Drama Level → Prompt Description
+    # Map to prompt variable AFTER selectbox
     if "Low" in drama_level:
         drama_strength = "The dog mostly reacts normally; its self-story has little effect."
     elif "Moderate" in drama_level:
@@ -74,12 +75,8 @@ with st.sidebar:
     else:
         drama_strength = "The dog fully believes in its self-story; all thoughts and reactions are filtered through it."
 
-    st.caption(f"Current Drama Level: {drama_level}")
-    st.divider()
 
-    # -----------------------------
-    # Storytelling Style (tone/voice)
-    # -----------------------------
+    # Storytelling Style
     style_options = [
         "🐾 Doggish Dog",
         "🎬 Sitcom Dog",
@@ -88,11 +85,9 @@ with st.sidebar:
         "🎵 Snoop Dogg Dog"
     ]
 
-    # Initialize or validate session_state
     if "story_style" not in st.session_state or st.session_state.story_style not in style_options:
         st.session_state.story_style = style_options[0]
 
-    # Selectbox
     story_style = st.selectbox(
         "🎨 Storytelling Style",
         style_options,
@@ -100,7 +95,7 @@ with st.sidebar:
         key="story_style"
     )
 
-    # Map Storytelling Style → Prompt
+    # Map to prompt variable AFTER selectbox
     if story_style == "Doggish Dog":
         story_style_prompt = "Speak like a normal dog thinking in simple playful thoughts."
     elif story_style == "Sitcom Dog":
@@ -109,7 +104,7 @@ with st.sidebar:
         story_style_prompt = "Speak in overly dramatic Shakespearean-style language."
     elif story_style == "RPG Hero Dog":
         story_style_prompt = "Speak like a heroic RPG character on a noble quest to protect the household."
-    else:  # Snoop Dogg Dog
+    else:  # Snoop Dogg
         story_style_prompt = (
             "Speak in a laid-back, cool, rhyming style reminiscent of Snoop Dogg. "
             "Use playful slang, humor, and rhythm while describing dog thoughts."
