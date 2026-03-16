@@ -168,21 +168,24 @@ sample_questions = [
 ]
 placeholder_text = random.choice(sample_questions)
 
-# Input box
+st.markdown("### Ask your dog a question")
 user_question = st.text_input(
-    "Ask a question",
+    "Type your question here",
     key="user_question_input",
-    placeholder=placeholder_text
+    placeholder=random.choice(sample_questions)
 )
+
+submit_question = st.button("Ask")
 
 # -----------------------------
 # Determine which question to ask
 # -----------------------------
 question_to_ask = None
+
 if st.session_state.replay_pressed:
     question_to_ask = st.session_state.last_question
     st.session_state.replay_pressed = False
-elif user_question.strip() != "":
+elif submit_question and user_question.strip() != "":
     question_to_ask = user_question.strip()
 
 # -----------------------------
@@ -213,6 +216,7 @@ story_style_prompt = style_map[current_style]
 # -----------------------------
 if question_to_ask:
     st.session_state.last_question = question_to_ask
+    # Build prompt and call OpenAI here
 
     prompt = f"""
 You are a dog named {dog['name']}.
