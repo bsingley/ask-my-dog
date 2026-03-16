@@ -158,6 +158,29 @@ for q, d, t in st.session_state.chat_history:
 user_question = st.text_input("Ask a question", key="user_question_input")
 
 # -----------------------------
+# Sample questions for placeholder
+# -----------------------------
+sample_questions = [
+    "What's the best part of your day?",
+    "What scares you the most?",
+    "How do you feel about new people?",
+    "What's your favorite game or toy?",
+    "Describe your dream adventure!"
+]
+
+# Randomize placeholder text
+placeholder_text = random.choice(sample_questions)
+
+# -----------------------------
+# Input box (below chat feed)
+# -----------------------------
+user_question = st.text_input(
+    "Ask a question",
+    key="user_question_input",
+    placeholder=placeholder_text
+)
+
+# -----------------------------
 # Determine question to ask
 # -----------------------------
 question_to_ask = None
