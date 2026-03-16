@@ -179,9 +179,47 @@ for i, (q, dog_resp, trainer_resp) in enumerate(st.session_state.chat_history):
             st.markdown(trainer_resp)
     st.divider()
 
+
+
+# -----------------------------
+# Map confirmed settings to prompt
+# -----------------------------
+current_drama = st.session_state.confirmed_drama
+current_style = st.session_state.confirmed_style
+
+# Drama mapping → compute BEFORE AI call
+if "Low" in current_drama:
+    drama_strength = "The dog mostly reacts normally; its self-story has little effect."
+elif "Moderate" in current_drama:
+    drama_strength = "The dog sometimes filters its thoughts and behavior through its self-story."
+elif "High" in current_drama:
+    drama_strength = "The dog mostly acts and thinks according to its self-story."
+else:  # Extreme
+    drama_strength = "The dog fully believes in its self-story; all thoughts and reactions are filtered through it."
+
+# Story style mapping → compute BEFORE AI call
+if current_style == "🐾 Doggish Dog":
+    story_style_prompt = (
+        "Speak like a normal dog, thinking and acting according to your traits. "
+        "Do not list personality traits explicitly; behave as if everyone already knows them. "
+        "Make responses natural, playful, and filtered through the dog's self-story and Drama Level."
+)
+elif current_style == "🎬 Sitcom Dog":
+    story_style_prompt = "Respond like a sarcastic sitcom character observing ridiculous human behavior."
+elif current_style == "📖 Shakespearean Dog":
+    story_style_prompt = "Speak in overly dramatic Shakespearean-style language."
+elif current_style == "🎮 RPG Hero Dog":
+    story_style_prompt = "Speak like a heroic RPG character on a noble quest to protect the household."
+else:  # Snoop Dogg
+    story_style_prompt = (
+        "Speak in a laid-back, cool, rhyming style reminiscent of Snoop Dogg. "
+        "Use playful slang, humor, and rhythm while describing dog thoughts."
+    )
+
 # -----------------------------
 # Main Page: User Input
 # -----------------------------
+
 user_question = st.text_input(
     f"What would you like to ask {dog['name']}?",
     placeholder=f"e.g., {st.session_state.placeholder_question}",
@@ -255,41 +293,6 @@ User question:
 
     except OpenAIError:
         st.error("The AI dog is taking a nap. Check your API key or connection.")
-
-# -----------------------------
-# Map confirmed settings to prompt
-# -----------------------------
-current_drama = st.session_state.confirmed_drama
-current_style = st.session_state.confirmed_style
-
-# Drama mapping
-if "Low" in current_drama:
-    drama_strength = "The dog mostly reacts normally; its self-story has little effect."
-elif "Moderate" in current_drama:
-    drama_strength = "The dog sometimes filters its thoughts and behavior through its self-story."
-elif "High" in current_drama:
-    drama_strength = "The dog mostly acts and thinks according to its self-story."
-else:
-    drama_strength = "The dog fully believes in its self-story; all thoughts and reactions are filtered through it."
-
-# Story style mapping
-if current_style == "🐾 Doggish Dog":
-    story_style_prompt = (
-        "Speak like a normal dog, thinking and acting according to your traits. "
-        "Do not list personality traits explicitly; behave as if everyone already knows them. "
-        "Make responses natural, playful, and filtered through the dog's self-story and Drama Level."
-)
-elif current_style == "🎬 Sitcom Dog":
-    story_style_prompt = "Respond like a sarcastic sitcom character observing ridiculous human behavior."
-elif current_style == "📖 Shakespearean Dog":
-    story_style_prompt = "Speak in overly dramatic Shakespearean-style language."
-elif current_style == "🎮 RPG Hero Dog":
-    story_style_prompt = "Speak like a heroic RPG character on a noble quest to protect the household."
-else:  # Snoop Dogg
-    story_style_prompt = (
-        "Speak in a laid-back, cool, rhyming style reminiscent of Snoop Dogg. "
-        "Use playful slang, humor, and rhythm while describing dog thoughts."
-    )
 
 # -----------------------------
 # AI Response
