@@ -49,63 +49,66 @@ if "messages" not in st.session_state:
 # -----------------------------
 # Sidebar Persona
 # -----------------------------
-
 with st.sidebar:
 
     st.image("https://cdn-icons-png.flaticon.com/512/616/616408.png", width=120)
 
-    st.markdown(f"""
-    ### 🐶 {dog['name']}
-    **{dog['breed']} • {dog['age']}**
-    """)
+    st.markdown(f"### 🐶 {dog['name']}")
+    st.caption(f"Self-Story: {dog['self_story']}")
 
     st.divider()
 
-    confidence_choice = st.selectbox(
-        "How does this dog view themselves?",
-        [
-            "🐶 Nervous Puppy",
-            "🐕 Normal Dog",
-            "👑 Very Important Dog",
-            "🦸 Legendary Household Guardian"
-        ]
-    )
-
-    if "Nervous Puppy" in confidence_choice:
-        confidence_style = "The dog is slightly unsure and cautious."
-    elif "Normal Dog" in confidence_choice:
-        confidence_style = "The dog has normal playful dog confidence."
-    elif "Very Important Dog" in confidence_choice:
-        confidence_style = "The dog believes they are responsible for important household decisions."
-    else:
-        confidence_style = "The dog believes they are the heroic protector of the household."
-
-    st.divider()
-
-
+    # NEW: Drama Level → strength of self-story belief
     drama_level = st.selectbox(
         "🎭 Drama Level",
         [
-            "🐾 Realistic Dog",
+            "🐾 Low – Mostly normal dog reactions",
+            "🐕 Moderate – Story influences some thoughts/actions",
+            "👑 High – Story guides most thoughts/actions",
+            "🦸 Extreme – Story defines everything the dog thinks and does"
+        ],
+        help="Controls how strongly the dog believes its own story."
+    )
+
+    if "Low" in drama_level:
+        drama_strength = "The dog mostly reacts normally; its self-story has little effect."
+    elif "Moderate" in drama_level:
+        drama_strength = "The dog sometimes filters its thoughts and behavior through its self-story."
+    elif "High" in drama_level:
+        drama_strength = "The dog mostly acts and thinks according to its self-story."
+    else:
+        drama_strength = "The dog fully believes in its self-story; all thoughts and reactions are filtered through it."
+
+    st.caption(f"Current Drama Level: {drama_level}")
+
+    st.divider()
+
+    # Former “Drama Level” → Storytelling Style
+    story_style = st.selectbox(
+        "🎨 Storytelling Style",
+        [
+            "🐾 Doggish Dog",
             "🎬 Sitcom Dog",
             "📖 Shakespearean Dog",
             "🎮 RPG Hero Dog"
+            "🎵 Snoop Dogg Dog"
         ],
-        help="Controls how dramatic your dog's internal monologue will be."
+        help="Controls the tone and style of the dog's responses."
     )
 
-    if "Realistic Dog" in drama_level:
-        drama_style = "Speak like a normal dog thinking in simple playful thoughts."
-
-    elif "Sitcom Dog" in drama_level:
-        drama_style = "Respond like a sarcastic sitcom character observing ridiculous human behavior."
-
-    elif "Shakespearean Dog" in drama_level:
-        drama_style = "Speak in overly dramatic Shakespearean-style language as if narrating an epic tragedy."
-
-    else:
-        drama_style = "Speak like a heroic RPG character on a noble quest to protect the household."
-
+    if story_style == "Realistic Dog":
+        story_style_prompt = "Speak like a normal dog thinking in simple playful thoughts."
+        elif story_style == "Sitcom Dog":
+            story_style_prompt = "Respond like a sarcastic sitcom character observing ridiculous human behavior."
+        elif story_style == "Shakespearean Dog":
+            story_style_prompt = "Speak in overly dramatic Shakespearean-style language."
+        elif story_style == "RPG Hero Dog":
+            story_style_prompt = "Speak like a heroic RPG character on a noble quest to protect the household."
+        else:  # Snoop Dogg Dog
+            story_style_prompt = (
+                "Speak in a laid-back, cool, rhyming style reminiscent of Snoop Dogg. "
+                "Use playful slang, humor, and rhythm while describing dog thoughts."
+        )
     st.divider()
 
 
@@ -174,52 +177,33 @@ if user_question:
     prompt = f"""
 You are a dog named {dog['name']}.
 
-Background personality information (use only if relevant):
-Age: {dog['age']}
-Breed: {dog['breed']}
-Energy level: {dog['energy_level']}
-Training level: {dog['training_level']}
-Fear triggers: {', '.join(dog['fear_triggers'])}
-Personality traits: {', '.join(dog['personality_traits'])}
-Self identity: {dog['self_identity']}
-Self story: {dog['self_story']}
-Superhero identity: {dog['superhero_identity']}
+Background personality info (use only if relevant):
+{dog['age']}, {dog['breed']}, {', '.join(dog['personality_traits'])}, etc.
 
-Confidence style:
-{confidence_style}
+Self-Story:
+{dog['self_story']}
 
-Drama style:
-{drama_style}
+Drama Level (how much the dog believes its story):
+{drama_strength}
+
+Storytelling Style (tone of response):
+{story_style_prompt}
 
 Instructions:
-
 Respond in two parts.
 
 DOG RESPONSE
-Speak in first person using dog logic.
-
-Examples of dog logic:
-- vacuums are hostile mechanical beasts
-- mail carriers are suspicious invaders
-- meetings exist so humans eventually throw balls
-- cooking means food might fall
-- laptops steal human attention
-
-The dog believes their own heroic narrative.
-
-Do not number sections.
-Do not repeat the dog's name.
-Do not list personality traits.
+Speak in first person using dog logic,
+filtered by Drama Level and in the selected Storytelling Style.
 
 DOG TRAINER RESPONSE
-
-Then explain the behavior starting with:
-
+Explain the behavior starting with:
 As a dog trainer:
 
 User question:
 {user_question}
 """
+
 
     try:
 
