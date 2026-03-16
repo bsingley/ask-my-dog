@@ -9,11 +9,10 @@ import random
 # -----------------------------
 api_key = os.environ.get("API_KEY")
 client = OpenAI()
-
 st.set_page_config(page_title="Ask My Dog", page_icon="🐾")
 
 # -----------------------------
-# Defaults and JSON
+# Default dog profile
 # -----------------------------
 default_dog = {
     "name": "Luna",
@@ -21,10 +20,10 @@ default_dog = {
     "breed": "lab mix",
     "energy_level": "very high",
     "training_level": "basic obedience",
-    "fear_triggers": ["new objects", "loud sounds"],
-    "personality_traits": ["extremely intelligent", "curious", "cautious"],
     "self_identity": "fearless guardian",
-    "self_story": "protector of the household"
+    "self_story": "protector of the household",
+    "personality_traits": ["extremely intelligent", "curious", "cautious"],
+    "fear_triggers": ["new objects", "loud sounds"]
 }
 
 dog_file = "dog_profile.json"
@@ -38,12 +37,17 @@ if "dog" not in st.session_state:
 
 dog = st.session_state.dog
 
-# Initialize session state for chat and settings
+# -----------------------------
+# Session state for chat and settings
+# -----------------------------
 if "chat_history" not in st.session_state:
     st.session_state.chat_history = []
 
 if "last_question" not in st.session_state:
     st.session_state.last_question = ""
+
+if "replay_pressed" not in st.session_state:
+    st.session_state.replay_pressed = False
 
 if "confirmed_drama" not in st.session_state:
     st.session_state.confirmed_drama = "🐾 Low – Mostly normal dog reactions"
@@ -64,7 +68,7 @@ def render_dog_card():
 **Identity:** {dog['self_identity']}
 """)
 
-render_dog_card()  # always render card at top
+render_dog_card()
 
 # Persona editor
 with st.sidebar.expander("⚙️ View or edit full dog persona"):
@@ -91,7 +95,7 @@ with st.sidebar.expander("⚙️ View or edit full dog persona"):
     save_col1, save_col2 = st.columns(2)
     if save_col1.button("Save Updates"):
         st.success("Persona updated!")
-        render_dog_card()  # refresh card
+        render_dog_card()
     if save_col2.checkbox("Save for later"):
         with open(dog_file, "w") as f:
             json.dump(dog, f, indent=2)
@@ -102,7 +106,7 @@ with st.sidebar.expander("⚙️ View or edit full dog persona"):
         st.success("Reset to Luna")
         render_dog_card()
 
-# Drama level selector
+# Drama level
 st.sidebar.markdown("### 🎭 Drama Level")
 drama_options = [
     "🐾 Low – Mostly normal dog reactions",
@@ -116,7 +120,7 @@ st.session_state.selected_drama = st.sidebar.selectbox(
     index=drama_options.index(st.session_state.confirmed_drama)
 )
 
-# Storytelling style selector
+# Storytelling style
 st.sidebar.markdown("### 🎨 Storytelling Style")
 style_options = [
     "🐾 Doggish Dog",
@@ -131,19 +135,19 @@ st.session_state.selected_style = st.sidebar.selectbox(
     index=style_options.index(st.session_state.confirmed_style)
 )
 
-# Confirm button
+# Confirm settings
 if st.sidebar.button("Confirm Settings"):
     st.session_state.confirmed_drama = st.session_state.selected_drama
     st.session_state.confirmed_style = st.session_state.selected_style
     st.sidebar.success("Settings confirmed. They will apply to the next question.")
 
-# Replay last question button
+# Replay last question
 if st.sidebar.button("Replay Last Question"):
     if st.session_state.last_question:
         st.session_state.replay_pressed = True
 
 # -----------------------------
-# Main Page - Chat
+# Main page - Chat
 # -----------------------------
 st.title("🐾 Ask My Dog")
 
@@ -154,9 +158,7 @@ for q, d, t in st.session_state.chat_history:
     st.markdown(f"**🧑‍🏫 Dog trainer explains:** {t}")
     st.divider()
 
-# -----------------------------
 # Sample questions for placeholder
-# -----------------------------
 sample_questions = [
     "What's the best part of your day?",
     "What scares you the most?",
@@ -164,13 +166,9 @@ sample_questions = [
     "What's your favorite game or toy?",
     "Describe your dream adventure!"
 ]
-
-# Randomize placeholder text
 placeholder_text = random.choice(sample_questions)
 
-# -----------------------------
-# Input box (below chat feed)
-# -----------------------------
+# Input box
 user_question = st.text_input(
     "Ask a question",
     key="user_question_input",
@@ -178,61 +176,37 @@ user_question = st.text_input(
 )
 
 # -----------------------------
-# Determine question to ask
-# -----------------------------
 # Determine which question to ask
+# -----------------------------
 question_to_ask = None
-
-# Replay logic
-if st.session_state.get("replay_pressed", False):
+if st.session_state.replay_pressed:
     question_to_ask = st.session_state.last_question
     st.session_state.replay_pressed = False
-# New question typed by user
 elif user_question.strip() != "":
     question_to_ask = user_question.strip()
 
-# Call AI only if we have a real question
-if question_to_ask:
-    st.session_state.last_question = question_to_ask
-
-    # Compute drama_strength and story_style_prompt here
-    # (from st.session_state.confirmed_drama / confirmed_style)
-
-    # Build AI prompt...
-    # Call OpenAI API...
-
 # -----------------------------
-# Map Drama & Style → Prompt
+# Map drama & style → prompt
 # -----------------------------
 current_drama = st.session_state.confirmed_drama
 current_style = st.session_state.confirmed_style
 
-if "Low" in current_drama:
-    drama_strength = "The dog mostly reacts normally; its self-story has little effect."
-elif "Moderate" in current_drama:
-    drama_strength = "The dog sometimes filters its thoughts and behavior through its self-story."
-elif "High" in current_drama:
-    drama_strength = "The dog mostly acts and thinks according to its self-story."
-else:
-    drama_strength = "The dog fully believes in its self-story; all thoughts and reactions are filtered through it."
+drama_map = {
+    "🐾 Low – Mostly normal dog reactions": "The dog mostly reacts normally; its self-story has little effect.",
+    "🐕 Moderate – Story influences some thoughts/actions": "The dog sometimes filters its thoughts and behavior through its self-story.",
+    "👑 High – Story guides most thoughts/actions": "The dog mostly acts and thinks according to its self-story.",
+    "🦸 Extreme – Story defines everything the dog thinks and does": "The dog fully believes in its self-story; all thoughts and reactions are filtered through it."
+}
+drama_strength = drama_map[current_drama]
 
-if current_style == "🐾 Doggish Dog":
-    story_style_prompt = (
-        "Speak like a normal dog, thinking and acting according to your traits. "
-        "Do not list personality traits explicitly; behave as if everyone already knows them. "
-        "Make responses natural, playful, and filtered through the dog's self-story and Drama Level."
-)
-elif current_style == "🎬 Sitcom Dog":
-    story_style_prompt = "Respond like a sarcastic sitcom character observing ridiculous human behavior."
-elif current_style == "📖 Shakespearean Dog":
-    story_style_prompt = "Speak in overly dramatic Shakespearean-style language."
-elif current_style == "🎮 RPG Hero Dog":
-    story_style_prompt = "Speak like a heroic RPG character on a noble quest to protect the household."
-else:  # Snoop Dogg
-    story_style_prompt = (
-        "Speak in a laid-back, cool, rhyming style reminiscent of Snoop Dogg. "
-        "Use playful slang, humor, and rhythm while describing dog thoughts."
-    )
+style_map = {
+    "🐾 Doggish Dog": "Speak like a normal dog, thinking and acting according to your traits. Do not list personality traits explicitly; behave as if everyone already knows them. Make responses natural, playful, and filtered through the dog's self-story and Drama Level.",
+    "🎬 Sitcom Dog": "Respond like a sarcastic sitcom character observing ridiculous human behavior.",
+    "📖 Shakespearean Dog": "Speak in overly dramatic Shakespearean-style language.",
+    "🎮 RPG Hero Dog": "Speak like a heroic RPG character on a noble quest to protect the household.",
+    "🎵 Snoop Dogg Dog": "Speak in a laid-back, cool, rhyming style reminiscent of Snoop Dogg. Use playful slang, humor, and rhythm while describing dog thoughts."
+}
+story_style_prompt = style_map[current_style]
 
 # -----------------------------
 # Call AI
@@ -243,7 +217,7 @@ if question_to_ask:
     prompt = f"""
 You are a dog named {dog['name']}.
 
-Background personality information (use only if relevant):
+Background personality information:
 Age: {dog['age']}
 Breed: {dog['breed']}
 Energy level: {dog['energy_level']}
@@ -262,10 +236,9 @@ Storytelling Style:
 
 Instructions:
 - Respond in two parts.
-- Part 1: Speak in first person as the dog, using dog logic.
-- Part 2: Start with "As a dog trainer:" and give a brief objective explanation.
-- Keep responses concise: 2–4 sentences dog, 2–3 sentences trainer.
-- Do not repeat the dog's name or personality traits.
+- Part 1: Speak in first person as the dog, concise (2–4 sentences), extreme according to Drama Level.
+- Part 2: Start with "As a dog trainer:" and give a brief objective explanation (2–3 sentences).
+- Do not repeat the dog's name or list traits explicitly.
 
 User question:
 {question_to_ask}
@@ -277,15 +250,14 @@ User question:
                 model="gpt-4.1-mini",
                 input=prompt
             )
-        text = response.output_text.strip()
 
+        text = response.output_text.strip()
         if "As a dog trainer:" in text:
             dog_part, trainer_part = text.split("As a dog trainer:", 1)
         else:
             dog_part = text
             trainer_part = ""
 
-        # Append response to chat
         st.session_state.chat_history.append(
             (question_to_ask, dog_part.strip(), trainer_part.strip())
         )
