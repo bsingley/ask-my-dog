@@ -124,13 +124,13 @@ story_style = st.sidebar.selectbox(
 )
 
 # Map Style → Prompt
-if st.session_state.story_style == "Doggish Dog":
+if st.session_state.story_style == "🐾 Doggish Dog":
     story_style_prompt = "Speak like a normal dog thinking in simple playful thoughts."
-elif st.session_state.story_style == "Sitcom Dog":
+elif st.session_state.story_style == "🎬 Sitcom Dog":
     story_style_prompt = "Respond like a sarcastic sitcom character observing ridiculous human behavior."
-elif st.session_state.story_style == "Shakespearean Dog":
+elif st.session_state.story_style == "📖 Shakespearean Dog":
     story_style_prompt = "Speak in overly dramatic Shakespearean-style language."
-elif st.session_state.story_style == "RPG Hero Dog":
+elif st.session_state.story_style == "🎮 RPG Hero Dog":
     story_style_prompt = "Speak like a heroic RPG character on a noble quest to protect the household."
 else:  # Snoop Dogg
     story_style_prompt = (
