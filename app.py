@@ -37,11 +37,48 @@ else:
     dog = default_dog.copy()
 
 # -----------------------------
-# Sidebar: Drama & Style
+# Sidebar Controls
 # -----------------------------
-st.sidebar.header("🎭 Dog Personality Settings")
+st.sidebar.header("🐶 Dog Controls")
 
-# Drama Level
+# --- Dog Character Card ---
+st.sidebar.image("https://cdn-icons-png.flaticon.com/512/616/616408.png", width=80)
+st.sidebar.markdown(f"""
+### {dog['name']}
+**{dog['breed']} • {dog['age']}**  
+**Identity:** {dog['self_identity']}
+""")
+
+# --- Persona Expander ---
+with st.sidebar.expander("⚙️ View or edit full dog persona"):
+    st.write(f"**Training Level:** {dog['training_level']}")
+    st.write("**Personality Traits:** " + ", ".join(dog['personality_traits']))
+    st.write("**Fear Triggers:** " + ", ".join(dog['fear_triggers']))
+    st.write(f"**Self Story:** {dog['self_story']}")
+    st.write(f"**Superhero Identity:** {dog['superhero_identity']}")
+
+    if st.checkbox("Edit persona"):
+        dog["name"] = st.text_input("Dog name", dog["name"])
+        dog["breed"] = st.text_input("Breed", dog["breed"])
+        dog["age"] = st.text_input("Age", dog["age"])
+        dog["energy_level"] = st.text_input("Energy level", dog["energy_level"])
+        dog["training_level"] = st.text_input("Training level", dog["training_level"])
+        dog["self_identity"] = st.text_input("Self identity", dog["self_identity"])
+        dog["self_story"] = st.text_input("Self story", dog["self_story"])
+        dog["superhero_identity"] = st.text_input("Superhero identity", dog["superhero_identity"])
+
+        save_col1, save_col2 = st.columns(2)
+        if save_col1.button("Save Updates"):
+            st.success("Persona updated!")
+        if save_col2.checkbox("Save for later"):
+            with open(dog_file, "w") as f:
+                json.dump(dog, f, indent=2)
+            st.success("Saved for future sessions")
+        if st.button("Reset to Luna"):
+            dog = default_dog.copy()
+            st.success("Reset to Luna")
+
+# --- Drama Level ---
 drama_options = [
     "🐾 Low – Mostly normal dog reactions",
     "🐕 Moderate – Story influences some thoughts/actions",  # default
@@ -58,7 +95,7 @@ drama_level = st.sidebar.selectbox(
     key="drama_level"
 )
 
-# Map Drama Level → Prompt Description
+# Map Drama → Prompt
 if "Low" in st.session_state.drama_level:
     drama_strength = "The dog mostly reacts normally; its self-story has little effect."
 elif "Moderate" in st.session_state.drama_level:
@@ -68,7 +105,7 @@ elif "High" in st.session_state.drama_level:
 else:
     drama_strength = "The dog fully believes in its self-story; all thoughts and reactions are filtered through it."
 
-# Storytelling Style
+# --- Storytelling Style ---
 style_options = [
     "🐾 Doggish Dog",   # default
     "🎬 Sitcom Dog",
@@ -101,56 +138,19 @@ else:  # Snoop Dogg
         "Use playful slang, humor, and rhythm while describing dog thoughts."
     )
 
-# -----------------------------
-# Dog Character Card
-# -----------------------------
-col1, col2 = st.columns([1, 4])
-with col1:
-    st.image("https://cdn-icons-png.flaticon.com/512/616/616408.png", width=80)
-with col2:
-    st.markdown(f"""
-### 🐶 {dog['name']}
-**{dog['breed']} • {dog['age']}**  
-**Identity:** {dog['self_identity']}  
-**Drama Level:** {st.session_state.drama_level}  
-**Storytelling Style:** {st.session_state.story_style}
-""")
-st.divider()
+# --- Replay Last Question ---
+if "last_question" not in st.session_state:
+    st.session_state.last_question = ""
+if "replay_triggered" not in st.session_state:
+    st.session_state.replay_triggered = False
+
+if st.session_state.last_question:
+    if st.sidebar.button("🔁 Replay Last Question with New Styles"):
+        st.session_state.replay_triggered = True
+        st.experimental_rerun()
 
 # -----------------------------
-# Persona Expander
-# -----------------------------
-with st.expander("⚙️ View or edit full dog persona"):
-    st.write(f"**Training Level:** {dog['training_level']}")
-    st.write("**Personality Traits:** " + ", ".join(dog['personality_traits']))
-    st.write("**Fear Triggers:** " + ", ".join(dog['fear_triggers']))
-    st.write(f"**Self Story:** {dog['self_story']}")
-    st.write(f"**Superhero Identity:** {dog['superhero_identity']}")
-
-    if st.checkbox("Edit persona"):
-        dog["name"] = st.text_input("Dog name", dog["name"])
-        dog["breed"] = st.text_input("Breed", dog["breed"])
-        dog["age"] = st.text_input("Age", dog["age"])
-        dog["energy_level"] = st.text_input("Energy level", dog["energy_level"])
-        dog["training_level"] = st.text_input("Training level", dog["training_level"])
-        dog["self_identity"] = st.text_input("Self identity", dog["self_identity"])
-        dog["self_story"] = st.text_input("Self story", dog["self_story"])
-        dog["superhero_identity"] = st.text_input("Superhero identity", dog["superhero_identity"])
-
-        save_col1, save_col2 = st.columns(2)
-        if save_col1.button("Save Updates"):
-            st.success("Persona updated!")
-        if save_col2.checkbox("Save for later"):
-            with open(dog_file, "w") as f:
-                json.dump(dog, f, indent=2)
-            st.success("Saved for future sessions")
-        if st.button("Reset to Luna"):
-            dog = default_dog.copy()
-            st.success("Reset to Luna")
-st.divider()
-
-# -----------------------------
-# Sample Questions / Input
+# Main Page: Chat Input + Response Feed
 # -----------------------------
 sample_questions = [
     "Why do I chase my tail?",
@@ -170,19 +170,6 @@ user_question = st.text_input(
     placeholder=f"e.g., {st.session_state.placeholder_question}",
     key="user_question_input"
 )
-
-# -----------------------------
-# Replay Last Question
-# -----------------------------
-if "last_question" not in st.session_state:
-    st.session_state.last_question = ""
-if "replay_triggered" not in st.session_state:
-    st.session_state.replay_triggered = False
-
-if st.session_state.last_question:
-    if st.sidebar.button("🔁 Replay Last Question with New Styles"):
-        st.session_state.replay_triggered = True
-        st.experimental_rerun()
 
 # Determine which question to send
 if st.session_state.replay_triggered:
@@ -243,7 +230,7 @@ User question:
             dog_part = text
             trainer_part = ""
 
-        # Display responses
+        # Display responses in main page
         st.markdown(f"### 🐶 {dog['name']} thinks...")
         st.markdown(dog_part.strip())
 
