@@ -2,6 +2,7 @@ import streamlit as st
 from openai import OpenAI, OpenAIError
 import json
 import os
+import random
 
 api_key = os.environ.get("API_KEY")
 client = OpenAI()
@@ -168,7 +169,26 @@ st.divider()
 # Ask Question
 # -----------------------------
 st.markdown("### Ask your dog a question")
-user_question = st.text_input(f"What would you like to ask {dog['name']}?")
+
+# List of sample questions
+sample_questions = [
+    "Why do I chase my tail?",
+    "How can I make new friends?",
+    "Why do I bark at strangers?",
+    "What’s my favorite part of the house?",
+    "How can I be a better fetch player?",
+    "Why do I get scared of the vacuum?",
+    "What’s my favorite toy?",
+]
+
+# Pick a random placeholder
+placeholder_text = random.choice(sample_questions)
+
+# Text input with randomized placeholder
+user_question = st.text_input(
+    f"What would you like to ask {dog['name']}?",
+    placeholder=f"e.g., {placeholder_text}"
+)
 
 # -----------------------------
 # AI Response
