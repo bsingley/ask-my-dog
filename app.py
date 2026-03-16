@@ -165,6 +165,8 @@ with st.expander("⚙️ View or edit full dog persona"):
 
 st.divider()
 
+import random
+
 # -----------------------------
 # Ask Question
 # -----------------------------
@@ -181,13 +183,15 @@ sample_questions = [
     "What’s my favorite toy?",
 ]
 
-# Pick a random placeholder
-placeholder_text = random.choice(sample_questions)
+# Initialize a placeholder in session_state if it doesn't exist
+if "placeholder_question" not in st.session_state:
+    st.session_state.placeholder_question = random.choice(sample_questions)
 
-# Text input with randomized placeholder
+# Text input with persistent placeholder
 user_question = st.text_input(
     f"What would you like to ask {dog['name']}?",
-    placeholder=f"e.g., {placeholder_text}"
+    placeholder=f"e.g., {st.session_state.placeholder_question}",
+    key="user_question_input"
 )
 
 # -----------------------------
