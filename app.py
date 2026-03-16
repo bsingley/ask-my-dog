@@ -82,7 +82,6 @@ with st.sidebar:
 
     st.divider()
 
-    st.divider()
 
     drama_level = st.selectbox(
         "🎭 Drama Level",
