@@ -106,6 +106,22 @@ with st.sidebar:
             "Speak in a laid-back, cool, rhyming style reminiscent of Snoop Dogg. "
             "Use playful slang, humor, and rhythm while describing dog thoughts."
         )
+    
+    # -----------------------------
+    # Replay Last Question Button
+    # -----------------------------
+    if "last_question" not in st.session_state:
+        st.session_state.last_question = ""  # initialize
+
+    def replay_last_question():
+        # Set the input box to the last question
+        st.session_state.user_question_input = st.session_state.last_question
+        # Trigger Streamlit to rerun so the AI response executes
+        st.experimental_rerun()
+
+    if st.session_state.last_question:
+        if st.button("🔁 Replay Last Question with New Styles"):
+            replay_last_question()
 
 # -----------------------------
 # Dog Character Card (Main Page)
@@ -189,7 +205,10 @@ user_question = st.text_input(
 # -----------------------------
 # AI Response
 # -----------------------------
+# When the user submits a question
 if user_question:
+    st.session_state.last_question = user_question  # save for replay
+    # ... then run your AI response as usual
     prompt = f"""
 You are a dog named {dog['name']}.
 
