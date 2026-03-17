@@ -103,7 +103,7 @@ with st.sidebar.expander("⚙️ View or edit full dog persona"):
             "Fear Triggers (comma-separated)",
             ", ".join(dog["fear_triggers"])
         ).split(",")
-        
+    ]
     identity_list = list(identity_options.keys())
     current_identity = dog["self_identity"] if dog["self_identity"] in identity_list else "Custom"
     selected_identity = st.radio("Self Identity", identity_list, index=identity_list.index(current_identity))
@@ -115,7 +115,7 @@ with st.sidebar.expander("⚙️ View or edit full dog persona"):
         dog["self_story"] = identity_options[selected_identity]
         st.caption(f"*{dog['self_story']}*")
     
-    ]
+    
 
     save_col1, save_col2 = st.columns(2)
     if save_col1.button("Save Updates"):
