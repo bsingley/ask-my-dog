@@ -215,7 +215,7 @@ Question: {question}
             dog_part = text
             trainer_part = ""
 
-         st.session_state.last_question = active_question
+        st.session_state.last_question = active_question
         st.session_state.chat_history.append(
             (active_question, dog_part.strip(), trainer_part.strip())
         )
