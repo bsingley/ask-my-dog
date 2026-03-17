@@ -255,7 +255,7 @@ if active_question:
     drama = drama_map[st.session_state.confirmed_drama]
     style = style_map[st.session_state.confirmed_style]
 
-    egg = detect_easter_egg(active_question)
+    egg = detect_easter_egg(active_question) or {}
 
     if egg:
         special_instruction = f"\n\nSPECIAL OVERRIDE: {egg['instruction']}"
@@ -311,7 +311,7 @@ Question: {question}
             trainer_part = ""
 
         st.session_state.last_question = active_question
-        achievement = egg["achievement"] if egg else None
+        achievement = egg.get("achievement")
         st.session_state.chat_history.append(
             (active_question, dog_part.strip(), trainer_part.strip(), achievement)
         )
