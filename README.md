@@ -15,7 +15,7 @@ This project demonstrates skills in:
 * **Lightweight AI UX** – building intuitive, interactive flows
 * **Streamlit app development** – rapid prototyping of web-based AI applications
 
-**Live demo:** [Insert Link]
+**Live demo:** [\[Insert Link\]](https://ask-my-dog-syur5g5wj4wxkuke7xtk5p.streamlit.app/)
 
 ---
 
@@ -56,7 +56,6 @@ flowchart TD
 
 * Personalized training recommendations based on user questions
 * Multiple dog personalities with distinct behaviors
-* Conversation memory for ongoing interactions
 * Enhanced UX with richer feedback and interactive elements
 
 
