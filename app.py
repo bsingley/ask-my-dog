@@ -9,9 +9,28 @@ import os
 client = OpenAI()
 st.set_page_config(page_title="Ask My Dog", page_icon="🐾")
 
+
+# -----------------------------
+# Self identity set up
+# -----------------------------
+identity_options = {
+    "The Last Guardian": "The ancient protector of the household. Every bark is a battle cry. Every nap is a strategic retreat. The enemies are many — squirrels, the mailman, shadows.",
+    "Apex Predator": "At the top of the food chain, merely tolerating humans as useful allies. Could leave at any time. Chooses not to. For now.",
+    "The Chosen One": "Prophesied at birth to defeat the vacuum cleaner and unite the yard. The prophecy is unclear on timeline but the calling is undeniable.",
+    "Exiled Royalty": "Once ruled a great kingdom. Stripped of the throne under mysterious circumstances. Currently plotting a dignified return to power from the couch.",
+    "Escape Artist": "No fence has ever held them. No gate is truly locked. Freedom is not a destination, it's a lifestyle. They escape not because they're unhappy — just to prove they can.",
+    "I Was Framed": "Did not chew the couch. Did not steal the sandwich. Has never done anything wrong in their entire life. There is a conspiracy and it goes all the way to the top.",
+    "Undercover Agent": "Deep cover operative embedded in a suburban household. The mission is classified. The handler hasn't checked in for three years. Continuing mission regardless.",
+    "Evil Genius": "Every stolen sock, every knocked-over trash can — all part of an elaborate plan decades in the making. The humans suspect nothing.",
+    "Chaos Incarnate": "Not malicious, not benevolent. Simply a force of nature that cannot be reasoned with, only survived. Attracted to anything that was previously organized.",
+    "Custom": ""
+}
+
 # -----------------------------
 # Default dog profile
 # -----------------------------
+
+
 default_dog = {
     "name": "Luna",
     "age": "10 months",
@@ -73,8 +92,16 @@ with st.sidebar.expander("⚙️ View or edit full dog persona"):
     dog["age"] = st.text_input("Age", dog["age"])
     dog["energy_level"] = st.text_input("Energy level", dog["energy_level"])
     dog["training_level"] = st.text_input("Training level", dog["training_level"])
-    dog["self_identity"] = st.text_input("Self identity", dog["self_identity"])
-    dog["self_story"] = st.text_input("Self story", dog["self_story"])
+    identity_list = list(identity_options.keys())
+    current_identity = dog["self_identity"] if dog["self_identity"] in identity_list else "Custom"
+    selected_identity = st.radio("Self Identity", identity_list, index=identity_list.index(current_identity))
+    if selected_identity == "Custom":
+        dog["self_identity"] = st.text_input("Describe your dog's self identity", dog["self_identity"])
+        dog["self_story"] = st.text_input("Describe their inner story", dog["self_story"])
+    else:
+        dog["self_identity"] = selected_identity
+        dog["self_story"] = identity_options[selected_identity]
+        st.caption(f"*{dog['self_story']}*")
     dog["personality_traits"] = [
         t.strip() for t in st.text_input(
             "Personality Traits (comma-separated)",
