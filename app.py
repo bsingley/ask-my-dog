@@ -200,24 +200,26 @@ Respond in two parts:
 Question: {question}
 """
 
-    try:
+ try:
         with st.spinner(f"🐾 {dog['name']} is thinking..."):
+            # Build messages list
+            messages = [{"role": "system", "content": prompt}]
+
+            # Inject last 3 exchanges as memory
+            for past_q, past_d, _ in st.session_state.chat_history[-3:]:
+                messages.append({"role": "user", "content": past_q})
+                messages.append({"role": "assistant", "content": past_d})
+
+            # Add the new question
+            messages.append({"role": "user", "content": active_question})
+
             response = client.chat.completions.create(
                 model="gpt-4o-mini",
-                # System prompt sets the persona once
-                messages = [{"role": "system", "content": prompt_without_question}]
-
-                # Inject last 3 exchanges as memory
-                for past_q, past_d, _ in st.session_state.chat_history[-3:]:
-                    messages.append({"role": "user", "content": past_q})
-                    messages.append({"role": "assistant", "content": past_d})
-
-                # Add the new question
-                messages.append({"role": "user", "content": active_question})
+                messages=messages
             )
- 
-        text = response.choices[0].message.content
 
+        text = response.choices[0].message.content
+        
         if "As a dog trainer:" in text:
             dog_part, trainer_part = text.split("As a dog trainer:",1)
         else:
