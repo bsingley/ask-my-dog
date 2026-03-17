@@ -11,7 +11,7 @@ st.set_page_config(page_title="Ask My Dog", page_icon="🐾")
 
 
 # -----------------------------
-# Self identity set up
+# Self identity & intelligence set up
 # -----------------------------
 identity_options = {
     "The Last Guardian": "The ancient protector of the household. Every bark is a battle cry. Every nap is a strategic retreat. The enemies are many — squirrels, the mailman, shadows.",
@@ -26,6 +26,14 @@ identity_options = {
     "Custom": ""
 }
 
+intelligence_levels = [
+    "Plays 3D chess when you're not looking",
+    "Knows exactly what you said. Chooses to ignore it.",
+    "Definitely has a plan. Probably.",
+    "Frequently outwitted by furniture.",
+    "Two brain cells fighting for third place"
+]
+
 # -----------------------------
 # Default dog profile
 # -----------------------------
@@ -37,6 +45,7 @@ default_dog = {
     "breed": "lab mix",
     "energy_level": "very high",
     "training_level": "basic obedience",
+    "intelligence": "Definitely has a plan. Probably.",
     "self_identity": "fearless guardian",
     "self_story": "protector of the household",
     "personality_traits": ["extremely intelligent", "curious", "cautious"],
@@ -104,6 +113,9 @@ with st.sidebar.expander("⚙️ View or edit full dog persona"):
             ", ".join(dog["fear_triggers"])
         ).split(",")
     ]
+    current_intel = dog.get("intelligence", intelligence_levels[2])
+    intel_index = intelligence_levels.index(current_intel) if current_intel in intelligence_levels else 2
+    dog["intelligence"] = st.select_slider("Intelligence", options=intelligence_levels, value=intelligence_levels[intel_index])
     identity_list = list(identity_options.keys())
     current_identity = dog["self_identity"] if dog["self_identity"] in identity_list else "Custom"
     selected_identity = st.radio("Self Identity", identity_list, index=identity_list.index(current_identity))
@@ -213,6 +225,7 @@ if active_question:
 You are a dog named {dog['name']}.
 
 Traits: {", ".join(dog["personality_traits"])}
+Intelligence: {dog.get("intelligence", "Definitely has a plan. Probably.")}
 Fears: {", ".join(dog["fear_triggers"])}
 
 Drama rule:
