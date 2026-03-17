@@ -116,6 +116,7 @@ with st.sidebar.expander("⚙️ View or edit full dog persona"):
             ", ".join(dog["fear_triggers"])
         ).split(",")
     ]
+    dog["nemesis"] = st.text_input("Nemesis", dog.get("nemesis", "the vacuum cleaner"))
     current_intel = dog.get("intelligence", intelligence_levels[2])
     intel_index = intelligence_levels.index(current_intel) if current_intel in intelligence_levels else 2
     intel_index = 5 - st.slider("Intelligence", min_value=1, max_value=5, value=5 - intel_index)
@@ -230,6 +231,7 @@ if active_question:
 You are a dog named {dog['name']}.
 
 Traits: {", ".join(dog["personality_traits"])}
+Nemesis: {dog.get("nemesis", "the vacuum cleaner")}
 Intelligence: {dog.get("intelligence", "Definitely has a plan. Probably.")}
 Fears: {", ".join(dog["fear_triggers"])}
 
