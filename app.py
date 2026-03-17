@@ -92,16 +92,6 @@ with st.sidebar.expander("⚙️ View or edit full dog persona"):
     dog["age"] = st.text_input("Age", dog["age"])
     dog["energy_level"] = st.text_input("Energy level", dog["energy_level"])
     dog["training_level"] = st.text_input("Training level", dog["training_level"])
-    identity_list = list(identity_options.keys())
-    current_identity = dog["self_identity"] if dog["self_identity"] in identity_list else "Custom"
-    selected_identity = st.radio("Self Identity", identity_list, index=identity_list.index(current_identity))
-    if selected_identity == "Custom":
-        dog["self_identity"] = st.text_input("Describe your dog's self identity", dog["self_identity"])
-        dog["self_story"] = st.text_input("Describe their inner story", dog["self_story"])
-    else:
-        dog["self_identity"] = selected_identity
-        dog["self_story"] = identity_options[selected_identity]
-        st.caption(f"*{dog['self_story']}*")
     dog["personality_traits"] = [
         t.strip() for t in st.text_input(
             "Personality Traits (comma-separated)",
@@ -113,6 +103,18 @@ with st.sidebar.expander("⚙️ View or edit full dog persona"):
             "Fear Triggers (comma-separated)",
             ", ".join(dog["fear_triggers"])
         ).split(",")
+        
+    identity_list = list(identity_options.keys())
+    current_identity = dog["self_identity"] if dog["self_identity"] in identity_list else "Custom"
+    selected_identity = st.radio("Self Identity", identity_list, index=identity_list.index(current_identity))
+    if selected_identity == "Custom":
+        dog["self_identity"] = st.text_input("Describe your dog's self identity", dog["self_identity"])
+        dog["self_story"] = st.text_input("Describe their inner story", dog["self_story"])
+    else:
+        dog["self_identity"] = selected_identity
+        dog["self_story"] = identity_options[selected_identity]
+        st.caption(f"*{dog['self_story']}*")
+    
     ]
 
     save_col1, save_col2 = st.columns(2)
