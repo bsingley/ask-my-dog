@@ -200,7 +200,7 @@ Respond in two parts:
 Question: {question}
 """
 
- try:
+    try:
         with st.spinner(f"🐾 {dog['name']} is thinking..."):
             # Build messages list
             messages = [{"role": "system", "content": prompt}]
@@ -219,7 +219,7 @@ Question: {question}
             )
 
         text = response.choices[0].message.content
-        
+
         if "As a dog trainer:" in text:
             dog_part, trainer_part = text.split("As a dog trainer:",1)
         else:
