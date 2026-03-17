@@ -143,12 +143,24 @@ st.title("🐾 Ask My Dog")
 # Input FIRST
 # -----------------------------
 
-user_question = st.text_input("Ask your dog a question", key="chat_input")
-submit = st.button("Ask")
+with st.form(key="question_form", clear_on_submit=True):
+    user_question = st.text_input("Ask your dog a question", key="chat_input")
+    col1, col2 = st.columns([1, 2])
+    submit = col1.form_submit_button("Ask")
+replay = st.button("🔁 Replay Last Question", disabled=not st.session_state.last_question)
+
+# Determine the question to process this run
 
 if submit and user_question.strip():
-
-    question = user_question.strip()
+    active_question = user_question.strip()
+elif replay and st.session_state.last_question:
+    active_question = st.session_state.last_question
+else:
+    active_question = None
+ 
+if active_question:
+ 
+    question = active_question
 
     drama_map = {
         "🐾 Low – Mostly normal dog reactions": "The dog mostly reacts normally.",
@@ -203,8 +215,9 @@ Question: {question}
             dog_part = text
             trainer_part = ""
 
+         st.session_state.last_question = active_question
         st.session_state.chat_history.append(
-            (question, dog_part.strip(), trainer_part.strip())
+            (active_question, dog_part.strip(), trainer_part.strip())
         )
 
     except Exception:
