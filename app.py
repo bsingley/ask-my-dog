@@ -190,12 +190,12 @@ Question: {question}
 
     try:
         with st.spinner(f"🐾 {dog['name']} is thinking..."):
-            response = client.responses.create(
-                model="gpt-4.1-mini",
-                input=prompt
+            response = client.chat.completions.create(
+                model="gpt-4o-mini",
+                messages=[{"role": "user", "content": prompt}]
             )
-
-        text = response.output_text
+ 
+        text = response.choices[0].message.content
 
         if "As a dog trainer:" in text:
             dog_part, trainer_part = text.split("As a dog trainer:",1)
