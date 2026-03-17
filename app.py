@@ -88,9 +88,13 @@ st.sidebar.header("🐾 Dog Profile")
 def render_dog_card():
     st.sidebar.image("https://cdn-icons-png.flaticon.com/512/616/616408.png", width=80)
     st.sidebar.markdown(f"""
+
+st.sidebar.markdown(f"""
 ### {dog['name']}
 **{dog['breed']} • {dog['age']}**  
-**Identity:** {dog['self_identity']}
+**Identity:** {dog['self_identity']}  
+**Intelligence:** {dog.get('intelligence', 'Definitely has a plan. Probably.')}
+""")
 """)
 render_dog_card()
 
