@@ -290,7 +290,8 @@ Question: {question}
             messages = [{"role": "system", "content": prompt}]
 
             # Inject last 3 exchanges as memory
-            for past_q, past_d, _ in st.session_state.chat_history[-3:]:
+            for entry in st.session_state.chat_history[-3:]:
+                past_q, past_d = entry[0], entry[1]
                 messages.append({"role": "user", "content": past_q})
                 messages.append({"role": "assistant", "content": past_d})
 
@@ -312,7 +313,7 @@ Question: {question}
 
         st.session_state.last_question = active_question
         achievement = egg.get("achievement")
-        st.session_state.chat_history.append(
+            st.session_state.chat_history.append(
             (active_question, dog_part.strip(), trainer_part.strip(), achievement)
         )
 
