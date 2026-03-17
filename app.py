@@ -118,7 +118,9 @@ with st.sidebar.expander("⚙️ View or edit full dog persona"):
     ]
     current_intel = dog.get("intelligence", intelligence_levels[2])
     intel_index = intelligence_levels.index(current_intel) if current_intel in intelligence_levels else 2
-    dog["intelligence"] = st.select_slider("Intelligence", options=intelligence_levels, value=intelligence_levels[intel_index])
+    intel_index = st.slider("Intelligence", min_value=1, max_value=5, value=intel_index + 1) - 1
+    dog["intelligence"] = intelligence_levels[intel_index]
+    st.caption(f"_{intelligence_levels[intel_index]}_")
     identity_list = list(identity_options.keys())
     current_identity = dog["self_identity"] if dog["self_identity"] in identity_list else "Custom"
     selected_identity = st.radio("Self Identity", identity_list, index=identity_list.index(current_identity))
