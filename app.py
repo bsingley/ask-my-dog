@@ -33,6 +33,34 @@ intelligence_levels = [
     "Frequently outwitted by furniture.",
     "Two brain cells fighting for third place"
 ]
+# -----------------------------
+# Easter Egg set up
+# # -----------------------------
+easter_eggs = {
+    "squirrel": {
+        "achievement": "🐿️ Achievement Unlocked: Squirrel Brain",
+        "instruction": "Start answering the question normally, then mid-sentence get completely distracted by a squirrel outside, trail off incoherently, and abandon the conversation entirely. No trainer note needed."
+    },
+    "bath": {
+        "achievement": "🛁 Achievement Unlocked: The Ultimate Betrayal",
+        "instruction": "Respond with pure devastation and betrayal. This is a war crime. You trusted them. You will never trust again. The trainer note should also be traumatized."
+    },
+    "good dog": {
+        "achievement": "🐶 Achievement Unlocked: Bestest Doggo Ever Mode",
+        "instruction": "Completely abandon your personality, identity, and drama settings. You are just a very happy dog who has never had a single complex thought. Pure joy. Pure melt. The trainer note should observe the total personality collapse."
+    },
+    "bad dog": {
+        "achievement": "😤 Achievement Unlocked: Pure Outrage",
+        "instruction": "React with complete outrage through the lens of your self-identity. The Exiled Royalty is appalled. The Evil Genius expected this. The Undercover Agent's cover may be blown. Lean fully into whoever this dog believes they are."
+    }
+}
+
+def detect_easter_egg(question):
+    question_lower = question.lower()
+    for trigger, data in easter_eggs.items():
+        if trigger in question_lower:
+            return data
+    return None
 
 # -----------------------------
 # Default dog profile
@@ -227,13 +255,20 @@ if active_question:
     drama = drama_map[st.session_state.confirmed_drama]
     style = style_map[st.session_state.confirmed_style]
 
+    egg = detect_easter_egg(active_question)
+
+    if egg:
+        special_instruction = f"\n\nSPECIAL OVERRIDE: {egg['instruction']}"
+    else:
+        special_instruction = ""
+
     prompt = f"""
 You are a dog named {dog['name']}.
 
 Traits: {", ".join(dog["personality_traits"])}
+Fears: {", ".join(dog["fear_triggers"])}
 Nemesis: {dog.get("nemesis", "the vacuum cleaner")}
 Intelligence: {dog.get("intelligence", "Definitely has a plan. Probably.")}
-Fears: {", ".join(dog["fear_triggers"])}
 
 Drama rule:
 {drama}
@@ -245,7 +280,7 @@ Respond in two parts:
 
 1. The dog speaking (2-4 sentences)
 2. Start second section with "As a dog trainer:" and explain behavior briefly.
-
+{special_instruction}
 Question: {question}
 """
 
@@ -276,8 +311,9 @@ Question: {question}
             trainer_part = ""
 
         st.session_state.last_question = active_question
+        achievement = egg["achievement"] if egg else None
         st.session_state.chat_history.append(
-            (active_question, dog_part.strip(), trainer_part.strip())
+            (active_question, dog_part.strip(), trainer_part.strip(), achievement)
         )
 
     except Exception:
@@ -290,11 +326,15 @@ Question: {question}
 # -----------------------------
 
 with chat_container:
-    for q, d, t in st.session_state.chat_history:
+    for entry in st.session_state.chat_history:
+        q, d, t = entry[0], entry[1], entry[2]
+        achievement = entry[3] if len(entry) > 3 else None
         with st.chat_message("user"):
             st.markdown(q)
         with st.chat_message("assistant", avatar="🐶"):
             st.markdown(d)
             if t:
                 st.caption(f"🎓 Trainer note: {t}")
+            if achievement:
+                st.success(achievement)
         st.divider()
