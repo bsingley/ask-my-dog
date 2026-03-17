@@ -313,7 +313,7 @@ Question: {question}
 
         st.session_state.last_question = active_question
         achievement = egg.get("achievement")
-            st.session_state.chat_history.append(
+        st.session_state.chat_history.append(
             (active_question, dog_part.strip(), trainer_part.strip(), achievement)
         )
 
