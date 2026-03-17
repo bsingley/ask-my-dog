@@ -91,7 +91,7 @@ def render_dog_card():
 
 st.sidebar.markdown(f"""
 ### {dog['name']}
-**{dog['breed']} • {dog['age']}**  
+**{dog['breed']}  {dog['age']}**  
 **Identity:** {dog['self_identity']}  
 **Intelligence:** {dog.get('intelligence', 'Definitely has a plan. Probably.')}
 """)
