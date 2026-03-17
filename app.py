@@ -139,13 +139,13 @@ if st.sidebar.button("Confirm Settings"):
 
 st.title("🐾 Ask My Dog")
 
-# -----------------------------
-# Input FIRST
-# -----------------------------
+# Chat renders here (see bottom of file)
+chat_container = st.container()
 
+# Input pinned after chat
 with st.form(key="question_form", clear_on_submit=True):
-    user_question = st.text_input("Ask your dog a question", key="chat_input")
-    col1, col2 = st.columns([1, 2])
+    user_question = st.text_input("Ask your dog a question", key="chat_input", label_visibility="collapsed", placeholder="Ask your dog something...")
+    col1, col2 = st.columns([1, 3])
     submit = col1.form_submit_button("Ask")
 replay = st.button("🔁 Replay Last Question", disabled=not st.session_state.last_question)
 
@@ -226,15 +226,15 @@ Question: {question}
         )
 
 # -----------------------------
-# Render chat AFTER response
+# Render chat in container
 # -----------------------------
 
-for q,d,t in st.session_state.chat_history:
-
-    st.markdown(f"**You:** {q}")
-    st.markdown(f"**🐶 {dog['name']} thinks:** {d}")
-
-    if t:
-        st.markdown(f"**Trainer:** {t}")
-
-    st.divider()
+with chat_container:
+    for q, d, t in st.session_state.chat_history:
+        with st.chat_message("user"):
+            st.markdown(q)
+        with st.chat_message("assistant", avatar="🐶"):
+            st.markdown(d)
+            if t:
+                st.caption(f"🎓 Trainer note: {t}")
+        st.divider()
