@@ -235,11 +235,19 @@ with col_style:
 chat_container = st.container()
 
 # Input pinned after chat
-with st.form(key="question_form", clear_on_submit=True):
-    user_question = st.text_input("Ask your dog a question", key="chat_input", label_visibility="collapsed", placeholder="Ask your dog something...")
-    col1, col2 = st.columns([1, 3])
-    submit = col1.form_submit_button("Ask")
+if not active_question:
+    with st.form(key="question_form", clear_on_submit=True):    user_question = st.text_input("Ask your dog a question", key="chat_input", label_visibility="collapsed", placeholder="Ask your dog something...")
+        col1, col2 = st.columns([1, 3])
+        submit = col1.form_submit_button("Ask")
 replay = st.button("🔁 Replay Last Question", disabled=not st.session_state.last_question)
+
+st.components.v1.html("""
+    <script>
+        window.scrollTo(0, document.body.scrollHeight);
+        const inputs = window.parent.document.querySelectorAll('input[type="text"]');
+        if (inputs.length > 0) inputs[inputs.length - 1].focus();
+    </script>
+""", height=0)
 
 # Determine the question to process this run
 
