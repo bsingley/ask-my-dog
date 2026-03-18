@@ -351,10 +351,10 @@ with chat_container:
         with st.chat_message("user"):
             st.markdown(f'<div style="text-align: right; background-color: #DCF8C6; padding: 10px; border-radius: 10px; margin: 5px 0;">{q}</div>', unsafe_allow_html=True)        
             with st.chat_message("assistant", avatar="🐶"):
-            if t:
-                st.caption(f"🎓 Trainer note: {t}")
-            if achievement:
-                st.success(achievement)
+                if t:
+                    st.caption(f"🎓 Trainer note: {t}")
+                if achievement:
+                    st.success(achievement)
         st.divider()
 
 #scroll to the bottom of the page after render
