@@ -157,6 +157,9 @@ st.sidebar.markdown(f"""
 **Intelligence:** {dog.get('intelligence', 'Definitely has a plan. Probably.')}
 """)
 
+💛 [Buy Luna a treat](https://venmo.com/u/Beth-Singley-1)
+""")
+
 # -----------------------------
 # Main page
 # -----------------------------
