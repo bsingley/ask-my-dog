@@ -56,10 +56,16 @@ easter_eggs = {
 }
 
 def detect_easter_egg(question):
-    question_lower = question.lower()
     import re
+    question_lower = question.lower()
     for trigger, data in easter_eggs.items():
-        if re.search(r'\b' + trigger + r'\b', question_lower):
+        if ' ' in trigger:
+            # multi-word triggers: match as whole phrase with word boundaries on edges
+            pattern = r'\b' + re.escape(trigger) + r'\b'
+        else:
+            # single word triggers: strict word boundary
+            pattern = r'\b' + re.escape(trigger) + r'\b'
+        if re.search(pattern, question_lower):
             return data
     return None
 
