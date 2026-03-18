@@ -245,14 +245,6 @@ if not st.session_state.get("is_generating", False):
         submit = col1.form_submit_button("Ask")
     replay = st.button("🔁 Replay Last Question", disabled=not st.session_state.last_question)
 
-#scroll to the bottom of the page after render
-if st.session_state.chat_history:
-    st.components.v1.html("""
-        <script>
-            window.parent.document.querySelector('section.main').scrollTo(0, 999999);
-        </script>
-    """, height=0)
-
 # Determine the question to process this run
 
 if submit and user_question.strip():
@@ -367,3 +359,11 @@ with chat_container:
             if achievement:
                 st.success(achievement)
         st.divider()
+
+#scroll to the bottom of the page after render
+if st.session_state.chat_history:
+    st.components.v1.html("""
+        <script>
+            window.parent.document.querySelector('section.main').scrollTo(0, 999999);
+        </script>
+    """, height=0)
