@@ -192,7 +192,6 @@ with st.sidebar.expander("⚙️ View or edit full dog persona"):
     save_col1, save_col2 = st.columns(2)
     if save_col1.button("Save Updates"):
         st.success("Persona updated!")
-#        render_dog_card()
     if save_col2.checkbox("Save for later"):
         with open(dog_file, "w") as f:
             json.dump(dog, f, indent=2)
