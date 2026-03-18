@@ -317,10 +317,11 @@ Question: {question}
             (active_question, dog_part.strip(), trainer_part.strip(), achievement)
         )
 
-    except Exception:
-        st.session_state.chat_history.append(
-            (question,"Something went wrong calling the AI.","")
-        )
+    except Exception as e:
+        if str(e):
+            st.session_state.chat_history.append(
+                (question, "Something went wrong calling the AI.", "", None)
+            )
 
 # -----------------------------
 # Render chat in container
