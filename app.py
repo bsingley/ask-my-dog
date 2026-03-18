@@ -139,20 +139,36 @@ if "current_input" not in st.session_state:
 # -----------------------------
 st.sidebar.header("🐾 Dog Profile")
 
-def render_dog_card():
-    st.sidebar.image("https://cdn-icons-png.flaticon.com/512/616/616408.png", width=80)
-
-    st.sidebar.markdown(f"""
-    ### {dog['name']}
-    **{dog['breed']}  {dog['age']}**  
-    **Identity:** {dog['self_identity']}  
-    **Intelligence:** {dog.get('intelligence', 'Definitely has a plan. Probably.')}
+st.sidebar.image("https://cdn-icons-png.flaticon.com/512/616/616408.png", width=80)
+st.sidebar.markdown(f"""
+### {dog['name']}
+**{dog['breed']}  {dog['age']}**  
+**Identity:** {dog['self_identity']}  
+**Intelligence:** {dog.get('intelligence', 'Definitely has a plan. Probably.')}
 """)
 
-render_dog_card()
+# -----------------------------
+# Main page
+# -----------------------------
 
-# Persona editor
-with st.sidebar.expander("⚙️ View or edit full dog persona"):
+st.title("🐾 Ask My Dog")
+
+st.markdown("#### Does this sound like your dog? ✏️")
+col_drama, col_style = st.columns(2)
+with col_drama:
+    st.session_state.confirmed_drama = st.selectbox(
+        "🎭 Drama Level",
+        options=drama_options,
+        index=drama_options.index(st.session_state.confirmed_drama)
+    )
+with col_style:
+    st.session_state.confirmed_style = st.selectbox(
+        "🎨 Storytelling Style",
+        options=style_options,
+        index=style_options.index(st.session_state.confirmed_style)
+    )
+
+with st.expander("🐾 Edit your dog's persona"):
     dog["name"] = st.text_input("Dog name", dog["name"])
     dog["breed"] = st.text_input("Breed", dog["breed"])
     dog["age"] = st.text_input("Age", dog["age"])
@@ -186,8 +202,6 @@ with st.sidebar.expander("⚙️ View or edit full dog persona"):
         dog["self_identity"] = selected_identity
         dog["self_story"] = identity_options[selected_identity]
         st.caption(f"*{dog['self_story']}*")
-    
-    
 
     save_col1, save_col2 = st.columns(2)
     if save_col1.button("Save Updates"):
@@ -201,50 +215,9 @@ with st.sidebar.expander("⚙️ View or edit full dog persona"):
         dog = st.session_state.dog
         st.success("Reset to Luna")
 
-
 # -----------------------------
-# Set Levels - drama, storytelling, intelligence
+# Chat function
 # -----------------------------
-
-
-# Drama level
-st.sidebar.markdown("### 🎭 Drama Level")
-drama_options = [
-    "🐾 Low – Mostly normal dog reactions",
-    "🐕 Moderate – Story influences some thoughts/actions",
-    "👑 High – Story guides most thoughts/actions",
-    "🦸 Extreme – Story defines everything the dog thinks and does"
-]
-st.session_state.selected_drama = st.sidebar.selectbox(
-    "Select Drama Level",
-    options=drama_options,
-    index=drama_options.index(st.session_state.confirmed_drama)
-)
-
-# Storytelling style
-st.sidebar.markdown("### 🎨 Storytelling Style")
-style_options = [
-    "🐾 Doggish Dog",
-    "🎬 Sitcom Dog",
-    "📖 Shakespearean Dog",
-    "🎮 RPG Hero Dog",
-    "🎵 Snoop Dogg Dog"
-]
-st.session_state.selected_style = st.sidebar.selectbox(
-    "Select Storytelling Style",
-    options=style_options,
-    index=style_options.index(st.session_state.confirmed_style)
-)
-
-
-
-# Confirm settings
-if st.sidebar.button("Confirm Settings"):
-    st.session_state.confirmed_drama = st.session_state.selected_drama
-    st.session_state.confirmed_style = st.session_state.selected_style
-    st.sidebar.success("Settings confirmed. They will apply to the next question.")
-
-st.title("🐾 Ask My Dog")
 
 # Chat renders here (see bottom of file)
 chat_container = st.container()
