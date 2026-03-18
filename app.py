@@ -155,7 +155,7 @@ st.sidebar.markdown(f"""
 **{dog['breed']}  {dog['age']}**  
 **Identity:** {dog['self_identity']}  
 **Intelligence:** {dog.get('intelligence', 'Definitely has a plan. Probably.')}
-""")
+
 
 :yellow_heart: [Buy Luna a treat](https://venmo.com/u/Beth-Singley-1)
 """)
