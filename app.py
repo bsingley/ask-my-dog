@@ -235,7 +235,7 @@ with col_style:
 chat_container = st.container()
 
 # Input pinned after chat
-with st.form(key="question_form", clear_on_submit=False):
+with st.form(key="question_form", clear_on_submit=True):
     user_question = st.text_input("Ask your dog a question", key="chat_input", label_visibility="collapsed", placeholder="Ask your dog something...")
     col1, col2 = st.columns([1, 3])
     submit = col1.form_submit_button("Ask")
@@ -252,8 +252,9 @@ else:
     active_question = None
  
 if active_question:
- 
+
     question = active_question
+    st.markdown(f"**You asked:** {question}")
 
     
 
