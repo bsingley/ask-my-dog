@@ -88,6 +88,9 @@ intelligence_map = {
     "Two brain cells fighting for third place": "You are very dim. Short, confused, incoherent answers. Easily distracted by nothing at all."
 }
 
+drama_options = list(drama_map.keys())
+style_options = list(style_map.keys())
+
 # -----------------------------
 # Default dog profile
 # -----------------------------
