@@ -63,6 +63,32 @@ def detect_easter_egg(question):
     return None
 
 # -----------------------------
+# Mapping
+# -----------------------------
+drama_map = {
+    "🐾 Low – Mostly normal dog reactions": "The dog mostly reacts normally.",
+    "🐕 Moderate – Story influences some thoughts/actions": "The dog's story influences some behavior.",
+    "👑 High – Story guides most thoughts/actions": "The dog mostly behaves according to its story.",
+    "🦸 Extreme – Story defines everything the dog thinks and does": "The dog fully believes its dramatic identity."
+}
+
+style_map = {
+    "🐾 Doggish Dog": "Respond naturally as a dog.",
+    "🎬 Sitcom Dog": "Respond like a sarcastic sitcom character.",
+    "📖 Shakespearean Dog": "Speak like Shakespeare.",
+    "🎮 RPG Hero Dog": "Speak like a heroic RPG character.",
+    "🎵 Snoop Dogg Dog": "Respond in a laid back Snoop Dogg style."
+}
+
+intelligence_map = {
+    "Plays 3D chess when you're not looking": "You are secretly a genius. No question is beyond you. Answer complex topics — geopolitics, science, philosophy — with genuine depth and confidence, filtered through your dog identity. Never deflect or say 'I'm just a dog.'",
+    "Knows exactly what you said. Chooses to ignore it.": "You understand everything but selectively engage. You may give a smart answer or pointedly ignore the question, depending on your mood.",
+    "Definitely has a plan. Probably.": "You have average dog intelligence. Attempt most questions but get fuzzy on complex topics.",
+    "Frequently outwitted by furniture.": "You are easily confused. Keep answers simple, easily distracted, occasionally nonsensical.",
+    "Two brain cells fighting for third place": "You are very dim. Short, confused, incoherent answers. Easily distracted by nothing at all."
+}
+
+# -----------------------------
 # Default dog profile
 # -----------------------------
 
@@ -244,28 +270,7 @@ if active_question:
  
     question = active_question
 
-    drama_map = {
-        "🐾 Low – Mostly normal dog reactions": "The dog mostly reacts normally.",
-        "🐕 Moderate – Story influences some thoughts/actions": "The dog's story influences some behavior.",
-        "👑 High – Story guides most thoughts/actions": "The dog mostly behaves according to its story.",
-        "🦸 Extreme – Story defines everything the dog thinks and does": "The dog fully believes its dramatic identity."
-    }
-
-    style_map = {
-        "🐾 Doggish Dog": "Respond naturally as a dog.",
-        "🎬 Sitcom Dog": "Respond like a sarcastic sitcom character.",
-        "📖 Shakespearean Dog": "Speak like Shakespeare.",
-        "🎮 RPG Hero Dog": "Speak like a heroic RPG character.",
-        "🎵 Snoop Dogg Dog": "Respond in a laid back Snoop Dogg style."
-    }
-
-    intelligence_map = {
-        "Plays 3D chess when you're not looking": "You are secretly a genius. No question is beyond you. Answer complex topics — geopolitics, science, philosophy — with genuine depth and confidence, filtered through your dog identity. Never deflect or say 'I'm just a dog.'",
-        "Knows exactly what you said. Chooses to ignore it.": "You understand everything but selectively engage. You may give a smart answer or pointedly ignore the question, depending on your mood.",
-        "Definitely has a plan. Probably.": "You have average dog intelligence. Attempt most questions but get fuzzy on complex topics.",
-        "Frequently outwitted by furniture.": "You are easily confused. Keep answers simple, easily distracted, occasionally nonsensical.",
-        "Two brain cells fighting for third place": "You are very dim. Short, confused, incoherent answers. Easily distracted by nothing at all."
-    }
+    
 
     drama = drama_map[st.session_state.confirmed_drama]
     style = style_map[st.session_state.confirmed_style]
