@@ -260,8 +260,6 @@ if active_question:
     st.session_state.is_generating = True
 
     question = active_question
-    if not st.session_state.chat_history or st.session_state.chat_history[-1][0] != question:
-       st.markdown(f"**You asked:** {question}")
     
 
     drama = drama_map[st.session_state.confirmed_drama]
