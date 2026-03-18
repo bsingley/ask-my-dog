@@ -166,7 +166,7 @@ st.title("🐾 Ask My Dog")
 st.markdown("#### Does this sound like your dog? ✏️")
 
 
-with st.expander("🐾 Edit your dog's persona"):
+with st.expander("🐾 No? Edit your dog's persona here"):
     dog["name"] = st.text_input("Dog name", dog["name"])
     dog["breed"] = st.text_input("Breed", dog["breed"])
     dog["age"] = st.text_input("Age", dog["age"])
@@ -247,9 +247,11 @@ if not st.session_state.get("is_generating", False):
 
 st.components.v1.html("""
     <script>
-        window.scrollTo(0, document.body.scrollHeight);
-        const inputs = window.parent.document.querySelectorAll('input[type="text"]');
-        if (inputs.length > 0) inputs[inputs.length - 1].focus();
+        setTimeout(function() {
+            window.parent.scrollTo(0, window.parent.document.body.scrollHeight);
+            const inputs = window.parent.document.querySelectorAll('input[type="text"]');
+            if (inputs.length > 0) inputs[inputs.length - 1].focus();
+        }, 300);
     </script>
 """, height=0)
 
