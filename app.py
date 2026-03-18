@@ -110,7 +110,7 @@ default_dog = {
     "energy_level": "very high",
     "training_level": "basic obedience",
     "intelligence": "Definitely has a plan. Probably.",
-    "self_identity": "fearless guardian",
+    "self_identity": "The Last Guardian",
     "self_story": "protector of the household",
     "personality_traits": ["extremely intelligent", "curious", "cautious"],
     "fear_triggers": ["new objects", "loud sounds"]
@@ -165,6 +165,9 @@ st.title("🐾 Ask My Dog")
 
 st.markdown("#### Does this sound like your dog? ✏️")
 
+if st.session_state.get("show_save_success"):
+    st.success("Persona updated!")
+    st.session_state.show_save_success = False
 
 with st.expander("🐾 No? Edit your dog's persona here"):
     dog["name"] = st.text_input("Dog name", dog["name"])
@@ -203,7 +206,8 @@ with st.expander("🐾 No? Edit your dog's persona here"):
 
     save_col1, save_col2 = st.columns(2)
     if save_col1.button("Save Updates"):
-        st.success("Persona updated!")
+        st.session_state.show_save_success = True
+        st.rerun()
     if save_col2.checkbox("Save for later"):
         with open(dog_file, "w") as f:
             json.dump(dog, f, indent=2)
