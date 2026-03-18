@@ -245,15 +245,13 @@ if not st.session_state.get("is_generating", False):
         submit = col1.form_submit_button("Ask")
     replay = st.button("🔁 Replay Last Question", disabled=not st.session_state.last_question)
 
-st.components.v1.html("""
-    <script>
-        setTimeout(function() {
-            window.parent.scrollTo(0, window.parent.document.body.scrollHeight);
-            const inputs = window.parent.document.querySelectorAll('input[type="text"]');
-            if (inputs.length > 0) inputs[inputs.length - 1].focus();
-        }, 300);
-    </script>
-""", height=0)
+#scroll to the bottom of the page after render
+if st.session_state.chat_history:
+    st.components.v1.html("""
+        <script>
+            window.parent.document.querySelector('section.main').scrollTo(0, 999999);
+        </script>
+    """, height=0)
 
 # Determine the question to process this run
 
