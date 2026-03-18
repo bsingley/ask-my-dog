@@ -234,6 +234,17 @@ with col_style:
 # Chat renders here (see bottom of file)
 chat_container = st.container()
 
+submit = False
+user_question = ""
+replay = False
+
+if not st.session_state.get("is_generating", False):
+    with st.form(key="question_form", clear_on_submit=True):  
+        user_question = st.text_input("Ask your dog a question", key="chat_input", label_visibility="collapsed", placeholder="Ask your dog something...")
+        col1, col2 = st.columns([1, 3])
+        submit = col1.form_submit_button("Ask")
+    replay = st.button("🔁 Replay Last Question", disabled=not st.session_state.last_question)
+
 # Input pinned after chat
 if not st.session_state.get("is_generating", False):
     with st.form(key="question_form", clear_on_submit=True):  
