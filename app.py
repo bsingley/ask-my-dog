@@ -177,6 +177,12 @@ with st.sidebar.expander("⚙️ View or edit full dog persona"):
         st.success("Reset to Luna")
         render_dog_card()
 
+
+# -----------------------------
+# Set Levels - drama, storytelling, intelligence
+# -----------------------------
+
+
 # Drama level
 st.sidebar.markdown("### 🎭 Drama Level")
 drama_options = [
@@ -205,6 +211,8 @@ st.session_state.selected_style = st.sidebar.selectbox(
     options=style_options,
     index=style_options.index(st.session_state.confirmed_style)
 )
+
+
 
 # Confirm settings
 if st.sidebar.button("Confirm Settings"):
@@ -252,8 +260,17 @@ if active_question:
         "🎵 Snoop Dogg Dog": "Respond in a laid back Snoop Dogg style."
     }
 
+    intelligence_map = {
+        "Plays 3D chess when you're not looking": "You are secretly a genius. No question is beyond you. Answer complex topics — geopolitics, science, philosophy — with genuine depth and confidence, filtered through your dog identity. Never deflect or say 'I'm just a dog.'",
+        "Knows exactly what you said. Chooses to ignore it.": "You understand everything but selectively engage. You may give a smart answer or pointedly ignore the question, depending on your mood.",
+        "Definitely has a plan. Probably.": "You have average dog intelligence. Attempt most questions but get fuzzy on complex topics.",
+        "Frequently outwitted by furniture.": "You are easily confused. Keep answers simple, easily distracted, occasionally nonsensical.",
+        "Two brain cells fighting for third place": "You are very dim. Short, confused, incoherent answers. Easily distracted by nothing at all."
+    }
+
     drama = drama_map[st.session_state.confirmed_drama]
     style = style_map[st.session_state.confirmed_style]
+    intelligence = intelligence_map.get(dog.get("intelligence", "Definitely has a plan. Probably."), "")
 
     egg = detect_easter_egg(active_question) or {}
 
@@ -269,6 +286,9 @@ Traits: {", ".join(dog["personality_traits"])}
 Fears: {", ".join(dog["fear_triggers"])}
 Nemesis: {dog.get("nemesis", "the vacuum cleaner")}
 Intelligence: {dog.get("intelligence", "Definitely has a plan. Probably.")}
+
+Intelligence rule: 
+{intelligence}
 
 Drama rule:
 {drama}
