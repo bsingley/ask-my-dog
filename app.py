@@ -57,8 +57,9 @@ easter_eggs = {
 
 def detect_easter_egg(question):
     question_lower = question.lower()
+    import re
     for trigger, data in easter_eggs.items():
-        if trigger in question_lower:
+        if re.search(r'\b' + trigger + r'\b', question_lower):
             return data
     return None
 
