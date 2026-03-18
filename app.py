@@ -235,8 +235,9 @@ with col_style:
 chat_container = st.container()
 
 # Input pinned after chat
-if not active_question:
-    with st.form(key="question_form", clear_on_submit=True):    user_question = st.text_input("Ask your dog a question", key="chat_input", label_visibility="collapsed", placeholder="Ask your dog something...")
+if not st.session_state.get("is_generating", False):
+    with st.form(key="question_form", clear_on_submit=True):  
+        user_question = st.text_input("Ask your dog a question", key="chat_input", label_visibility="collapsed", placeholder="Ask your dog something...")
     col1, col2 = st.columns([1, 3])
     submit = col1.form_submit_button("Ask")
 replay = st.button("🔁 Replay Last Question", disabled=not st.session_state.last_question)
@@ -260,6 +261,8 @@ else:
     active_question = None
  
 if active_question:
+
+    st.session_state.is_generating = True
 
     question = active_question
     if not st.session_state.chat_history or st.session_state.chat_history[-1][0] != question:
@@ -341,7 +344,7 @@ Question: {question}
                 (question, "Something went wrong calling the AI.", "", None)
             )
     st.session_state.pending_question = ""
-
+    st.session_state.is_generating = False
 
 
 # -----------------------------
