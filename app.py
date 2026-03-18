@@ -157,19 +157,7 @@ st.sidebar.markdown(f"""
 st.title("🐾 Ask My Dog")
 
 st.markdown("#### Does this sound like your dog? ✏️")
-col_drama, col_style = st.columns(2)
-with col_drama:
-    st.session_state.confirmed_drama = st.selectbox(
-        "🎭 Drama Level",
-        options=drama_options,
-        index=drama_options.index(st.session_state.confirmed_drama)
-    )
-with col_style:
-    st.session_state.confirmed_style = st.selectbox(
-        "🎨 Storytelling Style",
-        options=style_options,
-        index=style_options.index(st.session_state.confirmed_style)
-    )
+
 
 with st.expander("🐾 Edit your dog's persona"):
     dog["name"] = st.text_input("Dog name", dog["name"])
@@ -217,6 +205,20 @@ with st.expander("🐾 Edit your dog's persona"):
         st.session_state.dog = default_dog.copy()
         dog = st.session_state.dog
         st.success("Reset to Luna")
+
+col_drama, col_style = st.columns(2)
+with col_drama:
+    st.session_state.confirmed_drama = st.selectbox(
+        "🎭 Drama Level",
+        options=drama_options,
+        index=drama_options.index(st.session_state.confirmed_drama)
+    )
+with col_style:
+    st.session_state.confirmed_style = st.selectbox(
+        "🎨 Storytelling Style",
+        options=style_options,
+        index=style_options.index(st.session_state.confirmed_style)
+    )
 
 # -----------------------------
 # Chat function
