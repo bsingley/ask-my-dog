@@ -88,10 +88,17 @@ Respond in two parts:
     else:
         dog_part, trainer_part = text, ""
 
+    easter_egg_names = {
+    "squirrel": "🐿️ Squirrel Brain",
+    "bath": "🛁 The Ultimate Betrayal",
+    "good dog": "🐶 Bestest Doggo Ever Mode",
+    "bad dog": "😤 Pure Outrage",
+    }
+
     return {
         "dog_response": dog_part.strip(),
         "trainer_note": trainer_part.strip(),
-        "easter_egg": egg is not None
+        "easter_egg": next((easter_egg_names[k] for k in easter_egg_names if re.search(r'\b' + re.escape(k) + r'\b', req.question.lower())), None)
     }
 
 @app.get("/health")

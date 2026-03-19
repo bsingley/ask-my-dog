@@ -35,6 +35,7 @@ export default function HomeScreen() {
         question: currentQuestion,
         response: data.dog_response,
         trainer: data.trainer_note,
+        easter_egg: data.easter_egg,
       }]);
     } catch (e) {
       console.log('Error:', e);
@@ -91,6 +92,7 @@ export default function HomeScreen() {
             <View style={styles.dogBubble}>
               <Text style={styles.dogText}>{entry.response}</Text>
               {entry.trainer ? <Text style={styles.trainerText}>🎓 {entry.trainer}</Text> : null}
+              {entry.easter_egg ? <Text style={styles.achievementText}>🏆 Achievement Unlocked!</Text> : null}
             </View>
           </View>
         ))}
@@ -130,4 +132,5 @@ const styles = StyleSheet.create({
   chip: { backgroundColor: '#e0d0c0', borderRadius: 16, paddingHorizontal: 12, paddingVertical: 6 },
   chipActive: { backgroundColor: '#b05e2a' },
   chipText: { fontSize: 12, color: '#333' },
+  achievementText: { fontSize: 13, color: '#b05e2a', fontWeight: 'bold', marginTop: 6 },
 });
