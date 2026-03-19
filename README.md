@@ -11,44 +11,54 @@ Users can:
 * Replay the last question with updated settings
 * Discover hidden easter eggs
 
-This project demonstrates skills in:
-
-* **Prompt engineering** – designing AI prompts for engaging dog personas
-* **Persona design** – crafting distinct AI personalities with unique behaviors
-* **Conversation memory** – maintaining context across multiple exchanges using OpenAI's messages array
-* **Chat UX design** – building a message-feed interface with user/assistant bubbles
-* **Easter egg design** – embedding hidden triggers that override AI behavior mid-response
-* **Streamlit app development** – rapid prototyping of web-based AI applications
-
 **Live demo:** [ask-my-dog.streamlit.app](https://ask-my-dog-syur5g5wj4wxkuke7xtk5p.streamlit.app/)
 
 ---
 
-## Architecture Overview
+## Current State
+
+The app is live as a Streamlit web app. A native iOS and Android version is actively in development.
+
+### Streamlit App Stack
+| Layer | Technology |
+|---|---|
+| UI + Backend | Streamlit + Python |
+| AI | OpenAI GPT-4o-mini |
+
+### Native App Stack (In Development)
+| Layer | Technology |
+|---|---|
+| Mobile UI | React Native + Expo |
+| Backend | FastAPI (Python) |
+| Hosting | Railway |
+| AI | OpenAI GPT-4o-mini |
+
+---
+
+## Architecture
+
+### Streamlit (Current)
 ```mermaid
 flowchart TD
     UI[User Interface] --> App[Streamlit App]
     App --> AI[OpenAI API]
+    AI --> App
+    App --> UI
+```
 
-    UI -->|User inputs question and dog persona| App
-    App -->|System prompt + conversation history + new question| AI
-    AI -->|Generated response| App
-    App -->|Display in chat feed| UI
+### Native App (In Development)
+```mermaid
+flowchart TD
+    Phone[React Native App] --> Railway[FastAPI on Railway]
+    Railway --> OpenAI[OpenAI API]
+    OpenAI --> Railway
+    Railway --> Phone
 
-    subgraph Conversation Memory
-        History[Last 3 exchanges injected into messages array]
+    subgraph Backend logic
+        Prompt[Prompt builder]
+        Easter[Easter egg detection]
+        Memory[Conversation memory]
     end
-
-    subgraph Future Enhancements
-        MultiDog[Multiple Dog Profiles]
-        Training[Training Recommendations Journal]
-        Voice[Voice Output via TTS]
-    end
-
-    App --> History
-    AI --> MultiDog
-    AI --> Training
-    AI --> Voice
 ```
 
 ---
@@ -56,52 +66,55 @@ flowchart TD
 ## Features
 
 * **Dynamic AI personas:** Fully editable dog profile including name, breed, age, energy level, training level, personality traits, fear triggers, nemesis, and intelligence level
-* **Self identity selector:** Nine dramatic preset identities (The Last Guardian, Apex Predator, The Chosen One, Exiled Royalty, Escape Artist, I Was Framed, Undercover Agent, Evil Genius, Chaos Incarnate) plus a Custom option. Each preset includes a hidden backstory that enriches the AI prompt without exposing complexity to the user
-* **Intelligence slider:** Five-level scale from "Two brain cells fighting for third place" to "Plays 3D chess when you're not looking." Smartest is on the right
-* **Nemesis field:** Freeform input for whoever (or whatever) the dog considers their arch enemy. Woven naturally into responses
-* **Drama level selector:** Four levels controlling how deeply the dog believes its own story — from Low to Extreme
-* **Storytelling styles:** Five voice modes including Doggish Dog, Sitcom Dog, Shakespearean Dog, RPG Hero Dog, and Snoop Dogg Dog
-* **Conversation memory:** The last 3 exchanges are passed into each API call so the dog remembers what was just discussed
-* **Chat-style feed:** Questions appear as user bubbles, dog responses appear as assistant bubbles
-* **Trainer notes:** Each response includes a brief objective explanation of the dog behavior, shown below the reply
-* **Replay last question:** Re-runs the previous question with any updated settings applied
-* **Persistent persona:** Dog profile can be saved to a local JSON file and reloaded across sessions
-* **Easter eggs:** Four hidden triggers that override normal AI behavior and unlock achievement banners
+* **Self identity selector:** Nine dramatic preset identities plus a Custom option. Each preset includes a hidden backstory that enriches the AI prompt
+* **Intelligence slider:** Five-level scale from "Two brain cells fighting for third place" to "Plays 3D chess when you're not looking"
+* **Nemesis field:** Freeform input woven naturally into responses
+* **Drama level selector:** Four levels controlling how deeply the dog believes its own story
+* **Storytelling styles:** Five voice modes — Doggish, Sitcom, Shakespearean, RPG Hero, Snoop Dogg
+* **Conversation memory:** Last 3 exchanges passed into each API call
+* **Chat-style feed:** User and assistant bubbles
+* **Trainer notes:** Brief objective explanation of dog behavior below each reply
+* **Replay last question:** Re-runs the previous question with updated settings
+* **Easter eggs:** Four hidden triggers that override AI behavior and unlock achievement banners
 
 ---
 
 ## Easter Eggs
 
-Four hidden triggers are embedded in the app. Each one overrides the dog's current persona settings and fires a unique achievement banner:
-
-| Trigger word | Achievement | Behavior |
+| Trigger | Achievement | Behavior |
 |---|---|---|
-| "squirrel" | 🐿️ Squirrel Brain | Starts answering, trails off mid-sentence, gone |
-| "bath" | 🛁 The Ultimate Betrayal | Pure devastation. Trust is destroyed |
-| "good dog" | 🐶 Bestest Doggo Ever Mode | All identity collapses into pure happy dog |
+| "squirrel" | 🐿️ Squirrel Brain | Trails off mid-sentence, gone |
+| "bath" | 🛁 The Ultimate Betrayal | Pure devastation. Trust destroyed |
+| "good dog" | 🐶 Bestest Doggo Ever Mode | Identity collapses into pure happy dog |
 | "bad dog" | 😤 Pure Outrage | Self-identity activates dramatically |
-
-Triggers fire even if the word appears mid-sentence (e.g. "why does my dog hate bath time").
 
 ---
 
-## How It Works
+## Native App Progress
 
-Each question triggers an OpenAI `chat.completions` call structured as:
+### Working
+* Chat feed with user and dog bubbles
+* Trainer notes
+* Drama and storytelling style controls
+* Conversation memory
+* Dog persona editor connected live to chat
+* Easter eggs with achievement banners
+* Auto-scroll to latest message
+* Keyboard fix — input stays visible when typing
 
-1. **System message** — the full dog persona including identity, hidden backstory, intelligence, nemesis, drama rule, and style rule
-2. **Conversation history** — the last 3 user/assistant exchange pairs injected in order
-3. **Easter egg override** — if a trigger word is detected, a SPECIAL OVERRIDE instruction is appended to the system prompt
-4. **User message** — the new question
-
-This gives the dog short-term memory and dramatic range without requiring any database or external storage.
+### In Progress
+* Replay last question button
+* Tab icons and labels
+* UI polish
+* App icon and splash screen
+* App Store submission
 
 ---
 
 ## Future Improvements
 
-* Multiple dog profiles with a switcher dropdown
-* Training tip journal — export all trainer notes as a PDF
-* Voice output via OpenAI TTS so the dog speaks its answers
-* Mood system — a "current mood" field that shifts responses dynamically
+* Multiple dog profiles with a switcher
+* Training tip journal — export trainer notes as PDF
+* Voice output via OpenAI TTS
+* Mood system — dynamic mood field that shifts responses
 * Clear chat and download conversation buttons
