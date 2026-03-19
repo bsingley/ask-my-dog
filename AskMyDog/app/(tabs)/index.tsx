@@ -1,14 +1,14 @@
 import { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, ActivityIndicator } from 'react-native';
-
+import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, ActivityIndicator, KeyboardAvoidingView, Platform } from 'react-native';
 import { useDog } from '../../store';
+
 const RAILWAY_URL = 'https://ask-my-dog-production.up.railway.app';
 
 export default function HomeScreen() {
   const [question, setQuestion] = useState('');
   const [history, setHistory] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [dog] = useDog(); 
+  const [dog] = useDog();
   const [drama, setDrama] = useState('high');
   const [style, setStyle] = useState('doggish');
 
@@ -48,8 +48,9 @@ export default function HomeScreen() {
   }
 
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
       <Text style={styles.header}>🐾 Ask My Dog</Text>
+      <Text style={styles.subheader}>Chatting with {dog.name}</Text>
       <View style={styles.controlRow}>
         <TouchableOpacity style={[styles.chip, drama === 'low' && styles.chipActive]} onPress={() => setDrama('low')}>
           <Text style={styles.chipText}>🐾 Low</Text>
@@ -107,13 +108,14 @@ export default function HomeScreen() {
           <Text style={styles.buttonText}>Ask</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#fff9f0', paddingTop: 60 },
-  header: { fontSize: 24, fontWeight: 'bold', textAlign: 'center', marginBottom: 10, color: '#b05e2a' },
+  header: { fontSize: 24, fontWeight: 'bold', textAlign: 'center', marginBottom: 4, color: '#b05e2a' },
+  subheader: { fontSize: 14, textAlign: 'center', color: '#888', marginBottom: 8 },
   chat: { flex: 1, padding: 16 },
   userBubble: { alignSelf: 'flex-end', backgroundColor: '#b05e2a', borderRadius: 16, padding: 12, marginBottom: 8, maxWidth: '80%' },
   userText: { color: 'white', fontSize: 15 },
