@@ -1,6 +1,6 @@
-import { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, ActivityIndicator, KeyboardAvoidingView, Platform } from 'react-native';
 import { useDog } from '../../store';
+import { useState, useRef } from 'react';
 
 const RAILWAY_URL = 'https://ask-my-dog-production.up.railway.app';
 
@@ -11,6 +11,7 @@ export default function HomeScreen() {
   const [dog] = useDog();
   const [drama, setDrama] = useState('high');
   const [style, setStyle] = useState('doggish');
+  const scrollRef = useRef(null);
 
   async function askDog() {
     if (!question.trim()) return;
@@ -83,8 +84,8 @@ export default function HomeScreen() {
           <Text style={styles.chipText}>🎵 Snoop</Text>
         </TouchableOpacity>
       </View>
-      <ScrollView style={styles.chat}>
-        {history.map((entry, i) => (
+        <ScrollView style={styles.chat} ref={scrollRef} onContentSizeChange={() => scrollRef.current?.scrollToEnd({ animated: true })}>        
+            {history.map((entry, i) => (
           <View key={i}>
             <View style={styles.userBubble}>
               <Text style={styles.userText}>{entry.question}</Text>
@@ -92,8 +93,7 @@ export default function HomeScreen() {
             <View style={styles.dogBubble}>
               <Text style={styles.dogText}>{entry.response}</Text>
               {entry.trainer ? <Text style={styles.trainerText}>🎓 {entry.trainer}</Text> : null}
-              {entry.easter_egg ? <Text style={styles.achievementText}>🏆 Achievement Unlocked!</Text> : null}
-            </View>
+              {entry.easter_egg ? <Text style={styles.achievementText}>🏆 Achievement Unlocked: {entry.easter_egg}</Text> : null}            </View>
           </View>
         ))}
         {loading && <ActivityIndicator size="large" color="#b05e2a" style={{ margin: 20 }} />}
