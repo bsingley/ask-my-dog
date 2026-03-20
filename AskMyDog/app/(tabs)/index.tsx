@@ -1,7 +1,8 @@
 import React from 'react';
-import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, ActivityIndicator, KeyboardAvoidingView, Platform, ImageBackground, Modal } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, ActivityIndicator, KeyboardAvoidingView, Platform, ImageBackground, Modal, Image } from 'react-native';
 import { useState, useRef } from 'react';
 import { useDog } from '../../store';
+import { Keyboard } from 'react-native';
 
 const RAILWAY_URL = 'https://ask-my-dog-production.up.railway.app';
 
@@ -18,6 +19,7 @@ export default function HomeScreen() {
 
   async function askDog() {
     if (!question.trim()) return;
+    Keyboard.dismiss();
     setLoading(true);
     const currentQuestion = question;
     setQuestion('');
@@ -54,14 +56,11 @@ export default function HomeScreen() {
 
   return (
     <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-      <ImageBackground source={require('../../assets/images/header-bg.png')} style={styles.headerBg} resizeMode="cover">
+      <ImageBackground source={require('../../assets/images/dog-header.png')} style={styles.headerBg} resizeMode="cover">        
         <View style={styles.headerOverlay}>
-          <View style={styles.dogBadge}>
-            <Text style={styles.dogBadgeEmoji}>🐶</Text>
-          </View>
-          <View>
+          <View style={styles.headerTextBlock}>
             <Text style={styles.header}>Ask My Dog</Text>
-            <Text style={styles.subheader}>Chatting with {dog.name}</Text>
+            <Text style={styles.subheader}>{dog.name}</Text>
             <View style={styles.identityBadge}>
               <Text style={styles.identityBadgeText}>🛡️ {dog.self_identity}</Text>
             </View>
@@ -69,6 +68,15 @@ export default function HomeScreen() {
         </View>
       </ImageBackground>
     <View style={styles.controlRow}>
+      <View style={styles.controlGroup}>
+        <Text style={styles.controlLabel}>🎨 Style</Text>
+        <TouchableOpacity style={styles.dropdownButton} onPress={() => setStyleOpen(true)}>
+          <Text style={styles.dropdownButtonText}>
+            {['🐾 Doggish Dog','🎬 Sitcom Dog','📖 Shakespeare Dog','🎮 RPG Hero Dog','🎵 Snoop Dogg Dog'][['doggish','sitcom','shakespearean','rpg','snoop'].indexOf(style)]}
+          </Text>
+          <Text style={styles.dropdownArrow}>▾</Text>
+        </TouchableOpacity>
+      </View>
       <View style={styles.controlGroup}>
         <Text style={styles.controlLabel}>🎭 Drama level</Text>
         <TouchableOpacity style={styles.dropdownButton} onPress={() => setDramaOpen(true)}>
@@ -78,15 +86,7 @@ export default function HomeScreen() {
           <Text style={styles.dropdownArrow}>▾</Text>
         </TouchableOpacity>
       </View>
-      <View style={styles.controlGroup}>
-        <Text style={styles.controlLabel}>🎨 Style</Text>
-        <TouchableOpacity style={styles.dropdownButton} onPress={() => setStyleOpen(true)}>
-          <Text style={styles.dropdownButtonText}>
-            {['🐾 Doggish Dog','🎬 Sitcom Dog','📖 Shakespearean Dog','🎮 RPG Hero Dog','🎵 Snoop Dogg Dog'][['doggish','sitcom','shakespearean','rpg','snoop'].indexOf(style)]}
-          </Text>
-          <Text style={styles.dropdownArrow}>▾</Text>
-        </TouchableOpacity>
-      </View>
+
     </View>
 
     <Modal visible={dramaOpen} transparent animationType="fade">
@@ -142,7 +142,9 @@ export default function HomeScreen() {
           onChangeText={setQuestion}
           placeholder="Ask your dog something..."
           onSubmitEditing={askDog}
-        />
+          blurOnSubmit={true}
+          returnKeyType="send"
+        />        
         <TouchableOpacity style={styles.button} onPress={askDog}>
           <Text style={styles.buttonText}>Ask</Text>
         </TouchableOpacity>
@@ -153,23 +155,28 @@ export default function HomeScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#fafffe', paddingTop: 0 },
-  headerBg: { width: '100%' },
-  headerOverlay: { backgroundColor: 'rgba(8,80,65,0.5)', padding: 16, paddingTop: 56, flexDirection: 'row', alignItems: 'center', gap: 12 },
-  dogBadge: { width: 54, height: 54, borderRadius: 16, backgroundColor: '#1D9E75', borderWidth: 2, borderColor: '#5DCAA5', alignItems: 'center', justifyContent: 'center' },
-  dogBadgeEmoji: { fontSize: 26 },
-  header: { fontSize: 20, fontWeight: '600', color: '#E1F5EE' },
-  subheader: { fontSize: 12, color: '#9FE1CB', marginTop: 2 },
-  identityBadge: { backgroundColor: 'rgba(0,0,0,0.25)', borderRadius: 20, paddingHorizontal: 9, paddingVertical: 3, alignSelf: 'flex-start', marginTop: 6 },
-  identityBadgeText: { fontSize: 10, color: '#E1F5EE', fontWeight: '500' },
+  headerBg: { width: '100%', height: 260 },
+  headerOverlay: { 
+    height: 260, 
+    backgroundColor: 'transparent', 
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    justifyContent: 'flex-start',
+    paddingLeft: 28,
+    paddingBottom: 24,
+  },
+  headerTextBlock: { flex: 1, paddingRight: 12 },
+  header: { fontSize: 26, fontWeight: '700', color: '#085041' },
+  subheader: { fontSize: 20, color: '#0F6E56', marginTop: 6 },
   controlRow: { flexDirection: 'row', paddingHorizontal: 12, paddingVertical: 8, gap: 8, backgroundColor: '#f8fdfa', borderBottomWidth: 0.5, borderColor: '#9FE1CB' },
   controlGroup: { flex: 1 },
-  controlLabel: { fontSize: 10, fontWeight: '600', color: '#0F6E56', marginBottom: 4, textTransform: 'uppercase', letterSpacing: 0.5 },
+  controlLabel: { fontSize: 18, fontWeifght: '600', color: '#0F6E56', marginBottom: 4, textTransform: 'uppercase', letterSpacing: 0.5 },
   chat: { flex: 1, padding: 12, backgroundColor: '#fafffe' },
   userBubble: { alignSelf: 'flex-end', backgroundColor: '#1D9E75', borderRadius: 15, borderBottomRightRadius: 4, padding: 10, marginBottom: 6, maxWidth: '80%' },
-  userText: { color: 'white', fontSize: 14 },
+  userText: { color: 'white', fontSize: 18 },
   dogBubble: { alignSelf: 'flex-start', backgroundColor: '#E1F5EE', borderRadius: 15, borderBottomLeftRadius: 4, padding: 10, maxWidth: '80%' },
-  dogText: { fontSize: 14, color: '#085041' },
-  trainerText: { fontSize: 11, color: '#0F6E56', marginTop: 6, fontStyle: 'italic', borderLeftWidth: 2, borderColor: '#5DCAA5', paddingLeft: 6 },
+  dogText: { fontSize: 18, color: '#085041' },
+  trainerText: { fontSize: 14, color: '#0F6E56', marginTop: 6, fontStyle: 'italic', borderLeftWidth: 2, borderColor: '#5DCAA5', paddingLeft: 6 },
   achievementText: { fontSize: 12, color: '#E1F5EE', fontWeight: '600', marginTop: 6, backgroundColor: '#1D9E75', borderRadius: 20, paddingHorizontal: 10, paddingVertical: 3, alignSelf: 'flex-start' },
   inputRow: { flexDirection: 'row', padding: 12, borderTopWidth: 0.5, borderColor: '#9FE1CB', backgroundColor: '#fff' },
   input: { flex: 1, backgroundColor: '#f8fdfa', borderRadius: 20, paddingHorizontal: 16, paddingVertical: 8, fontSize: 14, borderWidth: 0.5, borderColor: '#9FE1CB', color: '#085041' },
@@ -180,7 +187,7 @@ const styles = StyleSheet.create({
   dogAvatar: { width: 28, height: 28, borderRadius: 14, backgroundColor: '#1D9E75', alignItems: 'center', justifyContent: 'center', flexShrink: 0 },
   dogAvatarEmoji: { fontSize: 14 },
   dropdownButton: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', backgroundColor: '#fff', borderWidth: 0.5, borderColor: '#5DCAA5', borderRadius: 8, paddingHorizontal: 10, paddingVertical: 7 },
-  dropdownButtonText: { fontSize: 11, color: '#085041', flex: 1 },
+  dropdownButtonText: { fontSize: 14, color: '#085041', flex: 1 },
   dropdownArrow: { fontSize: 12, color: '#1D9E75', marginLeft: 4 },
   modalOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.3)', justifyContent: 'center', alignItems: 'center' },
   modalBox: { backgroundColor: '#fff', borderRadius: 16, padding: 16, width: 260, borderWidth: 0.5, borderColor: '#5DCAA5' },
@@ -189,4 +196,6 @@ const styles = StyleSheet.create({
   modalOptionActive: { backgroundColor: '#1D9E75' },
   modalOptionText: { fontSize: 14, color: '#085041' },
   modalOptionTextActive: { color: '#fff', fontWeight: '500' },
+  identityBadge: { backgroundColor: 'rgba(0,0,0,0.25)', borderRadius: 20, paddingHorizontal: 9, paddingVertical: 3, alignSelf: 'flex-start', marginTop: 8 },
+  identityBadgeText: { fontSize: 14, color: '#ffffff', fontWeight: '500' },
 });

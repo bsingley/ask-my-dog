@@ -23,7 +23,7 @@ drama_map = {
 style_map = {
     "doggish": "Respond naturally as a dog.",
     "sitcom": "Respond like a sarcastic sitcom character.",
-    "shakespearean": "Speak like Shakespeare.",
+    "shakespeare": "Speak like Shakespeare.",
     "rpg": "Speak like a heroic RPG character.",
     "snoop": "Respond in a laid back Snoop Dogg style."
 }
