@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, Alert } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect } from '@react-navigation/native';
 import { useDog } from '../../store';
 import Slider from '@react-native-community/slider';
 
@@ -34,25 +34,25 @@ export default function PersonaScreen() {
   const [intelligence, setIntelligence] = useState(dog.intelligence);
   const [identity, setIdentity] = useState(dog.self_identity);
   const [saved, setSaved] = useState(false);
-  const navigation = useNavigation();
   const [isDirty, setIsDirty] = useState(false);
 
-  useEffect(() => {
-    const unsubscribe = navigation.addListener('beforeRemove', (e) => {
-      if (!isDirty) return;
-      e.preventDefault();
-      Alert.alert(
-        'Unsaved changes',
-        'You have unsaved changes to your dog\'s persona. Save before leaving?',
-        [
-          { text: 'Discard', style: 'destructive', onPress: () => { setIsDirty(false); navigation.dispatch(e.data.action); } },
-          { text: 'Save', onPress: () => { save(); navigation.dispatch(e.data.action); } },
-          { text: 'Keep editing', style: 'cancel' },
-        ]
-      );
-    });
-    return unsubscribe;
-  }, [navigation, isDirty]);
+useFocusEffect(
+  useCallback(() => {
+    return () => {
+      if (isDirty) {
+        Alert.alert(
+          'Unsaved changes',
+          "You have unsaved changes to your dog's persona. Save before leaving?",
+          [
+            { text: 'Save', onPress: () => save() },
+            { text: 'Keep editing', style: 'cancel' },
+            { text: 'Discard', style: 'destructive', onPress: () => setIsDirty(false) },
+          ]
+        );
+      }
+    };
+  }, [isDirty])
+);
 
 function save() {
   setDog({ ...dog, name, breed, age, nemesis, intelligence, self_identity: identity });
@@ -84,7 +84,7 @@ function save() {
         maximumValue={4}
         step={1}
         value={4 - intelligenceOptions.findIndex(o => o.value === intelligence)}
-        onValueChange={val => setIntelligence(intelligenceOptions[4 - val].value)}
+        onValueChange={val => { setIntelligence(intelligenceOptions[4 - val].value); setIsDirty(true); }}
         minimumTrackTintColor="#2B3A4A"
         maximumTrackTintColor="#C4A882"
         thumbTintColor="#2B3A4A"
@@ -106,8 +106,8 @@ function save() {
         <TouchableOpacity
           key={item}
           style={[styles.identityOption, identity === item && styles.identityActive]}
-          onPress={() => setIdentity(item)}>
-          <Text style={{ fontSize: 16, color: identity === item ? '#F5EFE6' : '#2B3A4A' }}>{item}</Text>
+          onPress={() => { setIdentity(item); setIsDirty(true); }}>
+            <Text style={{ fontSize: 16, color: identity === item ? '#F5EFE6' : '#2B3A4A' }}>{item}</Text>
         </TouchableOpacity>
       ))}
 

@@ -1,9 +1,7 @@
 import { Tabs } from 'expo-router';
 import React from 'react';
-
 import { HapticTab } from '@/components/haptic-tab';
 import { IconSymbol } from '@/components/ui/icon-symbol';
-import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 
 export default function TabLayout() {
@@ -12,22 +10,33 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+        tabBarActiveTintColor: '#2B3A4A',
+        tabBarInactiveTintColor: '#C4A882',
+        tabBarStyle: { 
+          backgroundColor: '#F5EFE6', 
+          borderTopColor: '#C4A882', 
+          borderTopWidth: 0.5,
+          height: 70,
+          paddingBottom: 10,
+          paddingTop: 8,
+        },
+        tabBarLabelStyle: { fontSize: 14, fontWeight: '600', marginTo: 2 },
+        tabBarItemStyle: { flexDirection: 'row', alignItems: 'center', gap: 6 },       
         headerShown: false,
         tabBarButton: HapticTab,
       }}>
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+          title: 'Chat',
+          tabBarIcon: ({ color }) => <IconSymbol size={26} name="bubble.left.and.bubble.right.fill" color={color} />,
         }}
       />
       <Tabs.Screen
         name="explore"
         options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+          title: 'My Dog',
+          tabBarIcon: ({ color }) => <IconSymbol size={26} name="pawprint.fill" color={color} />,
         }}
       />
     </Tabs>
