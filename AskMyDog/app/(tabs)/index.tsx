@@ -1,8 +1,6 @@
-import React from 'react';
-import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, ActivityIndicator, KeyboardAvoidingView, Platform, ImageBackground, Modal, Image } from 'react-native';
-import { useState, useRef } from 'react';
+import React, { useState, useRef } from 'react';
+import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, ActivityIndicator, KeyboardAvoidingView, Platform, ImageBackground, Modal, Image, Keyboard, Animated } from 'react-native';
 import { useDog } from '../../store';
-import { Keyboard } from 'react-native';
 
 const RAILWAY_URL = 'https://ask-my-dog-production.up.railway.app';
 
@@ -16,6 +14,17 @@ export default function HomeScreen() {
   const [dramaOpen, setDramaOpen] = useState(false);
   const [styleOpen, setStyleOpen] = useState(false);
   const scrollRef = useRef(null);
+  const headerHeight = useRef(new Animated.Value(260)).current;
+  const [headerCollapsed, setHeaderCollapsed] = useState(false);
+
+  function toggleHeader() {
+    const toValue = headerCollapsed ? 260 : 80;
+    Animated.timing(headerHeight, {
+      toValue,
+      duration: 300,
+      useNativeDriver: false,
+    }).start(() => setHeaderCollapsed(!headerCollapsed));
+}      
 
   async function askDog() {
     if (!question.trim()) return;
@@ -56,23 +65,27 @@ export default function HomeScreen() {
 
   return (
     <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-      <ImageBackground source={require('../../assets/images/dog-header.png')} style={styles.headerBg} resizeMode="cover">        
-        <View style={styles.headerOverlay}>
-          <View style={styles.headerTextBlock}>
-            <Text style={styles.header}>Ask My Dog</Text>
-            <Text style={styles.subheader}>{dog.name}</Text>
-            <View style={styles.identityBadge}>
-              <Text style={styles.identityBadgeText}>🛡️ {dog.self_identity}</Text>
+      <TouchableOpacity onPress={toggleHeader} activeOpacity={1}>
+        <Animated.View style={[styles.headerBg, { height: headerHeight, overflow: 'hidden' }]}>
+          <ImageBackground source={require('../../assets/images/dog-header.png')} style={{ width: '100%', height: 260 }} resizeMode="cover">        
+            <View style={styles.headerOverlay}>
+              <View style={styles.headerTextBlock}>
+              <Text style={styles.header}>Ask My Dog</Text>
+              <Text style={styles.subheader}>{dog.name}</Text>
+                <View style={styles.identityBadge}>
+                  <Text style={styles.identityBadgeText}>🛡️ {dog.self_identity}</Text>
+                </View>
+              </View>
             </View>
-          </View>
-        </View>
-      </ImageBackground>
+          </ImageBackground>
+        </Animated.View>
+      </TouchableOpacity>
     <View style={styles.controlRow}>
       <View style={styles.controlGroup}>
         <Text style={styles.controlLabel}>🎨 Style</Text>
         <TouchableOpacity style={styles.dropdownButton} onPress={() => setStyleOpen(true)}>
           <Text style={styles.dropdownButtonText}>
-            {['🐾 Doggish Dog','🎬 Sitcom Dog','📖 Shakespeare Dog','🎮 RPG Hero Dog','🎵 Snoop Dogg Dog'][['doggish','sitcom','shakespearean','rpg','snoop'].indexOf(style)]}
+            {['🐾 Doggish Dog','🎬 Sitcom Dog','📖 Shakespeare Dog','🎮 RPG Hero Dog','🎵 Snoop Dogg Dog'][['doggish','sitcom','shakespeare','rpg','snoop'].indexOf(style)]}
           </Text>
           <Text style={styles.dropdownArrow}>▾</Text>
         </TouchableOpacity>
@@ -101,12 +114,11 @@ export default function HomeScreen() {
         </View>
       </TouchableOpacity>
     </Modal>
-
     <Modal visible={styleOpen} transparent animationType="fade">
       <TouchableOpacity style={styles.modalOverlay} onPress={() => setStyleOpen(false)}>
         <View style={styles.modalBox}>
           <Text style={styles.modalTitle}>🎨 Style</Text>
-          {[['doggish','🐾 Doggish Dog'],['sitcom','🎬 Sitcom Dog'],['shakespearean','📖 Shakespearean Dog'],['rpg','🎮 RPG Hero Dog'],['snoop','🎵 Snoop Dogg Dog']].map(([val, label]) => (
+          {[['doggish','🐾 Doggish Dog'],['sitcom','🎬 Sitcom Dog'],['shakespeare','📖 Shakespeare Dog'],['rpg','🎮 RPG Hero Dog'],['snoop','🎵 Snoop Dogg Dog']].map(([val, label]) => (
             <TouchableOpacity key={val} style={[styles.modalOption, style === val && styles.modalOptionActive]} onPress={() => { setStyle(val); setStyleOpen(false); }}>
               <Text style={[styles.modalOptionText, style === val && styles.modalOptionTextActive]}>{label}</Text>
             </TouchableOpacity>
@@ -155,7 +167,7 @@ export default function HomeScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#fafffe', paddingTop: 0 },
-  headerBg: { width: '100%', height: 260 },
+  headerBg: { width: '100%'},
   headerOverlay: { 
     height: 260, 
     backgroundColor: 'transparent', 
