@@ -17,7 +17,7 @@ Users can:
 
 ## Current State
 
-The app is live as a Streamlit web app. A native iOS and Android version is actively in development.
+The app is live as a Streamlit web app. A native iOS version is in final pre-submission polish.
 
 ### Streamlit App Stack
 | Layer | Technology |
@@ -25,7 +25,7 @@ The app is live as a Streamlit web app. A native iOS and Android version is acti
 | UI + Backend | Streamlit + Python |
 | AI | OpenAI GPT-4o-mini |
 
-### Native App Stack (In Development)
+### Native App Stack
 | Layer | Technology |
 |---|---|
 | Mobile UI | React Native + Expo |
@@ -46,7 +46,7 @@ flowchart TD
     App --> UI
 ```
 
-### Native App (In Development)
+### Native App
 ```mermaid
 flowchart TD
     Phone[React Native App] --> Railway[FastAPI on Railway]
@@ -76,6 +76,7 @@ flowchart TD
 * **Trainer notes:** Brief objective explanation of dog behavior below each reply
 * **Replay last question:** Re-runs the previous question with updated settings
 * **Easter eggs:** Four hidden triggers that override AI behavior and unlock achievement banners
+* **About tab:** Version number, feedback link, Venmo tip link, privacy policy and terms of use
 
 ---
 
@@ -92,7 +93,7 @@ flowchart TD
 
 ## Native App Progress
 
-### Working
+### Complete
 * Chat feed with user and dog bubbles
 * Trainer notes
 * Drama and storytelling style controls
@@ -101,11 +102,11 @@ flowchart TD
 * Easter eggs with achievement banners
 * Auto-scroll to latest message
 * Keyboard fix — input stays visible when typing
+* About tab with version number, feedback, Venmo link
+* Privacy policy and terms of use hosted and linked
+* Code pushed to GitHub
 
 ### In Progress
-* Replay last question button
-* Tab icons and labels
-* UI polish
 * App icon and splash screen
 * App Store submission
 
@@ -113,8 +114,11 @@ flowchart TD
 
 ## Future Improvements
 
+* Dog expression images wired to identity and easter egg states
 * Multiple dog profiles with a switcher
 * Training tip journal — export trainer notes as PDF
 * Voice output via OpenAI TTS
 * Mood system — dynamic mood field that shifts responses
 * Clear chat and download conversation buttons
+* Easter egg animations
+* Saved achievements
