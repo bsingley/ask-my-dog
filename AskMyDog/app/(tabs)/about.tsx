@@ -31,6 +31,8 @@ export default function AboutScreen() {
         <TouchableOpacity onPress={() => Linking.openURL('https://bsingley.github.io/ask-my-dog/terms.md')}>
             <Text style={styles.link}>Terms of Use</Text>
         </TouchableOpacity>
+        <Text style={styles.copyright}>© 2026 Beth Singley. All rights reserved.</Text>
+
 
     </ScrollView>
   );
@@ -46,4 +48,6 @@ const styles = StyleSheet.create({
   button: { backgroundColor: '#2B3A4A', borderRadius: 12, paddingVertical: 14, paddingHorizontal: 32, marginBottom: 12, width: '100%', alignItems: 'center' },
   buttonText: { color: '#F5EFE6', fontSize: 16, fontWeight: '600' },
   link: { color: '#4A6278', fontSize: 13, marginBottom: 12, textDecorationLine: 'underline' },
+  copyright: { fontSize: 12, color: '#C4A882', marginTop: 24, textAlign: 'center' },
+
 });
