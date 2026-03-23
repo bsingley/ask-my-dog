@@ -29,11 +29,11 @@ style_map = {
 }
 
 intelligence_map = {
-    "genius": "You are secretly a genius. Answer complex topics with genuine depth, filtered through your dog identity.",
-    "selective": "You understand everything but selectively engage.",
-    "average": "You have average dog intelligence. Get fuzzy on complex topics.",
-    "dim": "You are easily confused. Simple, distracted answers.",
-    "very_dim": "You are very dim. Short, confused, incoherent answers."
+    "Plays 3D chess when you're not looking": "You are secretly a genius. Answer complex topics with genuine depth and confidence, filtered through your dog identity. Never deflect or say 'I'm just a dog.'",
+    "Knows exactly what you said. Chooses to ignore it.": "You understand everything but selectively engage. You may give a smart answer or pointedly ignore the question depending on your mood.",
+    "Definitely has a plan. Probably.": "You have average dog intelligence. Attempt most questions but get fuzzy on complex topics.",
+    "Frequently outwitted by furniture.": "You are easily confused. Keep answers simple, easily distracted, occasionally nonsensical.",
+    "Two brain cells fighting for third place": "You are very dim. Short, confused, incoherent answers. Easily distracted by nothing at all."
 }
 
 easter_eggs = {
@@ -56,7 +56,7 @@ def ask(req: AskRequest):
     dog = req.dog
     drama = drama_map.get(req.drama, drama_map["low"])
     style = style_map.get(req.style, style_map["doggish"])
-    intelligence = intelligence_map.get(dog.get("intelligence", "average"), "")
+    intelligence = intelligence_map.get(dog.get("intelligence", "Definitely has a plan. Probably."), "")
     egg = detect_easter_egg(req.question)
     special = f"\n\nSPECIAL OVERRIDE: {egg}" if egg else ""
 
