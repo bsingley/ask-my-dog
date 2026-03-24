@@ -13,7 +13,7 @@ export default function HomeScreen() {
   const [style, setStyle] = useState('doggish');
   const [dramaOpen, setDramaOpen] = useState(false);
   const [styleOpen, setStyleOpen] = useState(false);
-  const scrollRef = useRef(null);
+  const scrollRef = useRef<ScrollView>(null);
   const headerHeight = useRef(new Animated.Value(260)).current;
   const [headerCollapsed, setHeaderCollapsed] = useState(false);
 
@@ -180,8 +180,6 @@ const styles = StyleSheet.create({
   headerTextBlock: { flex: 1, paddingRight: 12 },
   header: { fontSize: 26, fontWeight: '700', color: '#2B3A4A' },
   subheader: { fontSize: 20, color: '#4A6278', marginTop: 6 },
-  identityBadge: { backgroundColor: 'rgba(43,58,74,0.75)', borderRadius: 20, paddingHorizontal: 9, paddingVertical: 3, alignSelf: 'flex-start', marginTop: 8 },
-  identityBadgeText: { fontSize: 18, color: '#F5EFE6', fontWeight: '500' },
   controlRow: { flexDirection: 'row', paddingHorizontal: 12, paddingVertical: 8, gap: 8, backgroundColor: '#F5EFE6', borderBottomWidth: 0.5, borderColor: '#C4A882' },
   controlGroup: { flex: 1 },
   controlLabel: { fontSize: 16, fontWeight: '600', color: '#4A6278', marginBottom: 4, textTransform: 'uppercase', letterSpacing: 0.5 },
