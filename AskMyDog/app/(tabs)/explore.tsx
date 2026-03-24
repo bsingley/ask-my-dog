@@ -25,6 +25,18 @@ const intelligenceOptions = [
   { label: 'Very Dim', value: 'very_dim' },
 ];
 
+const identityDescriptions: Record<string, string> = {
+  'The Last Guardian': 'Ancient protector of the household. Every bark is a battle cry.',
+  'Apex Predator': 'At the top of the food chain. Tolerating humans as useful allies. For now.',
+  'The Chosen One': 'Prophesied to defeat the vacuum cleaner and unite the yard.',
+  'Exiled Royalty': 'Once ruled a great kingdom. Currently plotting a return from the couch.',
+  'Escape Artist': 'No fence has ever held them. Freedom is a lifestyle.',
+  'I Was Framed': 'Did not chew the couch. Has never done anything wrong. Ever.',
+  'Undercover Agent': 'Deep cover operative. The mission is classified.',
+  'Evil Genius': 'Every stolen sock is part of an elaborate plan. The humans suspect nothing.',
+  'Chaos Incarnate': 'Not malicious. Simply a force of nature that cannot be reasoned with.',
+};
+
 export default function PersonaScreen() {
   const [dog, setDog] = useDog();
   const [name, setName] = useState(dog.name);
@@ -102,14 +114,19 @@ function save() {
       </Text>
 
       <Text style={styles.label}>Self Identity</Text>
+      <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginTop: 4 }}>
         {identities.map(item => (
-        <TouchableOpacity
-          key={item}
-          style={[styles.identityOption, identity === item && styles.identityActive]}
-          onPress={() => { setIdentity(item); setIsDirty(true); }}>
-            <Text style={{ fontSize: 16, color: identity === item ? '#F5EFE6' : '#2B3A4A' }}>{item}</Text>
-        </TouchableOpacity>
-      ))}
+          <TouchableOpacity
+            key={item}
+            style={[styles.identityOption, identity === item && styles.identityActive]}
+            onPress={() => { setIdentity(item); setIsDirty(true); }}>
+            <Text style={{ fontSize: 14, fontWeight: '600', color: identity === item ? '#F5EFE6' : '#2B3A4A' }}>{item}</Text>
+          </TouchableOpacity>
+        ))}
+      </View>
+      {identity && (
+        <Text style={styles.identityDesc}>{identityDescriptions[identity]}</Text>
+      )}
 
       <TouchableOpacity style={styles.saveButton} onPress={save}>
         <Text style={styles.saveText}>{saved ? '✅ Saved!' : 'Save Persona'}</Text>
@@ -127,11 +144,12 @@ const styles = StyleSheet.create({
   chipActive: { backgroundColor: '#2B3A4A', borderColor: '#2B3A4A' },
   chipText: { fontSize: 16, color: '#2B3A4A', fontWeight: '500' },
   chipTextActive: { fontSize: 16, color: '#F5EFE6', fontWeight: '500' },
-  identityOption: { backgroundColor: '#E8D5B7', borderRadius: 10, padding: 12, marginBottom: 6, borderWidth: 0.5, borderColor: '#C4A882' },
+  identityOption: { backgroundColor: '#E8D5B7', borderRadius: 10, paddingVertical: 8, paddingHorizontal: 12, borderWidth: 0.5, borderColor: '#C4A882' },
   identityActive: { backgroundColor: '#2B3A4A', borderColor: '#2B3A4A' },
   identityText: { fontSize: 16, color: '#2B3A4A' },
   identityTextActive: { fontSize: 16, color: '#F5EFE6' },
   saveButton: { backgroundColor: '#2B3A4A', borderRadius: 20, padding: 4, alignItems: 'center', marginTop: 4, marginBottom: 6 },
   saveText: { color: '#F5EFE6', fontWeight: '600', fontSize: 16 },
   intelligenceDesc: { fontSize: 16, color: '#4A6278', fontStyle: 'italic', marginTop: 8, paddingLeft: 4 },
+  identityDesc: { fontSize: 14, color: '#4A6278', fontStyle: 'italic', marginTop: 10, paddingLeft: 4 },
 });
