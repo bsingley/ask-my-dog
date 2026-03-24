@@ -301,7 +301,7 @@ if active_question:
     else:
         special_instruction = ""
 
-prompt = f"""
+    prompt = f"""
 You are a dog named {dog['name']}.
 
 INTELLIGENCE — this controls how you think and write. Follow it strictly:
