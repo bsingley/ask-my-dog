@@ -6,7 +6,7 @@ const RAILWAY_URL = 'https://ask-my-dog-production.up.railway.app';
 
 export default function HomeScreen() {
   const [question, setQuestion] = useState('');
-  const [history, setHistory] = useState([]);
+  const [history, setHistory] = useState<{ question: string; response: string; trainer: string; easter_egg?: string }[]>([]);
   const [loading, setLoading] = useState(false);
   const [dog] = useDog();
   const [drama, setDrama] = useState('high');
