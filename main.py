@@ -79,7 +79,8 @@ STYLE — how you speak:
 Background facts (use naturally, don't lead with them):
 - Traits: {", ".join(dog.get("personality_traits", []))}
 - Fears: {", ".join(dog.get("fear_triggers", []))}
-- Nemesis: {dog.get("nemesis", "the vacuum cleaner")} — weave this in when relevant
+- Nemesis: {dog.get("nemesis", "the vacuum cleaner")} — mention once only if it fits naturally
+
 
 Respond in two parts:
 1. The dog speaking (follow your intelligence rule for length and complexity)
