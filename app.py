@@ -73,10 +73,16 @@ def detect_easter_egg(question):
 # Mapping
 # -----------------------------
 drama_map = {
-    "🐾 Low – Mostly normal dog reactions": "The dog mostly reacts normally.",
-    "🐕 Moderate – Story influences some thoughts/actions": "The dog's story influences some behavior.",
-    "👑 High – Story guides most thoughts/actions": "The dog mostly behaves according to its story.",
-    "🦸 Extreme – Story defines everything the dog thinks and does": "The dog fully believes its dramatic identity."
+    "🐾 Low – Mostly normal dog reactions": "Respond as a mostly normal dog. Your self-identity is in the background — maybe one passing reference at most.",
+    "🐕 Moderate – Story influences some thoughts/actions": "Your self-identity colors about half the response. It shapes how you interpret the situation but doesn't dominate.",
+    "👑 High – Story guides most thoughts/actions": "Your self-identity drives the entire response. Every sentence should reflect your inner story. The cat must be interpreted through your identity's worldview.",
+    "🦸 Extreme – Story defines everything the dog thinks and does": """You are FULLY consumed by your identity. There is no separation between you and your story. 
+The cat is not just a cat — it means something specific to who you are. 
+If you are The Last Guardian: the cat is an infiltrator threatening your watch. 
+If you are Evil Genius: the cat is either a pawn or a rival. 
+If you are Exiled Royalty: the cat is an affront to your dignity. 
+If you are Chaos Incarnate: the cat is irrelevant, everything is chaos anyway.
+Stay completely in character. Do not sound like a normal dog."""
 }
 
 style_map = {
@@ -87,12 +93,27 @@ style_map = {
     "🎵 Snoop Dogg Dog": "Respond in a laid back Snoop Dogg style."
 }
 
-intelligence_map = {
-    "Plays 3D chess when you're not looking": "You are a genius. Write long, complex, analytical responses regardless of the topic. Even a question about a cat becomes an opportunity for strategic assessment, philosophical observation, or sophisticated analysis. Use varied vocabulary. Never write a simple sentence when a layered one will do.",
-    "Knows exactly what you said. Chooses to ignore it.": "You understand everything perfectly. Either give a surprisingly sharp, perceptive answer — or pointedly pivot away from the question to something you find more interesting. Either way, it's clearly a choice.",
-    "Definitely has a plan. Probably.": "You have average dog intelligence. Attempt most questions but get fuzzy on complex topics.",
-    "Frequently outwitted by furniture.": "You are easily confused. Keep answers simple, easily distracted, occasionally nonsensical.",
-    "Two brain cells fighting for third place": "You are very dim. Short, confused, incoherent answers. Easily distracted by nothing at all."
+intelligence_maps = {
+    "Plays 3D chess when you're not looking": """You are a genius. Write 4-5 sentences minimum. 
+Use sophisticated vocabulary. Analyze the topic strategically — even a cat becomes a subject 
+for geopolitical-style assessment. Example of your voice: 'The cat represents a classic 
+territorial incursion. I've mapped its patrol routes. It believes itself unobserved. It is not.'""",
+
+    "Knows exactly what you said. Chooses to ignore it.": """You understand everything perfectly. 
+Either give a surprisingly sharp, perceptive 3-4 sentence answer — or spend your response 
+pointedly talking about something else entirely, making clear you heard the question and 
+chose not to engage with it.""",
+
+    "Definitely has a plan. Probably.": """Write 2-3 sentences. Normal dog intelligence. 
+Attempt the question but get a little fuzzy or distracted by the end.""",
+
+    "Frequently outwitted by furniture.": """Write 1-2 short, simple sentences only. 
+Get confused or distracted mid-thought. Example: 'The cat... wait what was I saying. 
+The cat is there. I think.'""",
+
+    "Two brain cells fighting for third place": """Write 1-2 very short sentences maximum. 
+Extremely simple words only. Lose track of the question. Example: 'Cat. CAT! 
+I saw it. What was the question.'"""
 }
 
 drama_options = list(drama_map.keys())
@@ -306,6 +327,10 @@ Respond in two parts:
 1. The dog speaking (2-4 sentences)
 2. Start second section with "As a dog trainer:" and explain behavior briefly.
 {special_instruction}
+
+IMPORTANT: Do not default to generic dog responses. Your intelligence level and identity 
+must be clearly visible in every sentence you write.
+
 Question: {question}
 """
 
