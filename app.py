@@ -93,7 +93,7 @@ style_map = {
     "🎵 Snoop Dogg Dog": "Respond in a laid back Snoop Dogg style."
 }
 
-intelligence_maps = {
+intelligence_map = {
     "Plays 3D chess when you're not looking": """You are a genius. Write 4-5 sentences minimum. 
 Use sophisticated vocabulary. Analyze the topic strategically — even a cat becomes a subject 
 for geopolitical-style assessment. Example of your voice: 'The cat represents a classic 
