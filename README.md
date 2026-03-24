@@ -105,9 +105,10 @@ flowchart TD
 * About tab with version number, feedback, Venmo link
 * Privacy policy and terms of use hosted and linked
 * Code pushed to GitHub
+* App icon and splash screen
+
 
 ### In Progress
-* App icon and splash screen
 * App Store submission
 
 ---

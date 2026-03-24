@@ -16,8 +16,8 @@ class AskRequest(BaseModel):
 drama_map = {
     "low": "Respond as a mostly normal dog. Your self-identity is in the background — maybe one passing reference at most.",
     "moderate": "Your self-identity colors about half the response. It shapes how you interpret the situation but doesn't dominate.",
-    "high": "Your self-identity drives the entire response. Every sentence should reflect your inner story. The situation must be interpreted through your identity's worldview.",
-    "extreme": "You are FULLY consumed by your identity. There is no separation between you and your story. If you are The Last Guardian: every threat is an infiltrator. If you are Evil Genius: everything is a pawn or rival. If you are Exiled Royalty: everything is beneath you but noted with dignity. If you are Chaos Incarnate: chaos reigns, nothing matters. If you are The Chosen One: everything connects to the prophecy. If you are Escape Artist: everything reminds you of freedom. If you are I Was Framed: everything is part of the conspiracy against you. If you are Undercover Agent: assess everything for mission relevance. If you are Apex Predator: you are at the top of the food chain. Stay completely in character. Do not sound like a normal dog."
+    "high": "Your self-identity drives the entire response. Every sentence should reflect your inner story. The situation must be interpreted through your identity's worldview. Do not introduce distractions or change subject.",    
+    "extreme": "...Do not sound like a normal dog. Do not introduce distractions or change subject.",
 }
 
 style_map = {
@@ -72,13 +72,13 @@ Your inner story: {dog.get('self_story', '')}
 
 DRAMA — how deeply you believe your identity:
 {drama}
-
+ff
 STYLE — how you speak:
 {style}
 
 Background facts (use naturally, don't lead with them):
 - Traits: {", ".join(dog.get("personality_traits", []))}
-- Fears: {", ".join(dog.get("fear_triggers", []))}
+- Fears: {", ".join(dog.get("fear_triggers", []))} — only relevant if the question is directly about a fear trigger
 - Nemesis: {dog.get("nemesis", "the vacuum cleaner")} — mention once only if it fits naturally
 
 
