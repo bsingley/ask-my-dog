@@ -8,7 +8,6 @@ Users can:
 * Customize the dog's full persona including identity, intelligence, and nemesis
 * Adjust drama level and storytelling style
 * Follow along in a chat-style conversation feed
-* Replay the last question with updated settings
 * Discover hidden easter eggs
 
 **Live demo:** [ask-my-dog.streamlit.app](https://ask-my-dog-syur5g5wj4wxkuke7xtk5p.streamlit.app/)
@@ -33,17 +32,7 @@ The app is live as a Streamlit web app. A native iOS version is in final pre-sub
 | Hosting | Railway |
 | AI | OpenAI GPT-4o-mini |
 
----
 
-## Architecture
-
-### Streamlit (Current)
-```mermaid
-flowchart TD
-    UI[User Interface] --> App[Streamlit App]
-    App --> AI[OpenAI API]
-    AI --> App
-    App --> UI
 ```
 
 ### Native App
@@ -74,7 +63,6 @@ flowchart TD
 * **Conversation memory:** Last 3 exchanges passed into each API call
 * **Chat-style feed:** User and assistant bubbles
 * **Trainer notes:** Brief objective explanation of dog behavior below each reply
-* **Replay last question:** Re-runs the previous question with updated settings
 * **Easter eggs:** Four hidden triggers that override AI behavior and unlock achievement banners
 * **About tab:** Version number, feedback link, Venmo tip link, privacy policy and terms of use
 
@@ -91,25 +79,24 @@ flowchart TD
 
 ---
 
-## Native App Progress
+## Testing
 
-### Complete
-* Chat feed with user and dog bubbles
-* Trainer notes
-* Drama and storytelling style controls
-* Conversation memory
-* Dog persona editor connected live to chat
-* Easter eggs with achievement banners
-* Auto-scroll to latest message
-* Keyboard fix — input stays visible when typing
-* About tab with version number, feedback, Venmo link
-* Privacy policy and terms of use hosted and linked
-* Code pushed to GitHub
-* App icon and splash screen
+Ask My Dog uses four layers of testing, developed in collaboration with AI tooling.
 
+### Unit Tests
+Covers the easter egg detection logic in isolation — no server or API calls required. Seven tests verify that each easter egg trigger is detected correctly, that detection is case-insensitive, that triggers fire when buried mid-sentence, and that non-trigger input returns cleanly.
 
-### In Progress
-* App Store submission
+### Automated Prompt Tests
+Fires a test question at the live Railway backend across all 9 identities, 5 intelligence levels, and 4 drama levels — 18 total calls. Results are saved to a text file for manual review.
+
+Requires the Railway backend to be live. This test is less about pass/fail and more about verifying that AI behavior actually shifts meaningfully across persona settings — a quality check specific to AI-driven UX.
+
+### Manual Smoke Tests
+- **Backend:** Hit `/health` on Railway, confirm `{"status":"ok"}`. Use the `/docs` page to verify Luna returns a real response.
+- **Mobile:** Run Expo via tunnel, scan QR code in Expo Go, confirm chat and persona editor are working.
+
+### Manual UI Test Suite
+A systematically derived test suite covering chat flow, conversation memory, easter egg triggers, persona editing, drama and style controls, and mobile-specific behavior including keyboard handling and tab switching.
 
 ---
 
