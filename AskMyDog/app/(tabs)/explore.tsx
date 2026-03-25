@@ -154,4 +154,5 @@ const styles = StyleSheet.create({
   saveText: { color: '#F5EFE6', fontWeight: '600', fontSize: 16 },
   intelligenceDesc: { fontSize: 16, color: '#4A6278', fontStyle: 'italic', marginTop: 8, paddingLeft: 4 },
   identityDesc: { fontSize: 14, color: '#4A6278', fontStyle: 'italic', marginTop: 10, paddingLeft: 4 },
+  pickerWrapper: { backgroundColor: '#fff', borderRadius: 10, borderWidth: 0.5, borderColor: '#C4A882', marginTop: 4, overflow: 'hidden' },
 });
