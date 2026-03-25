@@ -9,7 +9,7 @@ export default function HomeScreen() {
   const [history, setHistory] = useState<{ question: string; response: string; trainer: string; easter_egg?: string }[]>([]);
   const [loading, setLoading] = useState(false);
   const [dog] = useDog();
-  const [drama, setDrama] = useState('high');
+  const [drama, setDrama] = useState('low');
   const [style, setStyle] = useState('doggish');
   const [dramaOpen, setDramaOpen] = useState(false);
   const [styleOpen, setStyleOpen] = useState(false);
