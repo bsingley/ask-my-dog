@@ -101,8 +101,8 @@ function save() {
         maximumTrackTintColor="#C4A882"
         thumbTintColor="#2B3A4A"
       />
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 4 }}>
-        <Text style={{ fontSize: 16, color: '#4A6278' }}>Very Dim</Text>
+        <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginTop: 4 }}>
+          <Text style={{ fontSize: 16, color: '#4A6278' }}>Very Dim</Text>
         <Text style={{ fontSize: 16, color: '#4A6278' }}>Genius</Text>
       </View>
       <Text style={styles.intelligenceDesc}>
@@ -145,7 +145,7 @@ const styles = StyleSheet.create({
   chipActive: { backgroundColor: '#2B3A4A', borderColor: '#2B3A4A' },
   chipText: { fontSize: 16, color: '#2B3A4A', fontWeight: '500' },
   chipTextActive: { fontSize: 16, color: '#F5EFE6', fontWeight: '500' },
-  identityOption: { backgroundColor: '#E8D5B7', borderRadius: 10, paddingVertical: 8, paddingHorizontal: 12, borderWidth: 0.5, borderColor: '#C4A882' },
+  identityOption: { backgroundColor: '#E8D5B7', borderRadius: 10, paddingVertical: 8, paddingHorizontal: 12, borderWidth: 0.5, borderColor: '#C4A882', marginRight: 8, marginBottom: 8 },
   identityActive: { backgroundColor: '#2B3A4A', borderColor: '#2B3A4A' },
   identityText: { fontSize: 16, color: '#2B3A4A' },
   identityTextActive: { fontSize: 16, color: '#F5EFE6' },
