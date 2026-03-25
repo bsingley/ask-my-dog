@@ -1,5 +1,5 @@
-import { useState, useEffect, useRef } from 'react';
-import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, Alert, Modal, FlatList } from 'react-native';
+import { useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, Modal, FlatList } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useDog } from '../../store';
 import Slider from '@react-native-community/slider';
@@ -48,35 +48,14 @@ export default function PersonaScreen() {
   const [intelligence, setIntelligence] = useState(dog.intelligence);
   const [identity, setIdentity] = useState(dog.self_identity);
   const [saved, setSaved] = useState(false);
-  const [isDirty, setIsDirty] = useState(false);
-  const isDirtyRef = useRef(false);
   const [showIdentityPicker, setShowIdentityPicker] = useState(false);
   const [expanded, setExpanded] = useState(false);
 
-useEffect(() => {
-    const unsubscribe = navigation.addListener('beforeRemove', (e: any) => {
-      if (!isDirtyRef.current) return;
-      e.preventDefault();
-      Alert.alert(
-        'Unsaved changes',
-        "You have unsaved changes to your dog's persona. Save before leaving?",
-        [
-          { text: 'Save', onPress: () => { save(); navigation.dispatch(e.data.action); } },
-          { text: 'Keep editing', style: 'cancel' },
-          { text: 'Discard', style: 'destructive', onPress: () => { isDirtyRef.current = false; navigation.dispatch(e.data.action); } },
-        ]
-      );
-    });
-    return unsubscribe;
-  }, [navigation]);
-
-function save() {
-  setDog({ ...dog, name, breed, age, nemesis, intelligence, self_identity: identity });
-  setSaved(true);
-  setIsDirty(false);
-  isDirtyRef.current = false;
-  setTimeout(() => setSaved(false), 2000);
-}
+  function save() {
+    setDog({ ...dog, name, breed, age, nemesis, intelligence, self_identity: identity });
+    setSaved(true);
+    setTimeout(() => setSaved(false), 2000);
+  }
 
   return (
     <ScrollView style={styles.container}>
@@ -100,20 +79,20 @@ function save() {
       {expanded && (
         <View style={styles.expandedFields}>
           <Text style={styles.label}>Name</Text>
-          <TextInput style={styles.input} value={name} onChangeText={val => { setName(val); setIsDirty(true); isDirtyRef.current = true; }} />
+          <TextInput style={styles.input} value={name} onChangeText={val => { setName(val); }} />
 
           <Text style={styles.label}>Breed</Text>
-          <TextInput style={styles.input} value={breed} onChangeText={val => { setBreed(val); setIsDirty(true); isDirtyRef.current = true; }} />
+          <TextInput style={styles.input} value={breed} onChangeText={val => { setBreed(val); }} />
 
           <Text style={styles.label}>Age</Text>
-          <TextInput style={styles.input} value={age} onChangeText={val => { setAge(val); setIsDirty(true); isDirtyRef.current = true; }} />
+          <TextInput style={styles.input} value={age} onChangeText={val => { setAge(val); }} />
 
           <Text style={styles.label}>Nemesis</Text>
-          <TextInput style={styles.input} value={nemesis} onChangeText={val => { setNemesis(val); setIsDirty(true); isDirtyRef.current = true; }} />
+          <TextInput style={styles.input} value={nemesis} onChangeText={val => { setNemesis(val); }} />
         </View>
       )}
 
-      
+
       <View style={{ paddingHorizontal: 24 }}>
         <Text style={styles.label}>Intelligence</Text>
         <Text style={styles.intelligenceDesc}>
@@ -129,16 +108,16 @@ function save() {
           maximumValue={4}
           step={1}
           value={4 - intelligenceOptions.findIndex(o => o.value === intelligence)}
-          onValueChange={val => { setIntelligence(intelligenceOptions[4 - val].value); setIsDirty(true); isDirtyRef.current = true; }}
+          onValueChange={val => { setIntelligence(intelligenceOptions[4 - val].value); }}
           minimumTrackTintColor="#2B3A4A"
           maximumTrackTintColor="#C4A882"
           thumbTintColor="#2B3A4A"
         />
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 4 }}>
-            <Text style={{ fontSize: 16, color: '#4A6278' }}>Very Dim</Text>
-            <Text style={{ fontSize: 16, color: '#4A6278' }}>Genius</Text>
-          </View>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 4 }}>
+          <Text style={{ fontSize: 16, color: '#4A6278' }}>Very Dim</Text>
+          <Text style={{ fontSize: 16, color: '#4A6278' }}>Genius</Text>
         </View>
+      </View>
 
       <View style={styles.divider} />
 
@@ -151,7 +130,7 @@ function save() {
           <Text style={styles.dropdownButtonText}>{identity}</Text>
           <Text style={styles.dropdownChevron}>▾</Text>
         </TouchableOpacity>
-        
+
 
         <Modal visible={showIdentityPicker} transparent animationType="fade">
           <TouchableOpacity style={styles.modalOverlay} onPress={() => setShowIdentityPicker(false)}>
@@ -162,7 +141,7 @@ function save() {
                 renderItem={({ item }) => (
                   <TouchableOpacity
                     style={[styles.modalOption, item === identity && styles.modalOptionActive]}
-                    onPress={() => { setIdentity(item); setIsDirty(true); isDirtyRef.current = true; setShowIdentityPicker(false); }}>
+                    onPress={() => { setIdentity(item);   setShowIdentityPicker(false); }}>
                     <Text style={[styles.modalOptionText, item === identity && styles.modalOptionTextActive]}>{item}</Text>
                     {item === identity && <Text style={styles.modalOptionText}>✓</Text>}
                   </TouchableOpacity>
@@ -172,14 +151,14 @@ function save() {
           </TouchableOpacity>
         </Modal>
       </View>
-      
+
       <View style={{ paddingHorizontal: 24 }}>
         <TouchableOpacity style={styles.saveButton} onPress={save}>
           <Text style={styles.saveText}>{saved ? '✅ Saved!' : 'Save Persona'}</Text>
         </TouchableOpacity>
       </View>
 
-    </ScrollView> 
+    </ScrollView>
   );
 }
 
@@ -220,4 +199,3 @@ const styles = StyleSheet.create({
   darkHeader: { backgroundColor: '#2B3A4A', paddingHorizontal: 24, paddingTop: 100, paddingBottom: 20 },
 
 });
-  
