@@ -1,6 +1,6 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, Alert, Modal, FlatList } from 'react-native';
-import { useFocusEffect } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import { useDog } from '../../store';
 import Slider from '@react-native-community/slider';
 import { Ionicons } from '@expo/vector-icons';
@@ -40,6 +40,7 @@ const identityDescriptions: Record<string, string> = {
 
 export default function PersonaScreen() {
   const [dog, setDog] = useDog();
+  const navigation = useNavigation();
   const [name, setName] = useState(dog.name);
   const [breed, setBreed] = useState(dog.breed);
   const [age, setAge] = useState(dog.age);
@@ -49,26 +50,25 @@ export default function PersonaScreen() {
   const [saved, setSaved] = useState(false);
   const [isDirty, setIsDirty] = useState(false);
   const isDirtyRef = useRef(false);
-    const [showIdentityPicker, setShowIdentityPicker] = useState(false);
+  const [showIdentityPicker, setShowIdentityPicker] = useState(false);
   const [expanded, setExpanded] = useState(false);
 
-useFocusEffect(
-  useCallback(() => {
-    return () => {
-      if (isDirtyRef.current) {
-          Alert.alert(
-          'Unsaved changes',
-          "You have unsaved changes to your dog's persona. Save before leaving?",
-          [
-            { text: 'Save', onPress: () => save() },
-            { text: 'Keep editing', style: 'cancel' },
-            { text: 'Discard', style: 'destructive', onPress: () => setIsDirty(false) },
-          ]
-        );
-      }
-    };
-  }, [isDirty])
-);
+useEffect(() => {
+    const unsubscribe = navigation.addListener('beforeRemove', (e: any) => {
+      if (!isDirtyRef.current) return;
+      e.preventDefault();
+      Alert.alert(
+        'Unsaved changes',
+        "You have unsaved changes to your dog's persona. Save before leaving?",
+        [
+          { text: 'Save', onPress: () => { save(); navigation.dispatch(e.data.action); } },
+          { text: 'Keep editing', style: 'cancel' },
+          { text: 'Discard', style: 'destructive', onPress: () => { isDirtyRef.current = false; navigation.dispatch(e.data.action); } },
+        ]
+      );
+    });
+    return unsubscribe;
+  }, [navigation]);
 
 function save() {
   setDog({ ...dog, name, breed, age, nemesis, intelligence, self_identity: identity });
