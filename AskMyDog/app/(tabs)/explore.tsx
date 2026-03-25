@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, Alert, Modal, FlatList } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { useDog } from '../../store';
@@ -48,14 +48,15 @@ export default function PersonaScreen() {
   const [identity, setIdentity] = useState(dog.self_identity);
   const [saved, setSaved] = useState(false);
   const [isDirty, setIsDirty] = useState(false);
-  const [showIdentityPicker, setShowIdentityPicker] = useState(false);
+  const isDirtyRef = useRef(false);
+    const [showIdentityPicker, setShowIdentityPicker] = useState(false);
   const [expanded, setExpanded] = useState(false);
 
 useFocusEffect(
   useCallback(() => {
     return () => {
-      if (isDirty) {
-        Alert.alert(
+      if (isDirtyRef.current) {
+          Alert.alert(
           'Unsaved changes',
           "You have unsaved changes to your dog's persona. Save before leaving?",
           [
@@ -73,6 +74,7 @@ function save() {
   setDog({ ...dog, name, breed, age, nemesis, intelligence, self_identity: identity });
   setSaved(true);
   setIsDirty(false);
+  isDirtyRef.current = false;
   setTimeout(() => setSaved(false), 2000);
 }
 
@@ -98,16 +100,16 @@ function save() {
       {expanded && (
         <View style={styles.expandedFields}>
           <Text style={styles.label}>Name</Text>
-          <TextInput style={styles.input} value={name} onChangeText={val => { setName(val); setIsDirty(true); }} />
+          <TextInput style={styles.input} value={name} onChangeText={val => { setName(val); setIsDirty(true); isDirtyRef.current = true; }} />
 
           <Text style={styles.label}>Breed</Text>
-          <TextInput style={styles.input} value={breed} onChangeText={val => { setBreed(val); setIsDirty(true); }} />
+          <TextInput style={styles.input} value={breed} onChangeText={val => { setBreed(val); setIsDirty(true); isDirtyRef.current = true; }} />
 
           <Text style={styles.label}>Age</Text>
-          <TextInput style={styles.input} value={age} onChangeText={val => { setAge(val); setIsDirty(true); }} />
+          <TextInput style={styles.input} value={age} onChangeText={val => { setAge(val); setIsDirty(true); isDirtyRef.current = true; }} />
 
           <Text style={styles.label}>Nemesis</Text>
-          <TextInput style={styles.input} value={nemesis} onChangeText={val => { setNemesis(val); setIsDirty(true); }} />
+          <TextInput style={styles.input} value={nemesis} onChangeText={val => { setNemesis(val); setIsDirty(true); isDirtyRef.current = true; }} />
         </View>
       )}
 
@@ -127,7 +129,7 @@ function save() {
           maximumValue={4}
           step={1}
           value={4 - intelligenceOptions.findIndex(o => o.value === intelligence)}
-          onValueChange={val => { setIntelligence(intelligenceOptions[4 - val].value); setIsDirty(true); }}
+          onValueChange={val => { setIntelligence(intelligenceOptions[4 - val].value); setIsDirty(true); isDirtyRef.current = true; }}
           minimumTrackTintColor="#2B3A4A"
           maximumTrackTintColor="#C4A882"
           thumbTintColor="#2B3A4A"
@@ -160,7 +162,7 @@ function save() {
                 renderItem={({ item }) => (
                   <TouchableOpacity
                     style={[styles.modalOption, item === identity && styles.modalOptionActive]}
-                    onPress={() => { setIdentity(item); setIsDirty(true); setShowIdentityPicker(false); }}>
+                    onPress={() => { setIdentity(item); setIsDirty(true); isDirtyRef.current = true; setShowIdentityPicker(false); }}>
                     <Text style={[styles.modalOptionText, item === identity && styles.modalOptionTextActive]}>{item}</Text>
                     {item === identity && <Text style={styles.modalOptionText}>✓</Text>}
                   </TouchableOpacity>
