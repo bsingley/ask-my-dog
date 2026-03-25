@@ -131,6 +131,7 @@ function save() {
       <TouchableOpacity style={styles.saveButton} onPress={save}>
         <Text style={styles.saveText}>{saved ? '✅ Saved!' : 'Save Persona'}</Text>
       </TouchableOpacity>
+    </ScrollView> 
   );
 }
 
