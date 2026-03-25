@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { Picker } from '@react-native-picker/picker';
 import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, Alert } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { useDog } from '../../store';
@@ -114,15 +115,15 @@ function save() {
       </Text>
 
       <Text style={styles.label}>Self Identity</Text>
-      <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginTop: 4 }}>
-        {identities.map(item => (
-          <TouchableOpacity
-            key={item}
-            style={[styles.identityOption, identity === item && styles.identityActive]}
-            onPress={() => { setIdentity(item); setIsDirty(true); }}>
-            <Text style={{ fontSize: 14, fontWeight: '600', color: identity === item ? '#F5EFE6' : '#2B3A4A' }}>{item}</Text>
-          </TouchableOpacity>
-        ))}
+      <View style={styles.pickerWrapper}>
+        <Picker
+          selectedValue={identity}
+          onValueChange={val => { setIdentity(val); setIsDirty(true); }}
+          style={{ color: '#2B3A4A' }}>
+          {identities.map(item => (
+            <Picker.Item key={item} label={item} value={item} color='#2B3A4A' />
+          ))}
+        </Picker>
       </View>
       {identity && (
         <Text style={styles.identityDesc}>{identityDescriptions[identity]}</Text>
