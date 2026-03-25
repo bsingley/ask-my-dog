@@ -1,6 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Picker } from '@react-native-picker/picker';
-import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, Alert } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, Alert, Modal, FlatList } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { useDog } from '../../store';
 import Slider from '@react-native-community/slider';
@@ -48,6 +47,8 @@ export default function PersonaScreen() {
   const [identity, setIdentity] = useState(dog.self_identity);
   const [saved, setSaved] = useState(false);
   const [isDirty, setIsDirty] = useState(false);
+  const [showIdentityPicker, setShowIdentityPicker] = useState(false);
+  const [expanded, setExpanded] = useState(false);
 
 useFocusEffect(
   useCallback(() => {
@@ -76,21 +77,39 @@ function save() {
 
   return (
     <ScrollView style={styles.container}>
-      <Text style={styles.header}>🐾 Dog Persona</Text>
+      <TouchableOpacity style={styles.dogSummaryCard} onPress={() => setExpanded(!expanded)}>
+        <View style={{ flex: 1 }}>
+          <Text style={styles.dogSummaryName}>{name}</Text>
+          <Text style={styles.dogSummaryDetail}>{breed} · {age}</Text>
+          <Text style={styles.dogSummaryDetail}>Nemesis: {nemesis}</Text>
+        </View>
+        <Text style={styles.dropdownChevron}>{expanded ? '▴' : '▾'}</Text>
+      </TouchableOpacity>
 
-      <Text style={styles.label}>Name</Text>
-      <TextInput style={styles.input} value={name} onChangeText={val => { setName(val); setIsDirty(true); }} />
+      {expanded && (
+        <View style={styles.expandedFields}>
+          <Text style={styles.label}>Name</Text>
+          <TextInput style={styles.input} value={name} onChangeText={val => { setName(val); setIsDirty(true); }} />
 
-      <Text style={styles.label}>Breed</Text>
-      <TextInput style={styles.input} value={breed} onChangeText={val => { setBreed(val); setIsDirty(true); }} />
+          <Text style={styles.label}>Breed</Text>
+          <TextInput style={styles.input} value={breed} onChangeText={val => { setBreed(val); setIsDirty(true); }} />
 
-      <Text style={styles.label}>Age</Text>
-      <TextInput style={styles.input} value={age} onChangeText={val => { setAge(val); setIsDirty(true); }} />
+          <Text style={styles.label}>Age</Text>
+          <TextInput style={styles.input} value={age} onChangeText={val => { setAge(val); setIsDirty(true); }} />
 
-      <Text style={styles.label}>Nemesis</Text>
-      <TextInput style={styles.input} value={nemesis} onChangeText={val => { setNemesis(val); setIsDirty(true); }} />
+          <Text style={styles.label}>Nemesis</Text>
+          <TextInput style={styles.input} value={nemesis} onChangeText={val => { setNemesis(val); setIsDirty(true); }} />
+        </View>
+      )}
 
       <Text style={styles.label}>Intelligence</Text>
+      <Text style={styles.intelligenceDesc}>
+        {intelligence === 'genius' && '🧠 Plays 3D chess when you\'re not looking'}
+        {intelligence === 'selective' && '😏 Knows exactly what you said. Chooses to ignore it.'}
+        {intelligence === 'average' && '🤔 Definitely has a plan...probably.'}
+        {intelligence === 'dim' && '😵 Frequently outwitted by furniture.'}
+        {intelligence === 'very_dim' && '💫 Two brain cells fighting for third place'}
+      </Text>
       <Slider
         style={{ width: '100%', height: 40 }}
         minimumValue={0}
@@ -102,32 +121,40 @@ function save() {
         maximumTrackTintColor="#C4A882"
         thumbTintColor="#2B3A4A"
       />
-        <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginTop: 4 }}>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 4 }}>
           <Text style={{ fontSize: 16, color: '#4A6278' }}>Very Dim</Text>
-        <Text style={{ fontSize: 16, color: '#4A6278' }}>Genius</Text>
-      </View>
-      <Text style={styles.intelligenceDesc}>
-        {intelligence === 'genius' && '🧠 Plays 3D chess when you\'re not looking'}
-        {intelligence === 'selective' && '😏 Knows exactly what you said. Chooses to ignore it.'}
-        {intelligence === 'average' && '🤔 Definitely has a plan...probably.'}
-        {intelligence === 'dim' && '😵 Frequently outwitted by furniture.'}
-        {intelligence === 'very_dim' && '💫 Two brain cells fighting for third place'}
-      </Text>
+          <Text style={{ fontSize: 16, color: '#4A6278' }}>Genius</Text>
+        </View>
+
 
       <Text style={styles.label}>Self Identity</Text>
-      <View style={styles.pickerWrapper}>
-        <Picker
-          selectedValue={identity}
-          onValueChange={val => { setIdentity(val); setIsDirty(true); }}
-          style={{ color: '#2B3A4A' }}>
-          {identities.map(item => (
-            <Picker.Item key={item} label={item} value={item} color='#2B3A4A' />
-          ))}
-        </Picker>
-      </View>
       {identity && (
         <Text style={styles.identityDesc}>{identityDescriptions[identity]}</Text>
       )}
+      <TouchableOpacity style={styles.dropdownButton} onPress={() => setShowIdentityPicker(true)}>
+        <Text style={styles.dropdownButtonText}>{identity}</Text>
+        <Text style={styles.dropdownChevron}>▾</Text>
+      </TouchableOpacity>
+      
+
+      <Modal visible={showIdentityPicker} transparent animationType="fade">
+        <TouchableOpacity style={styles.modalOverlay} onPress={() => setShowIdentityPicker(false)}>
+          <View style={styles.modalBox}>
+            <FlatList
+              data={identities}
+              keyExtractor={item => item}
+              renderItem={({ item }) => (
+                <TouchableOpacity
+                  style={[styles.modalOption, item === identity && styles.modalOptionActive]}
+                  onPress={() => { setIdentity(item); setIsDirty(true); setShowIdentityPicker(false); }}>
+                  <Text style={[styles.modalOptionText, item === identity && styles.modalOptionTextActive]}>{item}</Text>
+                  {item === identity && <Text style={styles.modalOptionText}>✓</Text>}
+                </TouchableOpacity>
+              )}
+            />
+          </View>
+        </TouchableOpacity>
+      </Modal>
 
       <TouchableOpacity style={styles.saveButton} onPress={save}>
         <Text style={styles.saveText}>{saved ? '✅ Saved!' : 'Save Persona'}</Text>
@@ -150,9 +177,21 @@ const styles = StyleSheet.create({
   identityActive: { backgroundColor: '#2B3A4A', borderColor: '#2B3A4A' },
   identityText: { fontSize: 16, color: '#2B3A4A' },
   identityTextActive: { fontSize: 16, color: '#F5EFE6' },
-  saveButton: { backgroundColor: '#2B3A4A', borderRadius: 20, padding: 4, alignItems: 'center', marginTop: 4, marginBottom: 6 },
-  saveText: { color: '#F5EFE6', fontWeight: '600', fontSize: 16 },
-  intelligenceDesc: { fontSize: 16, color: '#4A6278', fontStyle: 'italic', marginTop: 8, paddingLeft: 4 },
-  identityDesc: { fontSize: 14, color: '#4A6278', fontStyle: 'italic', marginTop: 10, paddingLeft: 4 },
-  pickerWrapper: { backgroundColor: '#fff', borderRadius: 10, borderWidth: 0.5, borderColor: '#C4A882', marginTop: 4, overflow: 'hidden' },
-});
+  saveButton: { backgroundColor: '#2B3A4A', borderRadius: 20, padding: 10, alignItems: 'center', marginTop: 4, marginBottom: 6 },
+  saveText: { color: '#F5EFE6', fontWeight: '600', fontSize: 20 },
+  intelligenceDesc: { fontSize: 18, color: '#4A6278', fontStyle: 'italic', marginTop: 8, paddingLeft: 4 },
+  identityDesc: { fontSize: 18, color: '#4A6278', fontStyle: 'italic', marginTop: 10, paddingLeft: 4 },
+  dropdownButton: { backgroundColor: '#F5EFE6', borderRadius: 10, borderWidth: 0.5, borderColor: '#C4A882', padding: 12, marginTop: 4, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+  dropdownButtonText: { fontSize: 16, color: '#2B3A4A' },
+  dropdownChevron: { fontSize: 16, color: '#4A6278' },
+  modalOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.3)', justifyContent: 'center', padding: 32 },
+  modalBox: { backgroundColor: '#F5EFE6', borderRadius: 14, overflow: 'hidden', borderWidth: 0.5, borderColor: '#C4A882' },
+  modalOption: { padding: 16, flexDirection: 'row', justifyContent: 'space-between', borderBottomWidth: 0.5, borderBottomColor: '#C4A882' },
+  modalOptionActive: { backgroundColor: '#E8D5B7' },
+  modalOptionText: { fontSize: 16, color: '#2B3A4A' },
+  modalOptionTextActive: { fontWeight: '700' },
+  dogSummaryCard: { backgroundColor: '#E8D5B7', borderRadius: 12, padding: 14, marginTop: 4, flexDirection: 'row', alignItems: 'center', borderWidth: 0.5, borderColor: '#C4A882' },
+  dogSummaryName: { fontSize: 18, fontWeight: '700', color: '#2B3A4A', marginBottom: 2 },
+  dogSummaryDetail: { fontSize: 14, color: '#4A6278', marginTop: 1 },
+  expandedFields: { backgroundColor: '#EDE3D4', borderRadius: 12, padding: 14, marginTop: 4, borderWidth: 0.5, borderColor: '#C4A882' },});
+  
