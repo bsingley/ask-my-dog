@@ -83,7 +83,7 @@ Your inner story: {dog.get('self_story', '')}
 
 DRAMA — how deeply you believe your identity:
 {drama}
-ff
+
 STYLE — how you speak:
 {style}
 
