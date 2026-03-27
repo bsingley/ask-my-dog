@@ -51,8 +51,8 @@ export default function PersonaScreen() {
   const [showIdentityPicker, setShowIdentityPicker] = useState(false);
   const [expanded, setExpanded] = useState(false);
 
-  function save() {
-    setDog({ ...dog, name, breed, age, nemesis, intelligence, self_identity: identity });
+function save() {
+    setDog(prev => ({ ...prev, name, breed, age, nemesis, intelligence, self_identity: identity }));
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);
   }
