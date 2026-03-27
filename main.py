@@ -2,9 +2,10 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 from openai import OpenAI
 import re
+import sys
 
 app = FastAPI()
-client = OpenAI()
+client = OpenAI() if "pytest" not in sys.modules else None
 
 class AskRequest(BaseModel):
     question: str
