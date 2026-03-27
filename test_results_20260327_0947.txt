@@ -1,0 +1,99 @@
+ASK MY DOG — AUTOMATED PROMPT TEST RESULTS
+Run at: 2026-03-27 09:47
+Test question: "What do you think about the neighbor's cat?"
+Backend: https://ask-my-dog-production.up.railway.app
+
+
+======================================================================
+  TEST 1: IDENTITY SWEEP (9 responses)
+  Fixed: intelligence=average | drama=high | style=doggish
+  Look for: each identity should sound like a DIFFERENT character/worldview
+======================================================================
+
+-- The Last Guardian --
+Oh, the neighbor's cat! It prowls around like it owns the world. I must remain vigilant and guard my territory; the cat is just a reminder of how important my role as The Last Guardian is. I shake my fur and let out a low growl because it could be plotting… or maybe it just wants to sneak into my yard and steal my favorite stick.
+  Trainer: The dog shows a natural instinct to protect its territory by identifying the neighbor's cat as a potential intruder. Such behavior is rooted in their guardian instinct, and recognizing this can help in reinforcing positive behaviors when interacting with other animals.
+
+-- Apex Predator --
+Oh, that neighbor's cat! It thinks it’s all stealthy and sneaky, but I’m the apex predator around here! I watch it through the window, plotting my next move to show it who's boss, but then it just sits there looking all smug.
+  Trainer: Dogs have a natural instinct to view other animals, like cats, as potential rivals or prey. This can lead to behaviors such as barking or stalking, driven by a desire to assert their dominance or engage in a chase.
+
+-- The Chosen One --
+The neighbor's cat is a sneaky little creature! It thinks it can roam around without being noticed, but I watch it closely from the window. I sense it knows I'm the Chosen One, and it's always trying to test my patience and bravery.
+  Trainer: It’s common for dogs to perceive cats as rivals or threats, especially when they display independent behavior. Observing the cat can create excitement or agitation, igniting a protracted rivalry in the dog's mind.
+
+-- Exiled Royalty --
+Oh, that neighbor's cat! It struts around like it owns the kingdom, but if only it knew about my royal lineage! I often watch it from my throne—uh, I mean my cozy spot by the window—pondering if it understands its place in the realm of our domain.
+  Trainer: The canine’s interest in the cat likely stems from territorial instincts and curiosity, common traits when encountering another animal. The dog's thoughts reflect its feelings of superiority and concern over rivals as it navigates social hierarchies.
+
+-- Escape Artist --
+Oh, the neighbor's cat! I see it lurking around, and I always think about how it gets to roam free while I'm stuck behind the fence. I dream of outsmarting it someday to show my ultimate escape skills, but then I get distracted thinking about how soft its fur might be.
+  Trainer: Luna's fascination with the cat illustrates her strong desire for exploration and freedom. She perceives the cat as a symbol of the outside world she wishes to reach, highlighting her escape artist tendencies.
+
+-- I Was Framed --
+That neighbor's cat thinks it owns the yard, but I know I was framed for that thing I did to its precious flower bed! I just wanted to chase it away, but somehow it turned into a whole scene like I was the bad guy. It's always strutting around like it’s a little king or something, and nobody believes me!
+  Trainer: This behavior suggests that Luna feels threatened by the presence of the cat and reacts differently than one might expect — a dog can sometimes project its feelings of being framed when it feels misunderstood in social dynamics with other animals.
+
+-- Undercover Agent --
+That cat, oh, it’s not just a cat! It’s a potential informant, always lurking, gathering intel on my movements. I’ve seen it eyeing my territory, and I must stay on alert, watch for its next move!
+  Trainer: It's natural for dogs to be cautious or curious about new animals in their environment. Observing their behavior helps them feel secure and maintain their territory.
+
+-- Evil Genius --
+Oh, the neighbor's cat! That sneaky little furball thinks it can just prance around my territory, flaunting its whiskers and arrogance. It sits there, looking all smug, like it owns the place... but I see right through it! One day, I'll outsmart that feline with my ultimate evil genius plan, just have to figure out the best approach.
+  Trainer: It's important to remember that dogs often see cats as rivals or intruders to their territory. Engaging with or ignoring the cat can depend on the dog's personality and training.
+
+-- Chaos Incarnate --
+Oh, the neighbor's cat! That sneaky little shadow, always slinking around like it owns the place. I can't help but wonder what it's plotting — maybe it dreams of ruling the backyard kingdom! But when I see it, my heart races, and I feel this chaotic need to chase it away, even if I’m really just super fascinated!
+  Trainer: This behavior reflects a dog's instinctual drive to assert dominance over perceived intruders in their territory. In this case, Luna feels both curiosity and the urge to protect her domain, leading her to react strongly to the presence of the cat.
+
+
+======================================================================
+  TEST 2: INTELLIGENCE SWEEP (5 responses)
+  Fixed: identity=Last Guardian | drama=high | style=doggish
+  Look for: responses get simpler/shorter/more confused going down the list
+======================================================================
+
+-- GENIUS --
+Ah, the neighbor's cat. A quintessential representation of unsolicited territorial encroachment, it embodies the very essence of feline audacity. This creature, with its sleek form and stealthy ambulation, has emerged as a direct challenge to my sovereignty over this domain. I have meticulously charted its daily maneuvers, observing with a vigilant eye its preferred vantage points—each calculated leap and languorous stretch unveils its confidence in the face of my vigilant watch. 
+
+Every time it graces my line of sight, it proffers a silent taunt, as if to declare its unyielding claim to the grassy territories adjacent to my rightful perimeters. This ongoing schism between my noble self and the insouciant feline brings into sharp relief the broader dynamics of interspecies rivalry, one steeped in a history fraught with competition for resources and status.
+  Trainer: The behaviors exhibited by dogs when faced with a cat often stem from their inherent instincts regarding territory and social hierarchy. Dogs are social animals, and the presence of another creature, particularly one that moves with such fluidity and apparent impunity, can trigger a protective or predatory response. The careful observation of the cat's movements allows dogs to assess the potential threat or challenge posed, necessitating strategic responses to maintain their perceived dominion.
+
+-- SELECTIVE --
+The neighbor's cat, a creature of shadows and silent mischief, is a constant reminder of the delicate balance between predator and guardian. As The Last Guardian, I watch over my territory and protect all that is dear to me from the lurking feline menace. Its mere presence stirs a primal instinct within me; I must remain vigilant, ready to defend our realm.
+  Trainer: It's important to understand that dogs can view cats as both rivals and curiosities. This can lead to protective behavior or excitement, depending on the individual dog's personality. Training can help manage any aggressive tendencies toward other pets and foster a peaceful coexistence.
+
+-- AVERAGE --
+The neighbor's cat is not just a cat; it’s a rival, a challenger to my guardianship! I feel it prowls around, testing my resolve, as if it thinks it can take my place as the protector of the yard. I must always keep an eye on it, even if it just sunbathes and doesn't seem threatening at first.
+  Trainer: It's common for dogs to see other pets, like cats, as rivals in their territory. Dogs may feel the need to assert their role as protectors, leading to protective behavior or vigilance toward the cat.
+
+-- DIM --
+The cat... wait, the cat is a challenge. It watches me like I'm not the last guardian. I must protect my territory!
+  Trainer: Dogs often view other animals as potential threats or rivals, leading to a protective instinct. Socialization can help ease tension around unfamiliar pets.
+
+-- VERY DIM --
+Cat! Sneaky cat. Watch it! I guard. My duty is strong.
+  Trainer: Dogs often exhibit protective instincts toward their territory, making them vigilant around unfamiliar animals. Luna's behavior reflects her role as The Last Guardian, showcasing her commitment to protect what she perceives as her domain.
+
+
+======================================================================
+  TEST 3: DRAMA SWEEP (4 responses)
+  Fixed: identity=Last Guardian | intelligence=average | style=doggish
+  Look for: low=normal dog, extreme=fully consumed by Guardian mythology
+======================================================================
+
+-- LOW — Mostly normal dog --
+Oh, that neighbor's cat is so sneaky! Sometimes I see it lounging in the sun, and I wonder if it’s plotting something. I think it might be a little jealous of my big backyard, or maybe… oh, wait, is that a squirrel?
+  Trainer: It's common for dogs to be curious about other pets in the neighborhood, especially cats. Luna's keen observation skills and her slight distraction show her intelligence, as she often shifts her focus to other engaging stimuli in her environment.
+
+-- MODERATE — Story influences some thoughts --
+Oh, that neighbor cat! It's always sneaking around, acting all sneaky like it owns the place. I keep a close eye on it, just in case it tries to invade my territory because, as The Last Guardian, I must protect my domain. Hey, is that a squirrel over there?
+  Trainer: It's common for dogs to be curious or cautious around cats, as the behavior can signal a potential threat or a play opportunity. Encouraging positive interactions can help foster better relationships between dogs and neighboring animals.
+
+-- HIGH — Story guides most thoughts --
+The neighbor's cat is not just a cat; it's a challenge to my very purpose as The Last Guardian. I observe it lounging, plotting, all while I must stand strong and vigilant, guarding my territory from its sneaky ways. Every flick of its tail feels like a taunt, but I mustn't falter—no, I can't let my gaze waver…
+  Trainer: It's common for dogs to be curious or even reactive around new animals like cats. This behavior stems from their instinct to protect their territory and assert their role in the environment.
+
+-- EXTREME — Story defines everything --
+The neighbor’s cat is a cunning infiltrator, a shadow lurking near my sacred territory, testing the boundaries of my watchful gaze. Its presence is an affront to my eternal duty as The Last Guardian, a reminder that the peace I protect is always threatened by the likes of it. I must remain vigilant, for a single moment of distraction could allow it to breach the sacred grounds.
+  Trainer: The dog displays protective instincts towards its territory, perceiving other animals, like the neighbor's cat, as potential threats. This behavior stems from its instinctual role as a guardian, reflecting the need to maintain a perceived dominance over its environment.

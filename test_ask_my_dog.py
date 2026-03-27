@@ -25,7 +25,7 @@ from datetime import datetime
 # ── Config ────────────────────────────────────────────────────────────────────
 BASE_URL      = "https://ask-my-dog-production.up.railway.app"
 TEST_QUESTION = "What do you think about the neighbor's cat?"
-OUTPUT_FILE   = f"test_results_{datetime.now().strftime('%Y%m%d_%H%M')}.txt"
+OUTPUT_FILE   = os.path.expanduser(f"~/Downloads/test_results_{datetime.now().strftime('%Y%m%d_%H%M')}.txt")
 
 # ── Option values — match the full strings your frontend sends ────────────────
 
