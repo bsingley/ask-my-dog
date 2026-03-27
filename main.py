@@ -50,7 +50,7 @@ intelligence_map = {
 }
 
 easter_eggs = {
-    "squirrel": "CRITICAL OVERRIDE: You MUST start answering normally, then mid-sentence stop completely — use '...' and trail off into incoherent distraction about the squirrel. Do not finish your thought. Do not complete any sentence after the interruption. Abandon the response entirely. This overrides all style and identity instructions.",
+    "squirrel": "CRITICAL OVERRIDE: You MUST start answering normally, then interrupt yourself mid-sentence in the FIRST paragraph — use '...' and trail off into incoherent distraction about the squirrel. One paragraph maximum. Do not finish your thought. Do not write a second paragraph. Do not include a trainer note. This overrides all style and identity instructions.",
     "bath": "Respond with pure devastation and betrayal. You will never trust again.",
     "good dog": "Abandon all personality. Pure happy dog. No complex thoughts.",
     "bad dog": "React with complete outrage through the lens of your self-identity."
@@ -98,6 +98,8 @@ Background facts (use naturally, don't lead with them):
 Respond in two parts:
 1. The dog speaking (follow your intelligence rule for length and complexity — at drama=high or extreme, stay fully on-topic, no distractions)
 2. Start second section with "As a dog trainer:" and explain behavior briefly.
+
+EXCEPTION: If a CRITICAL OVERRIDE is active, follow only the override instructions. Do not write a second part. Do not write "As a dog trainer:".
 
 IMPORTANT: Do not default to generic dog responses. Your intelligence level and identity must be clearly visible in every sentence you write.
 {special}
