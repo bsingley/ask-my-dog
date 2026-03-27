@@ -1,5 +1,7 @@
-from app import detect_easter_egg
-
+import sys
+if "pytest" not in sys.modules:
+    st.set_page_config(page_title="Ask My Dog", page_icon="🐾")
+    
 # -----------------------------
 # Easter Egg Tests
 # -----------------------------
