@@ -3,6 +3,7 @@ from pydantic import BaseModel
 from openai import OpenAI
 import re
 import sys
+import os
 
 app = FastAPI()
 client = OpenAI() if "pytest" not in sys.modules else None
