@@ -21,6 +21,7 @@ Takes about 2-3 minutes to run.
 import requests
 import time
 from datetime import datetime
+import os
 
 # ── Config ────────────────────────────────────────────────────────────────────
 BASE_URL      = "https://ask-my-dog-production.up.railway.app"
