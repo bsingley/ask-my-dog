@@ -14,12 +14,8 @@ export default function AboutScreen() {
 
         <View style={styles.divider} />
 
-        <TouchableOpacity style={styles.button} onPress={() => Linking.openURL('mailto:your@email.com?subject=Ask My Dog Feedback')}>
+        <TouchableOpacity style={styles.button} onPress={() => Linking.openURL('mailto:beth.singley@gmaill.com?subject=Ask My Dog Feedback')}>
             <Text style={styles.buttonText}>💌 Send Feedback</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.button} onPress={() => Linking.openURL('https://venmo.com/u/Beth-Singley-1')}>
-            <Text style={styles.buttonText}>🦴 Buy Luna a Treat</Text>
         </TouchableOpacity>
 
         <View style={styles.divider} />
