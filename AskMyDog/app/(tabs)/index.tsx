@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, ActivityIndicator, KeyboardAvoidingView, Platform, ImageBackground, Modal, Image, Keyboard, Animated } from 'react-native';
 import { useDog } from '../../store';
+import * as StoreReview from 'expo-store-review';
 
 const RAILWAY_URL = 'https://ask-my-dog-production.up.railway.app';
 
@@ -46,12 +47,20 @@ export default function HomeScreen() {
         }),
       });
       const data = await response.json();
-      setHistory(prev => [...prev, {
-        question: currentQuestion,
-        response: data.dog_response,
-        trainer: data.trainer_note,
-        easter_egg: data.easter_egg,
-      }]);
+      setHistory(prev => {
+        const newHistory = [...prev, {
+          question: currentQuestion,
+          response: data.dog_response,
+          trainer: data.trainer_note,
+          easter_egg: data.easter_egg,
+        }];
+        if (newHistory.length === 5) {
+          StoreReview.isAvailableAsync().then(available => {
+            if (available) StoreReview.requestReview();
+          });
+        }
+        return newHistory;
+      });
     } catch (e) {
       console.log('Error:', e);
       setHistory(prev => [...prev, {
