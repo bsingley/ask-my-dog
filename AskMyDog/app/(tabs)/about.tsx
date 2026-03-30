@@ -5,7 +5,7 @@ export default function AboutScreen() {
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
 
         <Text style={styles.heading}>🐾 Ask My Dog</Text>
-        <Text style={styles.version}>Version 1.0.0</Text>
+        <Text style={styles.version}>Version 1.0.1</Text>
 
         <Text style={styles.tribute}>
             Made for Luna, who is the scruffiest, most dramatic lab mix in the world.
