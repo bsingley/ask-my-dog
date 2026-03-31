@@ -5,24 +5,18 @@
 Users can:
 
 * Ask their dog questions and get in-character responses
-* Customize the dog's full persona including identity, intelligence, and nemesis
+* Customize the dog's full persona including photo, identity, intelligence, and nemesis
 * Adjust drama level and storytelling style
 * Follow along in a chat-style conversation feed
 * Discover hidden easter eggs
 
-**Live demo:** [ask-my-dog.streamlit.app](https://ask-my-dog-syur5g5wj4wxkuke7xtk5p.streamlit.app/)
+**Protoype demo:** [ask-my-dog.streamlit.app](https://ask-my-dog-syur5g5wj4wxkuke7xtk5p.streamlit.app/)
 
 ---
 
 ## Current State
 
-The app is live as a Streamlit web app. A native iOS version is in final pre-submission polish.
-
-### Streamlit App Stack
-| Layer | Technology |
-|---|---|
-| UI + Backend | Streamlit + Python |
-| AI | OpenAI GPT-4o-mini |
+The app is live as a native iOS version as of 03.28.2026. 
 
 ### Native App Stack
 | Layer | Technology |
@@ -54,8 +48,8 @@ flowchart TD
 
 ## Features
 
-* **Dynamic AI personas:** Fully editable dog profile including name, breed, age, energy level, training level, personality traits, fear triggers, nemesis, and intelligence level
-* **Self identity selector:** Nine dramatic preset identities plus a Custom option. Each preset includes a hidden backstory that enriches the AI prompt
+* **Dynamic AI personas:** Fully editable dog profile including name, breed, age, photo, nemesis, and intelligence level
+* **Self identity selector:** Nine dramatic preset identities. Each preset includes a hidden backstory that enriches the AI prompt
 * **Intelligence slider:** Five-level scale from "Two brain cells fighting for third place" to "Plays 3D chess when you're not looking"
 * **Nemesis field:** Freeform input woven naturally into responses
 * **Drama level selector:** Four levels controlling how deeply the dog believes its own story
@@ -64,7 +58,7 @@ flowchart TD
 * **Chat-style feed:** User and assistant bubbles
 * **Trainer notes:** Brief objective explanation of dog behavior below each reply
 * **Easter eggs:** Four hidden triggers that override AI behavior and unlock achievement banners
-* **About tab:** Version number, feedback link, Venmo tip link, privacy policy and terms of use
+* **About tab:** Version number, feedback link, privacy policy and terms of use
 
 ---
 
@@ -102,7 +96,6 @@ A systematically derived test suite covering chat flow, conversation memory, eas
 
 ## Future Improvements
 
-* Dog expression images wired to identity and easter egg states
 * Multiple dog profiles with a switcher
 * Training tip journal — export trainer notes as PDF
 * Voice output via OpenAI TTS
