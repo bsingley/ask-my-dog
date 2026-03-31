@@ -1,10 +1,19 @@
 import { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, Modal, FlatList } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, Modal, FlatList, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useDog } from '../../store';
 import Slider from '@react-native-community/slider';
 import { Ionicons } from '@expo/vector-icons';
 
+const DOG_PHOTOS: Record<string, any> = {
+  'dog-header': require('../../assets/images/dog-header.png'),
+  'dog_photo_1': require('../../assets/images/dog_photo_1.png'),
+  'dog_photo_2': require('../../assets/images/dog_photo_2.png'),
+  'dog_photo_3': require('../../assets/images/dog_photo_3.png'),
+  'dog_photo_4': require('../../assets/images/dog_photo_4.png'),
+  'dog_photo_5': require('../../assets/images/dog_photo_5.png'),
+  'dog_photo_6': require('../../assets/images/dog_photo_6.png'),
+};
 
 const identities = [
   'The Last Guardian',
@@ -71,6 +80,24 @@ export default function PersonaScreen() {
           <Text style={styles.dogSummaryDetail}>{breed}</Text>
           <Text style={styles.dogSummaryDetail}>{age}</Text>
           <Text style={styles.dogSummaryDetail}>Nemesis: {nemesis}</Text>
+          <Text style={styles.label}>Dog Photo</Text>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginBottom: 16 }}>
+            {Object.keys(DOG_PHOTOS).map((key) => (
+              <TouchableOpacity key={key} onPress={() => setDog({ ...dog, photo: key })}>
+                <Image
+                  source={DOG_PHOTOS[key]}
+                  style={{
+                    width: 120,
+                    height: 68,
+                    borderRadius: 8,
+                    marginRight: 10,
+                    borderWidth: dog.photo === key ? 3 : 0,
+                    borderColor: '#2B3A4A',
+                  }}
+                />
+              </TouchableOpacity>
+            ))}
+</ScrollView>
         </View>
         <TouchableOpacity onPress={() => setExpanded(!expanded)}>
           <Ionicons name={expanded ? 'close-outline' : 'create-outline'} size={22} color='#4A6278' />

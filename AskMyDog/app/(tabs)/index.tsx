@@ -4,6 +4,23 @@ import { useDog } from '../../store';
 import * as StoreReview from 'expo-store-review';
 
 const RAILWAY_URL = 'https://ask-my-dog-production.up.railway.app';
+const DOG_PHOTOS: Record<string, any> = {
+  'dog-header': require('../../assets/images/dog-header.png'),
+  'dog_photo_1': require('../../assets/images/dog_photo_1.png'),
+  'dog_photo_2': require('../../assets/images/dog_photo_2.png'),
+  'dog_photo_3': require('../../assets/images/dog_photo_3.png'),
+  'dog_photo_4': require('../../assets/images/dog_photo_4.png'),
+  'dog_photo_5': require('../../assets/images/dog_photo_5.png'),
+  'dog_photo_6': require('../../assets/images/dog_photo_6.png'),
+  'dog_photo_7': require('../../assets/images/dog_photo_7.png'),
+  'dog_photo_8': require('../../assets/images/dog_photo_8.png'),
+  'dog_photo_9': require('../../assets/images/dog_photo_8.png'),
+  'dog_photo_10': require('../../assets/images/dog_photo_10.png'),
+  'dog_photo_11': require('../../assets/images/dog_photo_11.png'),
+  'dog_photo_12': require('../../assets/images/dog_photo_12.png'),
+  'dog_photo_13': require('../../assets/images/dog_photo_13.png'),
+  'dog_photo_14': require('../../assets/images/dog_photo_14.png'),
+};
 
 export default function HomeScreen() {
   const [question, setQuestion] = useState('');
@@ -76,8 +93,8 @@ export default function HomeScreen() {
     <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
       <TouchableOpacity onPress={toggleHeader} activeOpacity={1}>
         <Animated.View style={[styles.headerBg, { height: headerHeight, overflow: 'hidden' }]}>
-          <ImageBackground source={require('../../assets/images/dog-header.png')} style={{ width: '100%', height: 260 }} resizeMode="cover">        
-            <View style={styles.headerOverlay}>
+          <ImageBackground source={DOG_PHOTOS[dog.photo] ?? DOG_PHOTOS['dog-header']} style={{ width: '100%', height: 260 }} resizeMode="cover">
+              <View style={styles.headerOverlay}>
               <View style={styles.headerTextBlock}>
               <Text style={styles.header}>Ask My Dog</Text>
               <Text style={styles.subheader}>{dog.name}</Text>
