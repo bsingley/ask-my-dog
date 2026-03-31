@@ -12,7 +12,7 @@ export const defaultDog = {
   nemesis: 'the vacuum cleaner',
   intelligence: 'average',
   self_identity: 'The Last Guardian',
-  photo: 'dog-header',
+  photo: 'dog_photo_1',
 };
 
 let dog = { ...defaultDog };
