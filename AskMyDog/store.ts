@@ -1,3 +1,8 @@
+import React from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+const STORAGE_KEY = 'dog_profile';
+
 export const defaultDog = {
   name: 'Luna',
   breed: 'lab mix',
@@ -17,9 +22,24 @@ export function getDog() {
   return dog;
 }
 
+export async function loadDog() {
+  try {
+    const saved = await AsyncStorage.getItem(STORAGE_KEY);
+    if (saved) {
+      dog = { ...defaultDog, ...JSON.parse(saved) };
+      listeners.forEach(fn => fn(dog));
+    }
+  } catch (e) {
+    console.log('Failed to load dog profile:', e);
+  }
+}
+
 export function setDog(newDog: typeof defaultDog) {
   dog = { ...newDog };
   listeners.forEach(fn => fn(dog));
+  AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(dog)).catch(e =>
+    console.log('Failed to save dog profile:', e)
+  );
 }
 
 export function useDog(): [typeof defaultDog, typeof setDog] {
@@ -32,5 +52,3 @@ export function useDog(): [typeof defaultDog, typeof setDog] {
   }, []);
   return [value, setDog];
 }
-
-import React from 'react';
