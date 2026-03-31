@@ -3,7 +3,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Tabs } from 'expo-router';
 import React from 'react';
 import { HapticTab } from '@/components/haptic-tab';
-import { IconSymbol } from '@/components/ui/icon-symbol';
+import { Ionicons } from '@expo/vector-icons';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 
 export default function TabLayout() {
@@ -31,21 +31,21 @@ export default function TabLayout() {
         name="index"
         options={{
           title: 'Chat',
-          tabBarIcon: ({ color }) => <IconSymbol size={26} name="bubble.left.and.bubble.right.fill" color={color} />,
+          tabBarIcon: ({ color }) => <Ionicons size={26} name="chatbubbles" color={color} />,
         }}
       />
       <Tabs.Screen
         name="explore"
         options={{
           title: 'My Dog',
-          tabBarIcon: ({ color }) => <IconSymbol size={26} name="pawprint.fill" color={color} />,
+          tabBarIcon: ({ color }) => <Ionicons size={26} name="paw" color={color} />,
         }}
       />
       <Tabs.Screen
         name="about"
         options={{
           title: 'About',
-          tabBarIcon: ({ color }) => <IconSymbol size={26} name="info.circle.fill" color={color} />,
+          tabBarIcon: ({ color }) => <Ionicons size={26} name="information-circle" color={color} />,
         }}
       />
     </Tabs>
