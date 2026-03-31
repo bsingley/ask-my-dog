@@ -13,7 +13,7 @@ export const unstable_settings = {
 export default function RootLayout() {
   const colorScheme = useColorScheme();
   React.useEffect(() => {
-    loadDog();
+    loadDog().catch(e => console.log('loadDog error:', e));
   }, []);
 
   return (
