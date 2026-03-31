@@ -21,7 +21,7 @@ export default function TabLayout() {
           paddingBottom: Platform.OS === 'android' ? 25 : 10,
           paddingTop: 8,
         },
-        tabBarLabelStyle: { fontSize: 14, fontWeight: '600', marginTo: 2 },
+        tabBarLabelStyle: { fontSize: 14, fontWeight: '600', marginTop: 2 },
         tabBarItemStyle: { flexDirection: 'row', alignItems: 'center', gap: 6 },       
         headerShown: false,
         tabBarButton: HapticTab,
