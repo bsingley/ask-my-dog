@@ -6,7 +6,6 @@ import Slider from '@react-native-community/slider';
 import { Ionicons } from '@expo/vector-icons';
 
 const DOG_PHOTOS: Record<string, any> = {
-  'dog-header': require('../../assets/images/dog-header.png'),
   'dog_photo_1': require('../../assets/images/dog_photo_1.png'),
   'dog_photo_2': require('../../assets/images/dog_photo_2.png'),
   'dog_photo_3': require('../../assets/images/dog_photo_3.png'),
