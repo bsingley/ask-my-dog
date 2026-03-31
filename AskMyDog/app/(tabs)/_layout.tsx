@@ -19,7 +19,7 @@ export default function TabLayout() {
           backgroundColor: '#F5EFE6', 
           borderTopColor: '#C4A882', 
           borderTopWidth: 0.5,
-          height: Platform.OS === 'android' ? 100 : 70,
+          height: Platform.OS === 'android' ? 120 : 70,
           paddingBottom: Platform.OS === 'android' ? 65 : 10,
           paddingTop: 8,
         },
