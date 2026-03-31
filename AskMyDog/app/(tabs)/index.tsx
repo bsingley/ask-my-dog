@@ -5,7 +5,6 @@ import * as StoreReview from 'expo-store-review';
 
 const RAILWAY_URL = 'https://ask-my-dog-production.up.railway.app';
 const DOG_PHOTOS: Record<string, any> = {
-  'dog-header': require('../../assets/images/dog-header.png'),
   'dog_photo_1': require('../../assets/images/dog_photo_1.png'),
   'dog_photo_2': require('../../assets/images/dog_photo_2.png'),
   'dog_photo_3': require('../../assets/images/dog_photo_3.png'),
