@@ -1,3 +1,4 @@
+import { Platform } from 'react-native';
 import { Tabs } from 'expo-router';
 import React from 'react';
 import { HapticTab } from '@/components/haptic-tab';
@@ -17,7 +18,7 @@ export default function TabLayout() {
           borderTopColor: '#C4A882', 
           borderTopWidth: 0.5,
           height: 70,
-          paddingBottom: 10,
+          paddingBottom: Platform.OS === 'android' ? 25 : 10,
           paddingTop: 8,
         },
         tabBarLabelStyle: { fontSize: 14, fontWeight: '600', marginTo: 2 },

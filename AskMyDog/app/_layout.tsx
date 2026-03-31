@@ -5,6 +5,7 @@ import 'react-native-reanimated';
 import React from 'react';
 import { loadDog } from '../store';
 import { useColorScheme } from '@/hooks/use-color-scheme';
+import { Platform } from 'react-native';
 
 export const unstable_settings = {
   anchor: '(tabs)',
