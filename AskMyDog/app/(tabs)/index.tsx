@@ -13,7 +13,7 @@ const DOG_PHOTOS: Record<string, any> = {
   'dog_photo_6': require('../../assets/images/dog_photo_6.png'),
   'dog_photo_7': require('../../assets/images/dog_photo_7.png'),
   'dog_photo_8': require('../../assets/images/dog_photo_8.png'),
-  'dog_photo_9': require('../../assets/images/dog_photo_8.png'),
+  'dog_photo_9': require('../../assets/images/dog_photo_9.png'),
   'dog_photo_10': require('../../assets/images/dog_photo_10.png'),
   'dog_photo_11': require('../../assets/images/dog_photo_11.png'),
   'dog_photo_12': require('../../assets/images/dog_photo_12.png'),
