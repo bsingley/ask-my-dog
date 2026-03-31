@@ -12,6 +12,14 @@ const DOG_PHOTOS: Record<string, any> = {
   'dog_photo_4': require('../../assets/images/dog_photo_4.png'),
   'dog_photo_5': require('../../assets/images/dog_photo_5.png'),
   'dog_photo_6': require('../../assets/images/dog_photo_6.png'),
+  'dog_photo_7': require('../../assets/images/dog_photo_7.png'),
+  'dog_photo_8': require('../../assets/images/dog_photo_8.png'),
+  'dog_photo_9': require('../../assets/images/dog_photo_9.png'),
+  'dog_photo_10': require('../../assets/images/dog_photo_10.png'),
+  'dog_photo_11': require('../../assets/images/dog_photo_11.png'),
+  'dog_photo_12': require('../../assets/images/dog_photo_12.png'),
+  'dog_photo_13': require('../../assets/images/dog_photo_13.png'),
+  'dog_photo_14': require('../../assets/images/dog_photo_14.png'),
 };
 
 const identities = [
@@ -83,17 +91,26 @@ export default function PersonaScreen() {
           <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginBottom: 16 }}>
             {Object.keys(DOG_PHOTOS).map((key) => (
               <TouchableOpacity key={key} onPress={() => setDog({ ...dog, photo: key })}>
-                <Image
-                  source={DOG_PHOTOS[key]}
-                  style={{
-                    width: 120,
-                    height: 68,
-                    borderRadius: 8,
-                    marginRight: 10,
-                    borderWidth: dog.photo === key ? 3 : 0,
-                    borderColor: '#2B3A4A',
-                  }}
-                />
+                <View style={{
+                  width: 100,
+                  height: 100,
+                  borderRadius: 8,
+                  marginRight: 10,
+                  overflow: 'hidden',
+                  borderWidth: dog.photo === key ? 3 : 0,
+                  borderColor: '#2B3A4A',
+                }}>
+                  <Image
+                    source={DOG_PHOTOS[key]}
+                    style={{
+                      width: 178,
+                      height: 100,
+                      position: 'absolute',
+                      right: 0,
+                    }}
+                    resizeMode="cover"
+                  />
+                </View>
               </TouchableOpacity>
             ))}
 </ScrollView>
