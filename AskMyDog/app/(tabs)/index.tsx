@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, ActivityIndicator, KeyboardAvoidingView, Platform, ImageBackground, Modal, Image, Keyboard, Animated } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, ActivityIndicator, KeyboardAvoidingView, Platform, ImageBackground, Modal, Image, Keyboard, Animated, Share } from 'react-native';
 import { useDog } from '../../store';
 import * as StoreReview from 'expo-store-review';
 
@@ -42,6 +42,21 @@ export default function HomeScreen() {
       useNativeDriver: false,
     }).start(() => setHeaderCollapsed(!headerCollapsed));
 }      
+
+  async function handleShare(dogResponse: string, question: string, easterEgg?: string) {
+      const openers = [
+      `My dog has opinions.`,
+      `I consulted the guardian of our household.`,
+      `Official statement from ${dog.name}:`,
+      `My dog was asked. My dog responded.`,
+      `${dog.name} has something to say.`,
+      `I asked. ${dog.name} answered. Make of this what you will.`,
+    ];
+    const opener = openers[Math.floor(Math.random() * openers.length)];
+    const achievement = easterEgg ? `\n🏆 Achievement Unlocked: ${easterEgg}\n` : '';
+    const message = `${opener}\n\n"${question}"\n\n${dogResponse}${achievement}\n— ${dog.name}, ${dog.self_identity} \n\n 🐾 Ask My Dog`;
+    await Share.share({ message });
+  }
 
   async function askDog() {
     if (!question.trim()) return;
@@ -165,7 +180,10 @@ export default function HomeScreen() {
                 <Text style={styles.dogText}>{entry.response}</Text>
                 {entry.trainer ? <Text style={styles.trainerText}>🎓 {entry.trainer}</Text> : null}
                 {entry.easter_egg ? <Text style={styles.achievementText}>🏆 Achievement Unlocked: {entry.easter_egg}
-                </Text> : null}            
+                </Text> : null} 
+              <TouchableOpacity onPress={() => handleShare(entry.response, entry.question, entry.easter_egg)} style={{ marginTop: 8, alignSelf: 'flex-start' }}>
+                <Text style={{ fontSize: 13, color: '#4A6278' }}>Share 🐾</Text>
+              </TouchableOpacity>      
               </View>
             </View>
           </View>
