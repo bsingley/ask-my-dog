@@ -5,10 +5,18 @@ import React from 'react';
 import { HapticTab } from '@/components/haptic-tab';
 import { Ionicons } from '@expo/vector-icons';
 import { useColorScheme } from '@/hooks/use-color-scheme';
+import { requestNotificationPermission, scheduleDogTagNotifications } from '../notifications';
+
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
   const insets = useSafeAreaInsets();
+
+  React.useEffect(() => {
+  requestNotificationPermission().then(granted => {
+    if (granted) scheduleDogTagNotifications();
+  });
+  }, []); 
 
   return (
     <Tabs
