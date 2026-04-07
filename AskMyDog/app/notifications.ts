@@ -42,19 +42,20 @@ export async function scheduleDogTagNotifications(dogName: string = 'Your dog') 
       name: 'Dog Tags',
       importance: Notifications.AndroidImportance.DEFAULT,
     });
+  }
 
-    // Test notification — fires in 30 seconds. Remove before submitting to App Store.
-    await Notifications.scheduleNotificationAsync({
+  // Test notification — fires in 30 seconds. Remove before submitting to App Store.
+  await Notifications.scheduleNotificationAsync({
     content: {
-        title: `🐾 ${dogName} has a message`,
-        body: MESSAGES[0],
+      title: `🐾 ${dogName} has a message`,
+      body: MESSAGES[0],
+      data: { dogTagMessage: MESSAGES[0] },
     },
     trigger: {
-        type: Notifications.SchedulableTriggerInputTypes.TIME_INTERVAL,
-        seconds: 30,
+      type: Notifications.SchedulableTriggerInputTypes.TIME_INTERVAL,
+      seconds: 30,
     },
-    });
-  }
+  });
 
   // Schedule 3 notifications per week at random times
   const daysOfWeek = [1, 3, 5]; // Mon, Wed, Fri
