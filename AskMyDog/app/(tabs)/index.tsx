@@ -1,10 +1,10 @@
 import React, { useState, useRef } from 'react';
 import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, ActivityIndicator, KeyboardAvoidingView, Platform, ImageBackground, Modal, Image, Keyboard, Animated, Share } from 'react-native';
-import { useDog } from '../../store';
+import { useDog, useDogTagMessage } from '../../store';
 import * as StoreReview from 'expo-store-review';
 import * as Print from 'expo-print';
 import * as Sharing from 'expo-sharing';
-import * as FileSystem from 'expo-file-system';
+import * as FileSystem from 'expo-file-system/legacy';
 
 const RAILWAY_URL = 'https://ask-my-dog-production.up.railway.app';
 const DOG_PHOTOS: Record<string, any> = {
@@ -29,6 +29,19 @@ export default function HomeScreen() {
   const [history, setHistory] = useState<{ question: string; response: string; trainer: string; easter_egg?: string }[]>([]);
   const [loading, setLoading] = useState(false);
   const [dog] = useDog();
+  const [dogTagMessage, setDogTagMessage] = useDogTagMessage();
+
+  React.useEffect(() => {
+    if (dogTagMessage) {
+      setHistory(prev => [...prev, {
+        question: '🐾 Dog Tag',
+        response: dogTagMessage,
+        trainer: '',
+        easter_egg: undefined,
+      }]);
+      setDogTagMessage(null);
+    }
+  }, [dogTagMessage]);
   const [drama, setDrama] = useState('low');
   const [style, setStyle] = useState('doggish');
   const [dramaOpen, setDramaOpen] = useState(false);

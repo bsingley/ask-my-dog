@@ -6,17 +6,27 @@ import { HapticTab } from '@/components/haptic-tab';
 import { Ionicons } from '@expo/vector-icons';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { requestNotificationPermission, scheduleDogTagNotifications } from './notifications';
-
+import * as Notifications from 'expo-notifications';
+import { useDog, setDogTagMessage } from '../../store';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
   const insets = useSafeAreaInsets();
 
+  const [dog] = useDog();
+
   React.useEffect(() => {
-  requestNotificationPermission().then(granted => {
-    if (granted) scheduleDogTagNotifications();
-  });
-  }, []); 
+    requestNotificationPermission().then(granted => {
+      if (granted) scheduleDogTagNotifications(dog.name);
+    });
+
+    const subscription = Notifications.addNotificationResponseReceivedListener(response => {
+      const message = response.notification.request.content.data?.dogTagMessage;
+      if (message) setDogTagMessage(message);
+    });
+
+    return () => subscription.remove();
+  }, []);
 
   return (
     <Tabs

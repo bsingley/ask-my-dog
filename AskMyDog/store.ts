@@ -17,6 +17,25 @@ export const defaultDog = {
 
 let dog = { ...defaultDog };
 let listeners: Array<(d: typeof defaultDog) => void> = [];
+let dogTagMessage: string | null = null;
+let tagListeners: Array<(m: string | null) => void> = [];
+
+export function setDogTagMessage(message: string | null) {
+  dogTagMessage = message;
+  tagListeners.forEach(fn => fn(message));
+}
+
+export function useDogTagMessage(): [string | null, typeof setDogTagMessage] {
+  const [value, setValue] = React.useState(dogTagMessage);
+  React.useEffect(() => {
+    tagListeners.push(setValue);
+    return () => {
+      tagListeners = tagListeners.filter(fn => fn !== setValue);
+    };
+  }, []);
+  return [value, setDogTagMessage];
+}
+
 
 export function getDog() {
   return dog;

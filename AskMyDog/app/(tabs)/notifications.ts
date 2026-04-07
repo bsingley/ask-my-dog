@@ -62,8 +62,9 @@ export async function scheduleDogTagNotifications(dogName: string = 'Your dog') 
     const message = MESSAGES[Math.floor(Math.random() * MESSAGES.length)];
     await Notifications.scheduleNotificationAsync({
       content: {
-        title: "🐾 Dog Tag",
+        title: `🐾 ${dogName} has a message`,
         body: message,
+        data: { dogTagMessage: message },
       },
       trigger: {
         type: Notifications.SchedulableTriggerInputTypes.WEEKLY,
