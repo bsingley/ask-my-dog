@@ -4,6 +4,7 @@ import { useDog } from '../../store';
 import * as StoreReview from 'expo-store-review';
 import * as Print from 'expo-print';
 import * as Sharing from 'expo-sharing';
+import * as FileSystem from 'expo-file-system';
 
 const RAILWAY_URL = 'https://ask-my-dog-production.up.railway.app';
 const DOG_PHOTOS: Record<string, any> = {
@@ -84,10 +85,14 @@ export default function HomeScreen() {
       </body></html>
     `;
 
-    const { uri } = await Print.printToFileAsync({ html, base64: false });
-    const filename = `${dog.name.replace(/\s+/g, '_')}_Case_Files.pdf`;
-      await Sharing.shareAsync(uri, { mimeType: 'application/pdf', dialogTitle: filename, UTI: 'com.adobe.pdf' });
-  }
+    const now = new Date();
+    const stamp = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+    const { uri } = await Print.printToFileAsync({ html });
+    const filename = `${dog.name.replace(/\s+/g, '_')}_Case_Files_${stamp}.pdf`;
+    const newUri = uri.substring(0, uri.lastIndexOf('/') + 1) + filename;
+    await FileSystem.moveAsync({ from: uri, to: newUri });
+    await Sharing.shareAsync(newUri, { mimeType: 'application/pdf', UTI: 'com.adobe.pdf' });
+   }
 
   async function askDog() {
     if (!question.trim()) return;
