@@ -1,7 +1,31 @@
-import { ScrollView, Text, TouchableOpacity, Linking, StyleSheet, View } from 'react-native';
+import { ScrollView, Text, TouchableOpacity, Linking, StyleSheet, View, Switch } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import * as Notifications from 'expo-notifications';
+import { scheduleDogTagNotifications } from './notifications';
 
 export default function AboutScreen() {
-  return (
+    const [notificationsEnabled, setNotificationsEnabled] = useState(false);
+
+    useEffect(() => {
+        Notifications.getPermissionsAsync().then(({ status }) => {
+        setNotificationsEnabled(status === 'granted');
+        });
+    }, []);
+
+    async function toggleNotifications(value: boolean) {
+        if (value) {
+        const { status } = await Notifications.requestPermissionsAsync();
+        if (status === 'granted') {
+            await scheduleDogTagNotifications();
+            setNotificationsEnabled(true);
+        }
+        } else {
+        await Notifications.cancelAllScheduledNotificationsAsync();
+        setNotificationsEnabled(false);
+        }
+    }
+
+return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
 
         <Text style={styles.heading}>🐾 Ask My Dog</Text>
@@ -12,6 +36,20 @@ export default function AboutScreen() {
             She didn't help build this app at all, but she supervised from the couch.
         </Text>
 
+        <View style={styles.divider} />
+
+        <View style={styles.toggleRow}>
+            <View>
+                <Text style={styles.toggleLabel}>🐾 Dog Tags</Text>
+                <Text style={styles.toggleSub}>Luna checks in a few times a week</Text>
+            </View>
+            <Switch
+                value={notificationsEnabled}
+                onValueChange={toggleNotifications}
+                trackColor={{ false: '#C4A882', true: '#2B3A4A' }}
+                thumbColor={'#F5EFE6'}
+            />
+            </View>
         <View style={styles.divider} />
 
         <TouchableOpacity style={styles.button} onPress={() => Linking.openURL('mailto:beth.singley@gmaill.com?subject=Ask My Dog Feedback')}>
@@ -45,5 +83,7 @@ const styles = StyleSheet.create({
   buttonText: { color: '#F5EFE6', fontSize: 16, fontWeight: '600' },
   link: { color: '#4A6278', fontSize: 13, marginBottom: 12, textDecorationLine: 'underline' },
   copyright: { fontSize: 12, color: '#C4A882', marginTop: 24, textAlign: 'center' },
-
+  toggleRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '100%', marginBottom: 8 },
+  toggleLabel: { fontSize: 16, fontWeight: '600', color: '#2B3A4A', marginBottom: 2 },
+  toggleSub: { fontSize: 13, color: '#4A6278' },
 });
