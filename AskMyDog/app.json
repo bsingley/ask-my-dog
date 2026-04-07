@@ -15,44 +15,49 @@
         "ITSAppUsesNonExemptEncryption": false,
         "NSUserNotificationsUsageDescription": "Your dog has things to say. Allow notifications to get occasional app check-ins from your pup."
       }
-      }
-    },
-    "android": {
-      "adaptiveIcon": {
-        "backgroundColor": "#E6F4FE"
-      },
-      "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false,
-      "package": "com.bsingley.AskMyDog",
-      "versionCode": 2
-    },
-    "web": {
-      "output": "static",
-      "favicon": "./assets/images/favicon.png"
-    },
-    "plugins": [
-      "expo-router",
-      [
-        "expo-splash-screen",
-        {
-          "image": "./assets/images/splash.png",
-          "imageWidth": 200,
-          "resizeMode": "contain",
-          "backgroundColor": "#ffffff",
-          "dark": {
-            "backgroundColor": "#000000"
-          }
-        }
-      ]
-    ],
-    "experiments": {
-      "typedRoutes": true,
-      "reactCompiler": true
     },
     "extra": {
-      "router": {},
       "eas": {
         "projectId": "8d601aea-9e12-4e29-82a7-154841102de8"
       }
     }
+  },
+  "android": {
+    "adaptiveIcon": {
+      "backgroundColor": "#E6F4FE"
+    },
+    "edgeToEdgeEnabled": true,
+    "predictiveBackGestureEnabled": false,
+    "package": "com.bsingley.AskMyDog",
+    "versionCode": 2
+  },
+  "web": {
+    "output": "static",
+    "favicon": "./assets/images/favicon.png"
+  },
+  "plugins": [
+    "expo-router",
+    [
+      "expo-splash-screen",
+      {
+        "image": "./assets/images/splash.png",
+        "imageWidth": 200,
+        "resizeMode": "contain",
+        "backgroundColor": "#ffffff",
+        "dark": {
+          "backgroundColor": "#000000"
+        }
+      }
+    ]
+  ],
+  "experiments": {
+    "typedRoutes": true,
+    "reactCompiler": true
+  },
+  "extra": {
+    "router": {},
+    "eas": {
+      "projectId": "8d601aea-9e12-4e29-82a7-154841102de8"
+    }
+  }
 }
