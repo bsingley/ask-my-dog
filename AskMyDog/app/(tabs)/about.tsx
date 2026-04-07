@@ -1,7 +1,7 @@
 import { ScrollView, Text, TouchableOpacity, Linking, StyleSheet, View, Switch } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import * as Notifications from 'expo-notifications';
-import { scheduleDogTagNotifications } from './notifications';
+import { scheduleDogTagNotifications } from '../notifications';
 import { useDog } from '../../store';
 import * as Print from 'expo-print';
 import * as Sharing from 'expo-sharing';

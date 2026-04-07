@@ -5,7 +5,7 @@ import React from 'react';
 import { HapticTab } from '@/components/haptic-tab';
 import { Ionicons } from '@expo/vector-icons';
 import { useColorScheme } from '@/hooks/use-color-scheme';
-import { requestNotificationPermission, scheduleDogTagNotifications } from './notifications';
+import { requestNotificationPermission, scheduleDogTagNotifications } from '../notifications';
 import * as Notifications from 'expo-notifications';
 import { useDog, setDogTagMessage } from '../../store';
 
@@ -22,7 +22,7 @@ export default function TabLayout() {
 
     const subscription = Notifications.addNotificationResponseReceivedListener(response => {
       const message = response.notification.request.content.data?.dogTagMessage;
-      if (message) setDogTagMessage(message);
+      if (message) setDogTagMessage(String(message));
     });
 
     return () => subscription.remove();
