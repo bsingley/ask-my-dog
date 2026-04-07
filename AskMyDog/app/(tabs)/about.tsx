@@ -3,6 +3,8 @@ import React, { useState, useEffect } from 'react';
 import * as Notifications from 'expo-notifications';
 import { scheduleDogTagNotifications } from './notifications';
 import { useDog } from '../../store';
+import * as Print from 'expo-print';
+import * as Sharing from 'expo-sharing';
 
 export default function AboutScreen() {
     const [notificationsEnabled, setNotificationsEnabled] = useState(false);
@@ -43,8 +45,9 @@ return (
         <View style={styles.dogTagsBox}>
             <View style={styles.toggleRow}>
                 <View style={{ flex: 1, marginRight: 12 }}>
-                <Text style={styles.toggleLabel}>🐾 Dog Tags — app notifications</Text>
-                <Text style={styles.toggleSub}>
+                    <Text style={styles.toggleLabel}>Notifications</Text>
+                    <Text style={styles.toggleSub}>Dog Tags 🐾 </Text>
+                    <Text style={styles.toggleSub}>
                     {notificationsEnabled
                     ? `${dog.name} will send you app notifications a few times a week with an update from the field.`
                     : `Get occasional app notifications from ${dog.name}. No spam — just a few times a week.`}
@@ -96,8 +99,8 @@ const styles = StyleSheet.create({
   link: { color: '#4A6278', fontSize: 13, marginBottom: 12, textDecorationLine: 'underline' },
   copyright: { fontSize: 12, color: '#C4A882', marginTop: 24, textAlign: 'center' },
   toggleRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '100%', marginBottom: 8 },
-  toggleLabel: { fontSize: 16, fontWeight: '600', color: '#2B3A4A', marginBottom: 2 },
-  toggleSub: { fontSize: 13, color: '#4A6278' },
+  toggleLabel: { fontSize: 18, fontWeight: '600', color: '#2B3A4A', marginBottom: 10 },
+  toggleSub: { fontSize: 16, color: '#4A6278', marginBottom: 6 },
   dogTagsBox: { width: '100%', backgroundColor: '#E8D5B7', borderRadius: 12, padding: 16, marginBottom: 8 },
   dogTagsExample: { fontSize: 13, color: '#4A6278', fontStyle: 'italic', marginTop: 10, lineHeight: 18 },
 });

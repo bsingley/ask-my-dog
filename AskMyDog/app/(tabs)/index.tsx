@@ -2,6 +2,8 @@ import React, { useState, useRef } from 'react';
 import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, ActivityIndicator, KeyboardAvoidingView, Platform, ImageBackground, Modal, Image, Keyboard, Animated, Share } from 'react-native';
 import { useDog } from '../../store';
 import * as StoreReview from 'expo-store-review';
+import * as Print from 'expo-print';
+import * as Sharing from 'expo-sharing';
 
 const RAILWAY_URL = 'https://ask-my-dog-production.up.railway.app';
 const DOG_PHOTOS: Record<string, any> = {
@@ -56,6 +58,35 @@ export default function HomeScreen() {
     const achievement = easterEgg ? `\n🏆 Achievement Unlocked: ${easterEgg}\n` : '';
     const message = `${opener}\n\n"${question}"\n\n${dogResponse}${achievement}\n— ${dog.name}, ${dog.self_identity} \n\n 🐾 Ask My Dog`;
     await Share.share({ message });
+  }
+
+  async function handleExport() {
+    if (history.length === 0) return;
+    const date = new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+    const entries = history
+      .filter(e => e.trainer)
+      .map(e => `
+        <div style="margin-bottom: 24px;">
+          <p style="color: #4A6278; font-style: italic; margin-bottom: 4px;">"${e.question}"</p>
+          <p style="color: #2B3A4A;">🎓 ${e.trainer}</p>
+        </div>
+      `).join('');
+
+    if (!entries) return;
+
+    const html = `
+      <html><body style="font-family: Georgia, serif; padding: 40px; background: #F5EFE6; color: #2B3A4A;">
+        <h1 style="color: #2B3A4A;">🐾 ${dog.name}'s Case Files</h1>
+        <p style="color: #4A6278; font-size: 14px;">${date}</p>
+        <hr style="border-color: #C4A882; margin: 24px 0;" />
+        ${entries}
+        <p style="color: #C4A882; font-size: 12px; margin-top: 40px;">Ask My Dog</p>
+      </body></html>
+    `;
+
+    const { uri } = await Print.printToFileAsync({ html, base64: false });
+    const filename = `${dog.name.replace(/\s+/g, '_')}_Case_Files.pdf`;
+      await Sharing.shareAsync(uri, { mimeType: 'application/pdf', dialogTitle: filename, UTI: 'com.adobe.pdf' });
   }
 
   async function askDog() {
@@ -181,14 +212,21 @@ export default function HomeScreen() {
                 {entry.trainer ? <Text style={styles.trainerText}>🎓 {entry.trainer}</Text> : null}
                 {entry.easter_egg ? <Text style={styles.achievementText}>🏆 Achievement Unlocked: {entry.easter_egg}
                 </Text> : null} 
-              <TouchableOpacity onPress={() => handleShare(entry.response, entry.question, entry.easter_egg)} style={{ marginTop: 8, alignSelf: 'flex-start' }}>
-                <Text style={{ fontSize: 13, color: '#4A6278' }}>Share 🐾</Text>
-              </TouchableOpacity>      
+              <View style={{ flexDirection: 'row', gap: 12, marginTop: 8 }}>
+                <TouchableOpacity onPress={() => handleShare(entry.response, entry.question, entry.easter_egg)}>
+                  <Text style={{ fontSize: 13, color: '#4A6278' }}>🐾 Share </Text>
+                </TouchableOpacity>
+                {entry.trainer ? (
+                  <TouchableOpacity onPress={handleExport}>
+                    <Text style={{ fontSize: 13, color: '#4A6278' }}>📋 Case Files</Text>
+                  </TouchableOpacity>
+                ) : null}
+              </View>    
               </View>
             </View>
           </View>
         ))}
-        {loading && <ActivityIndicator size="large" color="#b05e2a" style={{ margin: 20 }} />}
+        {loading && <ActivityIndicator size="large" color="#b05e2a" style={{ margin: 20 }} />}        f
       </ScrollView>
       <View style={styles.inputRow}>
         <TextInput
@@ -237,6 +275,8 @@ const styles = StyleSheet.create({
   input: { flex: 1, backgroundColor: '#fff', borderRadius: 20, paddingHorizontal: 16, paddingVertical: 8, fontSize: 16, borderWidth: 0.5, borderColor: '#C4A882', color: '#2B3A4A' },
   button: { marginLeft: 8, backgroundColor: '#2B3A4A', borderRadius: 20, paddingHorizontal: 20, justifyContent: 'center' },
   buttonText: { color: '#F5EFE6', fontWeight: '600', fontSize: 14 },
+  exportButton: { marginHorizontal: 12, marginBottom: 8, backgroundColor: '#E8D5B7', borderRadius: 12, paddingVertical: 10, alignItems: 'center', borderWidth: 0.5, borderColor: '#C4A882' },
+  exportButtonText: { color: '#2B3A4A', fontSize: 18, fontWeight: '600' },
   chip: {}, chipActive: {}, chipText: {},
   dogRow: { flexDirection: 'row', alignItems: 'flex-end', gap: 8, marginBottom: 6 },
   dogAvatar: { width: 28, height: 28, borderRadius: 14, backgroundColor: '#4A6278', alignItems: 'center', justifyContent: 'center', flexShrink: 0 },
