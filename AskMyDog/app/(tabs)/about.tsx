@@ -2,9 +2,11 @@ import { ScrollView, Text, TouchableOpacity, Linking, StyleSheet, View, Switch }
 import React, { useState, useEffect } from 'react';
 import * as Notifications from 'expo-notifications';
 import { scheduleDogTagNotifications } from './notifications';
+import { useDog } from '../../store';
 
 export default function AboutScreen() {
     const [notificationsEnabled, setNotificationsEnabled] = useState(false);
+    const [dog] = useDog();
 
     useEffect(() => {
         Notifications.getPermissionsAsync().then(({ status }) => {
@@ -16,7 +18,7 @@ export default function AboutScreen() {
         if (value) {
         const { status } = await Notifications.requestPermissionsAsync();
         if (status === 'granted') {
-            await scheduleDogTagNotifications();
+            await scheduleDogTagNotifications(dog.name);
             setNotificationsEnabled(true);
         }
         } else {
@@ -38,18 +40,28 @@ return (
 
         <View style={styles.divider} />
 
-        <View style={styles.toggleRow}>
-            <View>
-                <Text style={styles.toggleLabel}>🐾 Dog Tags</Text>
-                <Text style={styles.toggleSub}>Luna checks in a few times a week</Text>
-            </View>
-            <Switch
+        <View style={styles.dogTagsBox}>
+            <View style={styles.toggleRow}>
+                <View style={{ flex: 1, marginRight: 12 }}>
+                <Text style={styles.toggleLabel}>🐾 Dog Tags — app notifications</Text>
+                <Text style={styles.toggleSub}>
+                    {notificationsEnabled
+                    ? `${dog.name} will send you app notifications a few times a week with an update from the field.`
+                    : `Get occasional app notifications from ${dog.name}. No spam — just a few times a week.`}
+                </Text>
+                </View>
+                <Switch
                 value={notificationsEnabled}
                 onValueChange={toggleNotifications}
                 trackColor={{ false: '#C4A882', true: '#2B3A4A' }}
                 thumbColor={'#F5EFE6'}
-            />
-            </View>
+                />
+          </View>
+          <Text style={styles.dogTagsExample}>
+            {`"I have been watching the door for 4 hours. No one has come. I am filing a report."`}
+          </Text>
+        </View>
+
         <View style={styles.divider} />
 
         <TouchableOpacity style={styles.button} onPress={() => Linking.openURL('mailto:beth.singley@gmaill.com?subject=Ask My Dog Feedback')}>
@@ -86,4 +98,6 @@ const styles = StyleSheet.create({
   toggleRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '100%', marginBottom: 8 },
   toggleLabel: { fontSize: 16, fontWeight: '600', color: '#2B3A4A', marginBottom: 2 },
   toggleSub: { fontSize: 13, color: '#4A6278' },
+  dogTagsBox: { width: '100%', backgroundColor: '#E8D5B7', borderRadius: 12, padding: 16, marginBottom: 8 },
+  dogTagsExample: { fontSize: 13, color: '#4A6278', fontStyle: 'italic', marginTop: 10, lineHeight: 18 },
 });

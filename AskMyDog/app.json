@@ -12,7 +12,9 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.bsingley.AskMyDog",
       "infoPlist": {
-        "ITSAppUsesNonExemptEncryption": false
+        "ITSAppUsesNonExemptEncryption": false,
+        "NSUserNotificationsUsageDescription": "Your dog has things to say. Allow notifications to get occasional app check-ins from your pup."
+      }
       }
     },
     "android": {
@@ -53,5 +55,4 @@
         "projectId": "8d601aea-9e12-4e29-82a7-154841102de8"
       }
     }
-  }
 }

@@ -34,8 +34,8 @@ export async function requestNotificationPermission() {
   return status === 'granted';
 }
 
-export async function scheduleDogTagNotifications() {
-  await Notifications.cancelAllScheduledNotificationsAsync();
+export async function scheduleDogTagNotifications(dogName: string = 'Your dog') {
+    await Notifications.cancelAllScheduledNotificationsAsync();
 
   if (Platform.OS === 'android') {
     await Notifications.setNotificationChannelAsync('dog-tags', {
@@ -46,7 +46,7 @@ export async function scheduleDogTagNotifications() {
     // Test notification — fires in 30 seconds. Remove before submitting to App Store.
     await Notifications.scheduleNotificationAsync({
     content: {
-        title: "🐾 Dog Tag",
+        title: `🐾 ${dogName} has a message`,
         body: MESSAGES[0],
     },
     trigger: {
