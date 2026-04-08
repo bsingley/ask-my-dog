@@ -20,6 +20,9 @@
       "eas": {
         "projectId": "8d601aea-9e12-4e29-82a7-154841102de8"
       }
+    },
+    "android": {
+      "package": "com.bsingley.AskMyDog"
     }
   },
   "android": {

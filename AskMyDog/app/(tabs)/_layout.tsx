@@ -7,13 +7,15 @@ import { Ionicons } from '@expo/vector-icons';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { requestNotificationPermission, scheduleDogTagNotifications } from '../notifications';
 import * as Notifications from 'expo-notifications';
-import { useDog, setDogTagMessage } from '../../store';
+import { useDog, setDogTagMessage, loadDog, loadAchievements } from '../../store';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
   const insets = useSafeAreaInsets();
 
   const [dog] = useDog();
+  React.useEffect(() => { loadDog(); }, []);
+  React.useEffect(() => { loadAchievements(); }, []);
 
   React.useEffect(() => {
     requestNotificationPermission().then(granted => {
