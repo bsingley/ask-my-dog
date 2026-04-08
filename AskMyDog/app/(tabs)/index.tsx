@@ -1,10 +1,11 @@
 import React, { useState, useRef } from 'react';
 import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, ActivityIndicator, KeyboardAvoidingView, Platform, ImageBackground, Modal, Image, Keyboard, Animated, Share } from 'react-native';
-import { useDog, useDogTagMessage } from '../../store';
+import { useDog, useDogTagMessage, useAchievements } from '../../store';
 import * as StoreReview from 'expo-store-review';
 import * as Print from 'expo-print';
 import * as Sharing from 'expo-sharing';
 import * as FileSystem from 'expo-file-system/legacy';
+import { Image as ExpoImage } from 'expo-image';
 
 const RAILWAY_URL = 'https://ask-my-dog-production.up.railway.app';
 const DOG_PHOTOS: Record<string, any> = {
@@ -23,6 +24,8 @@ const DOG_PHOTOS: Record<string, any> = {
   'dog_photo_13': require('../../assets/images/dog_photo_13.png'),
   'dog_photo_14': require('../../assets/images/dog_photo_14.png'),
 };
+  const DOG_RUNNING = require('../../assets/images/dog_running.gif');
+
 
 export default function HomeScreen() {
   const [question, setQuestion] = useState('');
@@ -30,6 +33,7 @@ export default function HomeScreen() {
   const [loading, setLoading] = useState(false);
   const [dog] = useDog();
   const [dogTagMessage, setDogTagMessage] = useDogTagMessage();
+  const [, unlockAchievement] = useAchievements();
 
   React.useEffect(() => {
     if (dogTagMessage) {
@@ -134,6 +138,7 @@ export default function HomeScreen() {
           trainer: data.trainer_note,
           easter_egg: data.easter_egg,
         }];
+        if (data.easter_egg) unlockAchievement(data.easter_egg);
         if (newHistory.length === 5) {
           StoreReview.isAvailableAsync().then(available => {
             if (available) StoreReview.requestReview();
@@ -228,8 +233,12 @@ export default function HomeScreen() {
               <View style={styles.dogBubble}>
                 <Text style={styles.dogText}>{entry.response}</Text>
                 {entry.trainer ? <Text style={styles.trainerText}>🎓 {entry.trainer}</Text> : null}
-                {entry.easter_egg ? <Text style={styles.achievementText}>🏆 Achievement Unlocked: {entry.easter_egg}
-                </Text> : null} 
+                {entry.easter_egg ? (
+                  <View style={styles.achievementBanner}>
+                    <ExpoImage source={DOG_RUNNING} style={styles.runningDog} contentFit="contain" />
+                    <Text style={styles.achievementText}>🏆 {entry.easter_egg}</Text>
+                  </View>
+                ) : null}
               <View style={{ flexDirection: 'row', gap: 12, marginTop: 8 }}>
                 <TouchableOpacity onPress={() => handleShare(entry.response, entry.question, entry.easter_egg)}>
                   <Text style={{ fontSize: 13, color: '#4A6278' }}>🐾 Share </Text>
@@ -288,7 +297,9 @@ const styles = StyleSheet.create({
   dogBubble: { alignSelf: 'flex-start', backgroundColor: '#E8D5B7', borderRadius: 15, borderBottomLeftRadius: 4, padding: 10, maxWidth: '80%' },
   dogText: { fontSize: 16, color: '#2B3A4A' },
   trainerText: { fontSize: 14, color: '#4A6278', marginTop: 6, fontStyle: 'italic', borderLeftWidth: 2, borderColor: '#C4A882', paddingLeft: 6 },
-  achievementText: { fontSize: 16, color: '#F5EFE6', fontWeight: '600', marginTop: 6, backgroundColor: '#2B3A4A', borderRadius: 20, paddingHorizontal: 10, paddingVertical: 3, alignSelf: 'flex-start' },
+  achievementBanner: { marginTop: 8, backgroundColor: '#2B3A4A', borderRadius: 12, paddingHorizontal: 10, paddingVertical: 6, overflow: 'hidden' },
+  achievementText: { fontSize: 14, color: '#F5EFE6', fontWeight: '600' },
+  runningDog: { width: '100%', height: 60, resizeMode: 'contain' },
   inputRow: { flexDirection: 'row', padding: 12, borderTopWidth: 0.5, borderColor: '#C4A882', backgroundColor: '#F5EFE6' },
   input: { flex: 1, backgroundColor: '#fff', borderRadius: 20, paddingHorizontal: 16, paddingVertical: 8, fontSize: 16, borderWidth: 0.5, borderColor: '#C4A882', color: '#2B3A4A' },
   button: { marginLeft: 8, backgroundColor: '#2B3A4A', borderRadius: 20, paddingHorizontal: 20, justifyContent: 'center' },
