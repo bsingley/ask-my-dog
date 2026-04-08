@@ -244,7 +244,7 @@ export default function HomeScreen() {
             </View>
           </View>
         ))}
-        {loading && <ActivityIndicator size="large" color="#b05e2a" style={{ margin: 20 }} />}        f
+        {loading && <ActivityIndicator size="large" color="#b05e2a" style={{ margin: 20 }} />}        
       </ScrollView>
       <View style={styles.inputRow}>
         <TextInput
