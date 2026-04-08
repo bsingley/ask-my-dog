@@ -38,18 +38,20 @@ function RunningDogBanner({ achievement }: { achievement: string }) {
     }).start();
   }, []);
 
-return (
+  return (
     <View style={{ marginTop: 8, backgroundColor: '#2B3A4A', borderRadius: 12, overflow: 'hidden', height: 130 }}>
-      <Text style={{ color: '#C4A882', fontSize: 14, fontWeight: '700', letterSpacing: 1.5, textTransform: 'uppercase', paddingHorizontal: 10, paddingTop: 8 }}> 🏆 Achievement Unlocked</Text>
-      <Text style={{ color: '#F5EFE6', fontSize: 16, fontWeight: '700', paddingHorizontal: 10, position: 'absolute', bottom: 8 }}> {achievement}</Text>
-      <Animated.Image
-        source={DOG_RUNNING}
-        style={{ position: 'absolute', height: 90, width: 160, top: 20, transform: [{ translateX }] }}
-        resizeMode="contain"
-      />
+      <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 10, paddingTop: 8 }}>
+        <Text style={{ color: '#C4A882', fontSize: 11, fontWeight: '700', letterSpacing: 1.5, textTransform: 'uppercase' }}>🏆 Achievement Unlocked</Text>
+      </View>
+      <Text style={{ color: '#F5EFE6', fontSize: 16, fontWeight: '700', paddingHorizontal: 10, position: 'absolute', bottom: 8 }}>{achievement}</Text>
+      <Animated.View style={{ position: 'absolute', top: 20, transform: [{ translateX }] }}>
+        <ExpoImage source={DOG_RUNNING} style={{ height: 90, width: 160 }} contentFit="contain" />
+      </Animated.View>
     </View>
   );
 }
+
+
 
 export default function HomeScreen() {
   const [question, setQuestion] = useState('');
