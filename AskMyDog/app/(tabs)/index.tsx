@@ -27,7 +27,7 @@ const DOG_PHOTOS: Record<string, any> = {
   const DOG_RUNNING = require('../../assets/images/dog_running.gif');
 
 
-function RunningDogBanner({ achievement }: { achievement: string }) {
+<Text style={{ fontSize: 14, color: '#F5EFE6', fontWeight: '600' }}>🏆 Achievement Unlocked: {achievement}</Text>
   const translateX = useRef(new Animated.Value(-200)).current;
 
   React.useEffect(() => {
