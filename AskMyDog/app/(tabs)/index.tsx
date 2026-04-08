@@ -27,7 +27,7 @@ const DOG_PHOTOS: Record<string, any> = {
   const DOG_RUNNING = require('../../assets/images/dog_running.gif');
 
 
-<Text style={{ fontSize: 14, color: '#F5EFE6', fontWeight: '600' }}>🏆 Achievement Unlocked: {achievement}</Text>
+function RunningDogBanner({ achievement }: { achievement: string }) {
   const translateX = useRef(new Animated.Value(-200)).current;
 
   React.useEffect(() => {
@@ -39,14 +39,14 @@ const DOG_PHOTOS: Record<string, any> = {
   }, []);
 
   return (
-    <View style={{ marginTop: 8, backgroundColor: '#2B3A4A', borderRadius: 12, overflow: 'hidden', height: 80 }}>
+    <View style={{ marginTop: 8, backgroundColor: '#2B3A4A', borderRadius: 12, overflow: 'hidden', height: 110 }}>
       <Animated.Image
         source={DOG_RUNNING}
-        style={{ position: 'absolute', height: 70, width: 130, top: 5, transform: [{ translateX }] }}
+        style={{ position: 'absolute', height: 90, width: 160, top: 5, transform: [{ translateX }] }}
         resizeMode="contain"
       />
       <View style={{ position: 'absolute', bottom: 8, left: 10 }}>
-        <Text style={{ fontSize: 14, color: '#F5EFE6', fontWeight: '600' }}>🏆 {achievement}</Text>
+        <Text style={{ fontSize: 14, color: '#F5EFE6', fontWeight: '600' }}>🏆 Achievement Unlocked: {achievement}</Text>
       </View>
     </View>
   );
