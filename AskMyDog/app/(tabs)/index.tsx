@@ -27,6 +27,31 @@ const DOG_PHOTOS: Record<string, any> = {
   const DOG_RUNNING = require('../../assets/images/dog_running.gif');
 
 
+function RunningDogBanner({ achievement }: { achievement: string }) {
+  const translateX = useRef(new Animated.Value(400)).current;
+
+  React.useEffect(() => {
+    Animated.timing(translateX, {
+      toValue: -200,
+      duration: 3000,
+      useNativeDriver: true,
+    }).start();
+  }, []);
+
+  return (
+    <View style={{ marginTop: 8, backgroundColor: '#2B3A4A', borderRadius: 12, overflow: 'hidden', height: 80 }}>
+      <Animated.Image
+        source={DOG_RUNNING}
+        style={{ position: 'absolute', height: 70, width: 130, top: 5, transform: [{ translateX }] }}
+        resizeMode="contain"
+      />
+      <View style={{ position: 'absolute', bottom: 8, left: 10 }}>
+        <Text style={{ fontSize: 14, color: '#F5EFE6', fontWeight: '600' }}>🏆 {achievement}</Text>
+      </View>
+    </View>
+  );
+}
+
 export default function HomeScreen() {
   const [question, setQuestion] = useState('');
   const [history, setHistory] = useState<{ question: string; response: string; trainer: string; easter_egg?: string }[]>([]);
@@ -234,10 +259,7 @@ export default function HomeScreen() {
                 <Text style={styles.dogText}>{entry.response}</Text>
                 {entry.trainer ? <Text style={styles.trainerText}>🎓 {entry.trainer}</Text> : null}
                 {entry.easter_egg ? (
-                  <View style={styles.achievementBanner}>
-                    <ExpoImage source={DOG_RUNNING} style={styles.runningDog} contentFit="contain" />
-                    <Text style={styles.achievementText}>🏆 {entry.easter_egg}</Text>
-                  </View>
+                  <RunningDogBanner achievement={entry.easter_egg} />
                 ) : null}
               <View style={{ flexDirection: 'row', gap: 12, marginTop: 8 }}>
                 <TouchableOpacity onPress={() => handleShare(entry.response, entry.question, entry.easter_egg)}>
