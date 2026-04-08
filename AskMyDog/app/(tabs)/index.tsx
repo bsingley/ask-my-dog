@@ -28,11 +28,11 @@ const DOG_PHOTOS: Record<string, any> = {
 
 
 function RunningDogBanner({ achievement }: { achievement: string }) {
-  const translateX = useRef(new Animated.Value(400)).current;
+  const translateX = useRef(new Animated.Value(-200)).current;
 
   React.useEffect(() => {
     Animated.timing(translateX, {
-      toValue: -200,
+      toValue: 400,
       duration: 3000,
       useNativeDriver: true,
     }).start();
