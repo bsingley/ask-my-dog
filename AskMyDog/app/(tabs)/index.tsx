@@ -33,7 +33,7 @@ function RunningDogBanner({ achievement }: { achievement: string }) {
   React.useEffect(() => {
     Animated.timing(translateX, {
       toValue: 400,
-      duration: 3000,
+      duration: 6000,
       useNativeDriver: true,
     }).start();
   }, []);
