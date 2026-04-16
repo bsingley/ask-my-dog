@@ -243,9 +243,7 @@ export default function HomeScreen() {
                 <Text style={styles.dogText}>{entry.response}</Text>
                 {entry.trainer ? <Text style={styles.trainerText}>🎓 {entry.trainer}</Text> : null}
                {entry.easter_egg ? (
-                  <View style={styles.achievementBanner}>
-                    <Text style={styles.achievementText}>🏆 Achievement Unlocked: {entry.easter_egg}</Text>
-                  </View>
+                   <RunningDogBanner achievement={entry.easter_egg} />
                 ) : null}
               <View style={{ flexDirection: 'row', gap: 12, marginTop: 8 }}>
                 <TouchableOpacity onPress={() => handleShare(entry.response, entry.question, entry.easter_egg)}>
