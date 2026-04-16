@@ -5,53 +5,7 @@ const STORAGE_KEY = 'dog_profile';
 
 const ACHIEVEMENTS_KEY = 'achievements';
 
-const ALL_EGGS = ['Squirrel Brain', 'The Ultimate Betrayal', 'Bestest Doggo Ever Mode', 'Pure Outrage'];
-
-let achievements: string[] = [];
-let achievementListeners: Array<(a: string[]) => void> = [];
-
-export function getAchievements() {
-  return achievements;
-}
-
-export async function loadAchievements() {
-  try {
-    const saved = await AsyncStorage.getItem(ACHIEVEMENTS_KEY);
-    if (saved) {
-      achievements = JSON.parse(saved);
-      achievementListeners.forEach(fn => fn(achievements));
-    }
-  } catch (e) {
-    console.log('Failed to load achievements:', e);
-  }
-}
-
-export function unlockAchievement(name: string) {
-  if (!achievements.includes(name)) {
-    achievements = [...achievements, name];
-    achievementListeners.forEach(fn => fn(achievements));
-    AsyncStorage.setItem(ACHIEVEMENTS_KEY, JSON.stringify(achievements)).catch(e =>
-      console.log('Failed to save achievements:', e)
-    );
-  }
-}
-
-export function useAchievements(): [string[], typeof unlockAchievement] {
-  const [value, setValue] = React.useState(achievements);
-  React.useEffect(() => {
-    achievementListeners.push(setValue);
-    return () => {
-      achievementListeners = achievementListeners.filter(fn => fn !== setValue);
-    };
-  }, []);
-  return [value, unlockAchievement];
-}
-
-export { ALL_EGGS };
-
-const ACHIEVEMENTS_KEY = 'achievements';
-
-const ALL_EGGS = ['Squirrel Brain', 'The Ultimate Betrayal', 'Bestest Doggo Ever Mode', 'Pure Outrage'];
+const ALL_EGGS = ['Squirrel Brain', 'The Ultimate Betrayal', 'Bestest Doggo Ever', 'Pure Outrage'];
 
 let achievements: string[] = [];
 let achievementListeners: Array<(a: string[]) => void> = [];
