@@ -122,7 +122,7 @@ IMPORTANT: Do not default to generic dog responses. Your intelligence level and 
     easter_egg_names = {
     "squirrel": "🐿️ Squirrel Brain",
     "bath": "🛁 The Ultimate Betrayal",
-    "good dog": "🐶 Bestest Doggo Ever Mode",
+    "good dog": "🐶 Bestest Doggo Ever",
     "bad dog": "😤 Pure Outrage",
     }
 
