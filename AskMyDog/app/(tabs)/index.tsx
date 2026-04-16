@@ -242,9 +242,9 @@ export default function HomeScreen() {
               <View style={styles.dogBubble}>
                 <Text style={styles.dogText}>{entry.response}</Text>
                 {entry.trainer ? <Text style={styles.trainerText}>🎓 {entry.trainer}</Text> : null}
-               {entry.easter_egg ? (
-                   <RunningDogBanner achievement={entry.easter_egg} />
-                ) : null}
+              {entry.easter_egg ? (
+                <RunningDogBanner achievement={entry.easter_egg} />
+              ) : null}
               <View style={{ flexDirection: 'row', gap: 12, marginTop: 8 }}>
                 <TouchableOpacity onPress={() => handleShare(entry.response, entry.question, entry.easter_egg)}>
                   <Text style={{ fontSize: 13, color: '#4A6278' }}>🐾 Share </Text>
