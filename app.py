@@ -46,7 +46,7 @@ easter_eggs = {
         "instruction": "Respond with pure devastation and betrayal. This is a war crime. You trusted them. You will never trust again. The trainer note should also be traumatized."
     },
     "good dog": {
-        "achievement": "🐶 Achievement Unlocked: Bestest Doggo Ever Mode",
+        "achievement": "🐶 Achievement Unlocked: Bestest Doggo Ever",
         "instruction": "Completely abandon your personality, identity, and drama settings. You are just a very happy dog who has never had a single complex thought. Pure joy. Pure melt. The trainer note should observe the total personality collapse."
     },
     "bad dog": {
