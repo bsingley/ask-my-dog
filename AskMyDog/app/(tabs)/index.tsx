@@ -27,31 +27,6 @@ const DOG_PHOTOS: Record<string, any> = {
   const DOG_RUNNING = require('../../assets/images/dog_running.gif');
 
 
-function RunningDogBanner({ achievement }: { achievement: string }) {
-  const translateX = useRef(new Animated.Value(-200)).current;
-
-  React.useEffect(() => {
-    Animated.timing(translateX, {
-      toValue: 400,
-      duration: 6000,
-      useNativeDriver: true,
-    }).start();
-  }, []);
-
-  return (
-    <View style={{ marginTop: 8, backgroundColor: '#2B3A4A', borderRadius: 12, overflow: 'hidden', height: 130 }}>
-      <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 10, paddingTop: 8 }}>
-        <Text style={{ color: '#C4A882', fontSize: 11, fontWeight: '700', letterSpacing: 1.5, textTransform: 'uppercase' }}>🏆 Achievement Unlocked</Text>
-      </View>
-      <Text style={{ color: '#F5EFE6', fontSize: 16, fontWeight: '700', paddingHorizontal: 10, position: 'absolute', bottom: 8 }}>{achievement}</Text>
-      <Animated.View style={{ position: 'absolute', top: 20, transform: [{ translateX }] }}>
-        <ExpoImage source={DOG_RUNNING} style={{ height: 90, width: 160 }} contentFit="contain" />
-      </Animated.View>
-    </View>
-  );
-}
-
-
 
 export default function HomeScreen() {
   const [question, setQuestion] = useState('');
@@ -259,8 +234,10 @@ export default function HomeScreen() {
               <View style={styles.dogBubble}>
                 <Text style={styles.dogText}>{entry.response}</Text>
                 {entry.trainer ? <Text style={styles.trainerText}>🎓 {entry.trainer}</Text> : null}
-                {entry.easter_egg ? (
-                  <RunningDogBanner achievement={entry.easter_egg} />
+               {entry.easter_egg ? (
+                  <View style={styles.achievementBanner}>
+                    <Text style={styles.achievementText}>🏆 Achievement Unlocked: {entry.easter_egg}</Text>
+                  </View>
                 ) : null}
               <View style={{ flexDirection: 'row', gap: 12, marginTop: 8 }}>
                 <TouchableOpacity onPress={() => handleShare(entry.response, entry.question, entry.easter_egg)}>
