@@ -48,17 +48,17 @@ export default function TabLayout() {
         tabBarButton: HapticTab,
       }}>
       <Tabs.Screen
-        name="index"
-        options={{
-          title: 'Chat',
-          tabBarIcon: ({ color }) => <Ionicons size={26} name="chatbubbles" color={color} />,
-        }}
-      />
-      <Tabs.Screen
         name="explore"
         options={{
           title: 'My Dog',
           tabBarIcon: ({ color }) => <Ionicons size={26} name="paw" color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="index"
+        options={{
+          title: 'Chat',
+          tabBarIcon: ({ color }) => <Ionicons size={26} name="chatbubbles" color={color} />,
         }}
       />
       <Tabs.Screen
