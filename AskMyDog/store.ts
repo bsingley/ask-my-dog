@@ -5,7 +5,7 @@ const STORAGE_KEY = 'dog_profile';
 
 const ACHIEVEMENTS_KEY = 'achievements';
 
-const ALL_EGGS = ['Squirrel Brain', 'The Ultimate Betrayal', 'Bestest Doggo Ever', 'Pure Outrage'];
+export const ALL_EGGS = ['🐿️ Squirrel Brain', '🛁 The Ultimate Betrayal', '🐶 Bestest Doggo Ever Mode', '😤 Pure Outrage'];
 
 let achievements: string[] = [];
 let achievementListeners: Array<(a: string[]) => void> = [];
@@ -46,8 +46,6 @@ export function useAchievements(): [string[], typeof unlockAchievement] {
   }, []);
   return [value, unlockAchievement];
 }
-
-export { ALL_EGGS };
 
 export const defaultDog = {
   name: 'Luna',

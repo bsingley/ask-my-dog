@@ -7,17 +7,17 @@ import * as Print from 'expo-print';
 import * as Sharing from 'expo-sharing';
 
 const BADGES: Record<string, any> = {
-  'The Ultimate Betrayal': require('../../assets/images/badge_bath.png'),
-  'Squirrel Brain': require('../../assets/images/badge_squirrel.png'),
-  'Bestest Doggo Ever': require('../../assets/images/badge_good_dog.png'),
-  'Pure Outrage': require('../../assets/images/badge_bad_dog.png'),
+  '🛁 The Ultimate Betrayal': require('../../assets/images/badge_bath.png'),
+  '🐿️ Squirrel Brain': require('../../assets/images/badge_squirrel.png'),
+  '🐶 Bestest Doggo Ever': require('../../assets/images/badge_good_dog.png'),
+  '😤 Pure Outrage': require('../../assets/images/badge_bad_dog.png'),
 };
 
 const EGG_SUBTITLES: Record<string, string> = {
-  'The Ultimate Betrayal': 'Say the word. Watch the devastation.',
-  'Squirrel Brain': 'Gone. Just gone.',
-  'Bestest Doggo Ever': 'All drama. Gone. Just dog.',
-  'Pure Outrage': 'How dare you.',
+  '🛁 The Ultimate Betrayal': 'Say the word. Watch the devastation.',
+  '🐿️ Squirrel Brain': 'Gone. Just gone.',
+  '🐶 Bestest Doggo Ever': 'All drama. Gone. Just dog.',
+  '😤 Pure Outrage': 'How dare you.',
 };
 
 
