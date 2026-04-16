@@ -267,6 +267,7 @@ export default function HomeScreen() {
               <Text style={{ color: '#4A6278', fontSize: 14, fontStyle: 'italic', marginLeft: 8 }}>{dog.name} is thinking...</Text>
             </View>
           )}
+          </ScrollView>
       <View style={styles.inputRow}>
         <TextInput
           style={styles.input}
