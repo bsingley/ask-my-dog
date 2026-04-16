@@ -139,6 +139,7 @@ export default function HomeScreen() {
           trainer: data.trainer_note,
           easter_egg: data.easter_egg,
         }];
+        console.log('easter egg received:', data.easter_egg);
         if (data.easter_egg) unlockAchievement(data.easter_egg);
         if (newHistory.length === 5) {
           StoreReview.isAvailableAsync().then(available => {
