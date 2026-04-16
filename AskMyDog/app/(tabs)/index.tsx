@@ -24,8 +24,15 @@ const DOG_PHOTOS: Record<string, any> = {
   'dog_photo_13': require('../../assets/images/dog_photo_13.png'),
   'dog_photo_14': require('../../assets/images/dog_photo_14.png'),
 };
-  const DOG_RUNNING = require('../../assets/images/dog_running.gif');
-
+  
+function RunningDogBanner({ achievement }: { achievement: string }) {
+  return (
+    <View style={{ marginTop: 8, backgroundColor: '#2B3A4A', borderRadius: 12, padding: 10 }}>
+      <Text style={{ color: '#C4A882', fontSize: 11, fontWeight: '700', letterSpacing: 1.5, textTransform: 'uppercase' }}>🏆 Achievement Unlocked</Text>
+      <Text style={{ color: '#F5EFE6', fontSize: 16, fontWeight: '700', marginTop: 4 }}>{achievement}</Text>
+    </View>
+  );
+}
 
 
 export default function HomeScreen() {
