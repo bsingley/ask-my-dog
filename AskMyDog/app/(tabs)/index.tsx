@@ -25,6 +25,8 @@ const DOG_PHOTOS: Record<string, any> = {
   'dog_photo_14': require('../../assets/images/dog_photo_14.png'),
 };
   
+const DOG_SPINNER = require('../../assets/images/dog_spinner_2.gif');
+
 function RunningDogBanner({ achievement }: { achievement: string }) {
   return (
     <View style={{ marginTop: 8, backgroundColor: '#2B3A4A', borderRadius: 12, padding: 10 }}>
@@ -258,9 +260,13 @@ export default function HomeScreen() {
               </View>
             </View>
           </View>
-        ))}
-        {loading && <ActivityIndicator size="large" color="#b05e2a" style={{ margin: 20 }} />}        
-      </ScrollView>
+         ))}
+          {loading && (
+            <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 12, paddingHorizontal: 8 }}>
+              <ExpoImage source={DOG_SPINNER} style={{ width: 60, height: 60 }} contentFit="contain" />
+              <Text style={{ color: '#4A6278', fontSize: 14, fontStyle: 'italic', marginLeft: 8 }}>{dog.name} is thinking...</Text>
+            </View>
+          )}
       <View style={styles.inputRow}>
         <TextInput
           style={styles.input}
