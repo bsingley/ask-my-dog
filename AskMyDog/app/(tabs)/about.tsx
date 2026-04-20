@@ -142,7 +142,7 @@ const styles = StyleSheet.create({
   sectionHeading: { fontSize: 20, fontWeight: '700', color: '#2B3A4A', alignSelf: 'flex-start', marginBottom: 6 },
   trophySubtext: { fontSize: 14, color: '#4A6278', alignSelf: 'flex-start', marginBottom: 16 },
   trophyGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 12, width: '100%', marginBottom: 8 },
-  trophyCard: { width: '47%', backgroundColor: '#E8D5B7', borderRadius: 12, padding: 12, alignItems: 'center', borderWidth: 1, borderColor: '#C4A882' },
+  trophyCard: { width: '47%', backgroundColor: '#E8D5B7', borderRadius: 12, padding: 12, alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: '#C4A882' },
   trophyCardLocked: { backgroundColor: '#F0E8DC', borderColor: '#DDD0BB', opacity: 0.5 },
   badgeImage: { width: 64, height: 64, marginBottom: 8, marginTop: 16 },
   badgeImageLocked: { opacity: 0.3 },
