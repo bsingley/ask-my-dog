@@ -96,7 +96,7 @@ return (
                 style={styles.badgeImage}
                 />
                 {unlocked && <Text style={styles.trophyName}>{egg}</Text>}
-                {unlocked && <Text style={styles.trophySubtitle}>{EGG_SUBTITLES[egg]}</Text>} </View>
+                {unlocked && <Text style={styles.trophySubtitle}>{EGG_SUBTITLES[egg]}</Text>}</View>
               );
             })}
         </View>
