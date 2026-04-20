@@ -95,11 +95,10 @@ return (
                 source={unlocked ? BADGES[egg] : BADGE_LOCKED}
                 style={styles.badgeImage}
                 />
-                <Text style={[styles.trophyName, !unlocked && styles.trophyNameLocked]}>{egg}</Text>
-                <Text style={[styles.trophySubtitle, !unlocked && styles.trophyNameLocked]}>{unlocked ? EGG_SUBTITLES[egg] : '???'}</Text>
-            </View>
-            );
-        })}
+                {unlocked && <Text style={styles.trophyName}>{egg}</Text>}
+                {unlocked && <Text style={styles.trophySubtitle}>{EGG_SUBTITLES[egg]}</Text>} </View>
+              );
+            })}
         </View>
 
         <View style={styles.divider} />
@@ -145,8 +144,8 @@ const styles = StyleSheet.create({
   trophyGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 12, width: '100%', marginBottom: 8 },
   trophyCard: { width: '47%', backgroundColor: '#E8D5B7', borderRadius: 12, padding: 12, alignItems: 'center', borderWidth: 1, borderColor: '#C4A882' },
   trophyCardLocked: { backgroundColor: '#F0E8DC', borderColor: '#DDD0BB', opacity: 0.5 },
-  badgeImage: { width: 64, height: 64, marginBottom: 8 },
-  badgeImageLocked: { tintColor: '#C4A882' },
+  badgeImage: { width: 64, height: 64, marginBottom: 8, marginTop: 16 },
+  badgeImageLocked: { opacity: 0.3 },
   trophyName: { fontSize: 13, fontWeight: '700', color: '#2B3A4A', textAlign: 'center', marginBottom: 4 },
   trophyNameLocked: { color: '#C4A882' },
   trophySubtitle: { fontSize: 11, color: '#4A6278', textAlign: 'center' },
