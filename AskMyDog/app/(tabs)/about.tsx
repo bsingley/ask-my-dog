@@ -90,8 +90,8 @@ return (
         {ALL_EGGS.map(egg => {
             const unlocked = achievements.includes(egg);
             return (
-            <View key={egg} style={[styles.trophyCard, !unlocked && styles.trophyCardLocked]}>
-                <Image
+                <View key={egg} style={[styles.trophyCard, unlocked ? null : styles.trophyCardLocked]}>
+                    <Image
                 source={unlocked ? BADGES[egg] : BADGE_LOCKED}
                 style={styles.badgeImage}
                 />
