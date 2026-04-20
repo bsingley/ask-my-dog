@@ -12,6 +12,7 @@ const BADGES: Record<string, any> = {
   '🐶 Bestest Doggo Ever': require('../../assets/images/badge_good_dog.png'),
   '😤 Pure Outrage': require('../../assets/images/badge_bad_dog.png'),
 };
+const BADGE_LOCKED = require('../../assets/images/badge_locked.png');
 
 const EGG_SUBTITLES: Record<string, string> = {
   '🛁 The Ultimate Betrayal': 'Say the word. Watch the devastation.',
@@ -91,8 +92,8 @@ return (
             return (
             <View key={egg} style={[styles.trophyCard, !unlocked && styles.trophyCardLocked]}>
                 <Image
-                source={BADGES[egg]}
-                style={[styles.badgeImage, !unlocked && styles.badgeImageLocked]}
+                source={unlocked ? BADGES[egg] : BADGE_LOCKED}
+                style={styles.badgeImage}
                 />
                 <Text style={[styles.trophyName, !unlocked && styles.trophyNameLocked]}>{egg}</Text>
                 <Text style={[styles.trophySubtitle, !unlocked && styles.trophyNameLocked]}>{unlocked ? EGG_SUBTITLES[egg] : '???'}</Text>
