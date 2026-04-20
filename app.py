@@ -2,6 +2,8 @@ import streamlit as st
 from openai import OpenAI, OpenAIError
 import json
 import os
+import re
+
 
 # -----------------------------
 # Setup
@@ -360,8 +362,9 @@ Question: {question}
 
         text = response.choices[0].message.content
 
-        if "As a dog trainer:" in text:
-            dog_part, trainer_part = text.split("As a dog trainer:",1)
+        match = re.split(r'(?i)as a dog trainer[:,]?', text, maxsplit=1)
+        if len(match) > 1:
+            dog_part, trainer_part = match[0], match[1]
         else:
             dog_part = text
             trainer_part = ""
