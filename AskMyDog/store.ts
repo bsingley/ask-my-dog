@@ -51,8 +51,6 @@ export const defaultDog = {
   name: 'Luna',
   breed: 'lab mix',
   age: '10 months',
-  personality_traits: ['curious', 'cautious', 'extremely intelligent'],
-  fear_triggers: ['new objects', 'loud sounds'],
   nemesis: 'the vacuum cleaner',
   intelligence: 'average',
   self_identity: 'The Last Guardian',
